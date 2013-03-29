@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BlitzMail</string>
+    <string name="sent_mail">Sent Mail</string>
+    <string name="sending_mail">Sending Mail</string>
+    <string name="please_wait">Sending please wait&#8230;</string>
+    <string name="pref_sending_title">Sending</string>
+    <string name="pref_summary_smtp_auth_off">Server does not require authentication</string>
+    <string name="pref_summary_smtp_auth_on">Server requires authentication</string>
+    <string name="pref_smtp_server">SMTP Server</string>
+    <string name="pref_smtp_port">SMTP Port</string>
+    <string name="pref_smtp_auth">SMTP Auth</string>
+    <string name="pref_smtp_user">Username</string>
+    <string name="pref_smtp_pass">Password</string>
+    <string name="pref_summary_recipient">Mails will be send to this address</string>
+    <string name="pref_recipient">Recipient Address</string>
+    <string name="pref_sender">Sender Address</string>
+    <string name="pref_summary_sender">Mails will appear to come from this address</string>
+    <string name="pref_smtp_encryption">Encryption</string>
+    <string name="error">Error</string>
+    <string name="error_option_not_set">Please set this option:</string>
+    <string name="error_no_body_no_subject">Did not get body or subject. Mail not send because it would be empty.</string>
+    <string name="error_auth_failed">Authentication failed. Please check your username and password!</string>
+
+</resources>

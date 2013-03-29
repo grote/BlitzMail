@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="pref_sending"
+        android:title="@string/pref_sending_title">
+        
+        <EditTextPreference
+            android:summary="@string/pref_summary_recipient"
+            android:title="@string/pref_recipient"
+            android:key="pref_recipient"
+            android:inputType="textEmailAddress"/>
+        
+        <EditTextPreference
+            android:summary="@string/pref_summary_sender"
+            android:title="@string/pref_sender"
+            android:key="pref_sender"
+            android:inputType="textEmailAddress"/>
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:title="Mail Server Setting"
+        android:key="pref_mail_server">
+        
+        <EditTextPreference
+            android:title="@string/pref_smtp_server"
+            android:key="pref_smtp_server"
+            android:inputType="textNoSuggestions" />
+        <EditTextPreference
+            android:title="@string/pref_smtp_port"
+            android:key="pref_smtp_port"
+            android:inputType="number"
+            android:defaultValue="25"/>
+        <CheckBoxPreference
+            android:title="@string/pref_smtp_auth"
+            android:key="pref_smtp_auth"
+            android:defaultValue="false"
+            android:summaryOff="@string/pref_summary_smtp_auth_off"
+            android:summaryOn="@string/pref_summary_smtp_auth_on"/>
+        <ListPreference
+            android:title="@string/pref_smtp_encryption"
+            android:key="pref_smtp_encryption"
+            android:entries="@array/encryption"
+            android:entryValues="@array/encryptionValues" android:defaultValue="none"/>
+        <EditTextPreference
+            android:title="@string/pref_smtp_user"
+            android:inputType="textNoSuggestions"
+            android:key="pref_smtp_user"/>
+        <de.grobox.blitzmail.EncryptedEditTextPreference
+            android:title="@string/pref_smtp_pass"
+            android:key="pref_smtp_pass"
+            android:inputType="textPassword"/>
+        
+    </PreferenceCategory>
+
+</PreferenceScreen>
