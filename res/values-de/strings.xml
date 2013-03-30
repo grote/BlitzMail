@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">"BlitzMail"</string>
+    <string name="sent_mail">"E-Mail gesendet"</string>
+    <string name="sending_mail">"Verschicke E-Mail"</string>
+    <string name="please_wait">"Sende, bitte warten&#8230;"</string>
+    <string name="pref_sending_title">"Senden"</string>
+    <string name="pref_summary_smtp_auth_off">"Server erfordert keine Authentifizierung"</string>
+    <string name="pref_summary_smtp_auth_on">"Server erfordert Authentifizierung"</string>
+    <string name="pref_smtp_server">"SMTP Server"</string>
+    <string name="pref_smtp_port">"SMTP Port"</string>
+    <string name="pref_smtp_auth">"SMTP Authentifizierung"</string>
+    <string name="pref_smtp_user">"Benutzername"</string>
+    <string name="pref_smtp_pass">"Passwort"</string>
+    <string name="pref_summary_recipient">"Mails werden an diese Adresse gesendet"</string>
+    <string name="pref_recipient">"Empfänger-Adresse"</string>
+    <string name="pref_sender">"Absenderadresse"</string>
+    <string name="pref_summary_sender">"Mails erscheinen, als ob sie von dieser Adresse kommen"</string>
+    <string name="pref_smtp_encryption">"Verschlüsselung"</string>
+    <string name="error">"Fehler"</string>
+    <string name="error_option_not_set">"Bitte konfiguriere diese Einstellung:"</string>
+    <string name="error_no_body_no_subject">"Habe keinen Inhalt für die E-Mail erhalten. Sie wird nicht gesendet, denn sie wäre leer."</string>
+    <string name="error_auth_failed">"Authentifizierung fehlgeschlagen. Bitte überprüfe den Benutzernamen und das Passwort!"</string>
+
+</resources>
