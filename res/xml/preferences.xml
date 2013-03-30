@@ -19,7 +19,7 @@
     </PreferenceCategory>
     
     <PreferenceCategory
-        android:title="Mail Server Setting"
+        android:title="@string/pref_mail_server"
         android:key="pref_mail_server">
         
         <EditTextPreference
