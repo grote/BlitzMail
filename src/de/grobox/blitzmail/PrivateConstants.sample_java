@@ -1,0 +1,5 @@
+package de.grobox.blitzmail;
+
+public interface PrivateConstants {
+	public static final char[] CryptoKey = "[Please insert your encryption key here]".toCharArray();
+}
