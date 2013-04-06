@@ -21,24 +21,43 @@ import java.util.Properties;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class SendActivity extends Activity {
-	protected ProgressDialog progressDialog;
+	// define variables to be used in AsyncMailTask
+	protected NotificationManager mNotifyManager;
+	protected NotificationCompat.Builder mBuilder;
+	protected Intent notifyIntent;
 	
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// before doing anything show progress dialog to user
-		progressDialog = ProgressDialog.show(this, getString(R.string.sending_mail), getString(R.string.please_wait), true);
-        progressDialog.setCancelable(false);
-				
+        // before doing anything show notification about sending process
+        mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setContentTitle(getString(R.string.sending_mail))
+            .setContentText(getString(R.string.please_wait))
+            .setSmallIcon(R.drawable.ic_launcher);
+        // Sets an activity indicator for an operation of indeterminate length
+        mBuilder.setProgress(0, 0, true);
+        // Create Pending Intent
+        notifyIntent = new Intent(this, NotificationHandlerActivity.class);
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pendingIntent);
+        // Issues the notification
+        mNotifyManager.notify(0, mBuilder.build());
+
+        // get and handle Intent
 	    Intent intent = getIntent();
 	    String action = intent.getAction();
 	    
@@ -82,7 +101,8 @@ public class SendActivity extends Activity {
 	    	mail.bcc     = bcc;
 
 	    	mail.execute();
-	    }	    
+	    }
+	    finish();
 	}
 
 	private Properties getPrefs() {
@@ -143,8 +163,8 @@ public class SendActivity extends Activity {
 	}
 	
 	private void showError(String text) {
-		// close progress dialog first
-		progressDialog.cancel();
+		// close notification first
+		mNotifyManager.cancel(0);
 				
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		
@@ -156,7 +176,7 @@ public class SendActivity extends Activity {
 	    builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 	    	public void onClick(DialogInterface dialog, int id) {
 	    		// User clicked OK button, close this Activity
-	    		SendActivity.this.finish();
+	    		finish();
 	    	}
 	    });
 	    // Create and show the AlertDialog

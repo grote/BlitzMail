@@ -21,8 +21,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.PendingIntent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -74,50 +73,45 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
-		// Close progress dialog
-		activity.progressDialog.cancel();
-		
-		// Build the new dialog
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		
+		String msg;
+
+		// set progress notification to finished
+		activity.mBuilder.setProgress(0, 0, false);
+
+		// set dialog to auto close when clicked
+		activity.mBuilder.setAutoCancel(true);
+
 		if(result) {
 			// Everything went fine
-			builder.setTitle(activity.getString(R.string.app_name));
-			builder.setMessage(activity.getString(R.string.sent_mail) + "\n" + subject);
-			builder.setIcon(R.drawable.ic_launcher);
+			activity.mBuilder.setContentTitle(activity.getString(R.string.sent_mail));
+			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.sent_mail));
+			msg = subject;
 		} else {
-			builder.setTitle(activity.getString(R.string.error));
-		    builder.setIcon(android.R.drawable.ic_dialog_alert);
-			
+			activity.mBuilder.setContentTitle(activity.getString(R.string.error));
+			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.error));
+			activity.mBuilder.setSmallIcon(android.R.drawable.alert_dark_frame);
+
 			Log.d("AsyncMailTask", e.getClass().getCanonicalName());
-			
-			String msg;
-						
+
 			if(e.getClass().getCanonicalName().equals("javax.mail.AuthenticationFailedException")) {
 				msg = activity.getString(R.string.error_auth_failed);
 			} else {
 				msg = e.getMessage();
 			}
-			 // get and show the cause for the exception if it exists
+			// get and show the cause for the exception if it exists
 			Throwable ecause = e.getCause(); 
 			if(ecause != null) {
 				Log.d("AsyncMailTask", ecause.getClass().getCanonicalName());
 				msg += "\n" + ecause.getMessage();
 			}
-			
-			builder.setMessage(msg);
 		}
-		// Add the buttons
-		builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				// User clicked OK button
-				dialog.dismiss();
-				activity.finish();
-			}
-		});
-		// Create and show the AlertDialog
-		AlertDialog dialog = builder.create();
-		dialog.setCanceledOnTouchOutside(false);
-		dialog.show();
+
+		// Update the notification
+		activity.mBuilder.setContentText(msg);
+		activity.notifyIntent.putExtra("ContentText", msg);
+		activity.mBuilder.setContentIntent(PendingIntent.getActivity(activity, 0, activity.notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+		activity.mNotifyManager.notify(0, activity.mBuilder.build());
+
+		activity.finish();
 	}
 }

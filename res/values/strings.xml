@@ -23,5 +23,6 @@
     <string name="error_option_not_set">Please set this option:</string>
     <string name="error_no_body_no_subject">Did not get body or subject. Mail not send because it would be empty.</string>
     <string name="error_auth_failed">Authentication failed. Please check your username and password!</string>
+    <string name="error_smtp">The server returned the following error. Please check your SMTP settings.</string>
 
 </resources>

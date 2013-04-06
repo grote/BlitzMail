@@ -23,5 +23,6 @@
     <string name="error_option_not_set">"Bitte konfiguriere diese Einstellung:"</string>
     <string name="error_no_body_no_subject">"Habe keinen Inhalt für die E-Mail erhalten. Sie wird nicht gesendet, denn sie wäre leer."</string>
     <string name="error_auth_failed">"Authentifizierung fehlgeschlagen. Bitte überprüfe den Benutzernamen und das Passwort!"</string>
+    <string name="error_smtp">"Der Server antwortete mit folgendem Fehler. Bitte überprüfen Sie die SMTP-Einstellungen."</string>
 
 </resources>
