@@ -23,6 +23,7 @@ import java.util.Properties;
 
 import android.app.PendingIntent;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
@@ -84,6 +85,12 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 
 		if(result) {
 			// Everything went fine
+			if(!PreferenceManager.getDefaultSharedPreferences(activity).getBoolean("pref_success_notification", true)) {
+				// don't show success notification
+				activity.mNotifyManager.cancel(0);
+				return;
+			}
+			// show success notification
 			activity.mBuilder.setSmallIcon(R.drawable.ic_launcher);
 			activity.mBuilder.setContentTitle(activity.getString(R.string.sent_mail));
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.sent_mail));

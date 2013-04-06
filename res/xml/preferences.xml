@@ -53,4 +53,15 @@
         
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="pref_interface"
+        android:title="@string/pref_interface" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_success_notification"
+            android:summaryOff="@string/pref_summar_success_notification_off"
+            android:summaryOn="@string/pref_summar_success_notification_on"
+            android:title="@string/pref_success_notification" />
+    </PreferenceCategory>
+
 </PreferenceScreen>
