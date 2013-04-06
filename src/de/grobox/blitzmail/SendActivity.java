@@ -41,68 +41,68 @@ public class SendActivity extends Activity {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-        // before doing anything show notification about sending process
-        mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new NotificationCompat.Builder(this);
-        mBuilder.setContentTitle(getString(R.string.sending_mail))
-            .setContentText(getString(R.string.please_wait))
-            .setSmallIcon(R.drawable.ic_launcher);
-        // Sets an activity indicator for an operation of indeterminate length
-        mBuilder.setProgress(0, 0, true);
-        // Create Pending Intent
-        notifyIntent = new Intent(this, NotificationHandlerActivity.class);
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(pendingIntent);
-        // Issues the notification
-        mNotifyManager.notify(0, mBuilder.build());
+		// before doing anything show notification about sending process
+		mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mBuilder = new NotificationCompat.Builder(this);
+		mBuilder.setContentTitle(getString(R.string.sending_mail))
+			.setContentText(getString(R.string.please_wait))
+			.setSmallIcon(R.drawable.ic_launcher);
+		// Sets an activity indicator for an operation of indeterminate length
+		mBuilder.setProgress(0, 0, true);
+		// Create Pending Intent
+		notifyIntent = new Intent(this, NotificationHandlerActivity.class);
+		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		mBuilder.setContentIntent(pendingIntent);
+		// Issues the notification
+		mNotifyManager.notify(0, mBuilder.build());
 
-        // get and handle Intent
-	    Intent intent = getIntent();
-	    String action = intent.getAction();
-	    
-	    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		// get and handle Intent
+		Intent intent = getIntent();
+		String action = intent.getAction();
 
-	    if(Intent.ACTION_SEND.equals(action)) {
-	    	String text    = intent.getStringExtra(Intent.EXTRA_TEXT);
-//	    	String email   = intent.getStringExtra(Intent.EXTRA_EMAIL);
-	    	String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-	    	String cc      = intent.getStringExtra(Intent.EXTRA_CC);
-	    	String bcc     = intent.getStringExtra(Intent.EXTRA_BCC);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-	    	// Check for empty content
-	    	if(subject == null && text != null) {
-	    		// cut all characters from subject after the 128th
-	    		subject = text.substring(0, (text.length() < 128) ? text.length() : 128);
-	    	} else if(subject != null && text == null) {
-	    		text = subject;
-	    	} else if(subject == null && text == null) {
-	    		Log.e("Instant Mail", "Did not send mail, because subject and body empty.");
-	    		showError(getString(R.string.error_no_body_no_subject));
-	    		return;
-	    	}
-	    	
-	    	Properties prefs;
-	    	try {
-	    		prefs = getPrefs();
-	    	}
-	    	catch(Exception e) {
-	    		Log.i("SendActivity", "ERROR: " + e.getMessage(), e);
-	    		showError(e.getMessage());
-	    		return;
-	    	}
-	    	
-	    	// Start Mail Task
-	    	final AsyncMailTask mail = new AsyncMailTask(this, prefs);
-	    	
-	    	mail.body    = text;
-	    	mail.subject = subject;
-	    	mail.cc      = cc;
-	    	mail.bcc     = bcc;
+		if(Intent.ACTION_SEND.equals(action)) {
+			String text    = intent.getStringExtra(Intent.EXTRA_TEXT);
+			//String email   = intent.getStringExtra(Intent.EXTRA_EMAIL);
+			String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+			String cc      = intent.getStringExtra(Intent.EXTRA_CC);
+			String bcc     = intent.getStringExtra(Intent.EXTRA_BCC);
 
-	    	mail.execute();
-	    }
-	    finish();
+			// Check for empty content
+			if(subject == null && text != null) {
+				// cut all characters from subject after the 128th
+				subject = text.substring(0, (text.length() < 128) ? text.length() : 128);
+			} else if(subject != null && text == null) {
+				text = subject;
+			} else if(subject == null && text == null) {
+				Log.e("Instant Mail", "Did not send mail, because subject and body empty.");
+				showError(getString(R.string.error_no_body_no_subject));
+				return;
+			}
+
+			Properties prefs;
+			try {
+				prefs = getPrefs();
+			}
+			catch(Exception e) {
+				Log.i("SendActivity", "ERROR: " + e.getMessage(), e);
+				showError(e.getMessage());
+				return;
+			}
+
+			// Start Mail Task
+			final AsyncMailTask mail = new AsyncMailTask(this, prefs);
+
+			mail.body    = text;
+			mail.subject = subject;
+			mail.cc      = cc;
+			mail.bcc     = bcc;
+
+			mail.execute();
+		}
+		finish();
 	}
 
 	private Properties getPrefs() {
@@ -111,13 +111,13 @@ public class SendActivity extends Activity {
 
 		String recipients = pref.getString("pref_recipient", null);
 		String sender = pref.getString("pref_sender", null);
-		
+
 		String server = pref.getString("pref_smtp_server", null);
 		String port = pref.getString("pref_smtp_port", null);
 		Boolean auth = pref.getBoolean("pref_smtp_auth", false);
 		String user = pref.getString("pref_smtp_user", null);
 		String password = pref.getString("pref_smtp_pass", null);
-		
+
 		if(recipients == null) throw new RuntimeException(getString(R.string.error_option_not_set)+" "+getString(R.string.pref_recipient));
 		if(sender == null)     throw new RuntimeException(getString(R.string.error_option_not_set)+" "+getString(R.string.pref_sender));
 		if(server == null)     throw new RuntimeException(getString(R.string.error_option_not_set)+" "+getString(R.string.pref_smtp_server));
@@ -125,7 +125,7 @@ public class SendActivity extends Activity {
 		if(auth) {
 			if(user == null)     throw new RuntimeException(getString(R.string.error_option_not_set)+" "+getString(R.string.pref_smtp_user));
 			if(password == null) throw new RuntimeException(getString(R.string.error_option_not_set)+" "+getString(R.string.pref_smtp_pass));
-			
+
 			// Decrypt password
 			password = crypto.decrypt(password);
 		}
@@ -138,7 +138,7 @@ public class SendActivity extends Activity {
 		props.setProperty("mail.smtp.sender", sender);
 		props.setProperty("mail.smtp.recipients", recipients);
 		props.setProperty("mail.smtp.quitwait", "false");
-		
+
 		if(auth) {
 			// set username and password
 			props.setProperty("mail.smtp.user", user);
@@ -158,30 +158,30 @@ public class SendActivity extends Activity {
 			// set some hostname for proper HELO greeting
 			props.setProperty("mail.smtp.localhost",  "android.com");
 		}
-		
+
 		return props;
 	}
-	
+
 	private void showError(String text) {
 		// close notification first
 		mNotifyManager.cancel(0);
-				
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		
+
 		builder.setTitle(getString(R.string.error));
-	    builder.setMessage(text);
-	    builder.setIcon(android.R.drawable.ic_dialog_alert);
-	    
-	    // Add the buttons
-	    builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	    	public void onClick(DialogInterface dialog, int id) {
-	    		// User clicked OK button, close this Activity
-	    		finish();
-	    	}
-	    });
-	    // Create and show the AlertDialog
-	    AlertDialog dialog = builder.create();
-	    dialog.setCanceledOnTouchOutside(false);
-	    dialog.show();
+		builder.setMessage(text);
+		builder.setIcon(android.R.drawable.ic_dialog_alert);
+
+		// Add the buttons
+		builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				// User clicked OK button, close this Activity
+				finish();
+			}
+		});
+		// Create and show the AlertDialog
+		AlertDialog dialog = builder.create();
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 	}
 }

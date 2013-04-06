@@ -29,7 +29,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 	private SendActivity activity;
 	private Properties props;
 	private Exception e;
-	
+
 	public String body;
 	public String subject;
 	public String email;
@@ -40,7 +40,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 		this.activity = activity;
 		this.props = props;
 	}
-		
+
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		// try to get proper hostname and set fake one if failed
@@ -55,22 +55,22 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 				props.setProperty("mail.smtp.localhost",  hostname);
 			}
 		}
-		
+
 		MailSender sender = new MailSender(props);
-		
+
 		try {
 			sender.sendMail(subject, body, cc, bcc);
 		} catch(Exception e) {
 			Log.d("AsyncMailTask", "ERROR: " + e.getMessage());
-			
+
 			// remember exception for when task is finished
 			this.e = e;
-			
+
 			return false;
 		}		
 		return true;
 	}
-	
+
 	@Override
 	protected void onPostExecute(Boolean result) {
 		String msg;

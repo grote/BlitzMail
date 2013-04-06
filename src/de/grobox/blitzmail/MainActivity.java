@@ -40,7 +40,7 @@ public class MainActivity extends PreferenceActivity implements OnSharedPreferen
 		}
 	}
 
-	
+
 	private void setPrefState() {
 		CheckBoxPreference authPref = (CheckBoxPreference) findPreference("pref_smtp_auth");
 		if(authPref.isChecked()) {
@@ -53,16 +53,16 @@ public class MainActivity extends PreferenceActivity implements OnSharedPreferen
 			findPreference("pref_smtp_pass").setEnabled(false);
 		}
 	}
-	
+
 	@Override
 	protected void onResume() {
-	    super.onResume();
-	    getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+		super.onResume();
+		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
 
 	@Override
 	protected void onPause() {
-	    super.onPause();
-	    getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+		super.onPause();
+		getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 	}
 }

@@ -26,11 +26,11 @@ import android.os.Bundle;
 public class NotificationHandlerActivity extends Activity {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		Intent intent = getIntent();
 		onNewIntent(intent);
 	}
-	
+
 	@Override
 	protected void onNewIntent(Intent intent) {
 		Bundle extras = intent.getExtras(); 
