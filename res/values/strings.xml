@@ -24,6 +24,7 @@
     <string name="error_no_body_no_subject">Did not get body or subject. Mail not send because it would be empty.</string>
     <string name="error_auth_failed">Authentication failed. Please check your username and password!</string>
     <string name="error_smtp">The server returned the following error. Please check your SMTP settings.</string>
+    <string name="error_no_connection">No connection to the internet found. Please establish connectivity and try again.</string>
     <string name="pref_interface">Interface</string>
     <string name="pref_success_notification">Show Notification for Sent Mail</string>
     <string name="pref_summar_success_notification_on">Show notification in status bar after mail has been sent</string>

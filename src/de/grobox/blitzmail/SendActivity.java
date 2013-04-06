@@ -27,6 +27,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -80,6 +82,12 @@ public class SendActivity extends Activity {
 			} else if(subject == null && text == null) {
 				Log.e("Instant Mail", "Did not send mail, because subject and body empty.");
 				showError(getString(R.string.error_no_body_no_subject));
+				return;
+			}
+
+			// check network state before proceeding
+			if(!isNetworkAvailable()) {
+				showError(getString(R.string.error_no_connection));
 				return;
 			}
 
@@ -161,6 +169,12 @@ public class SendActivity extends Activity {
 		}
 
 		return props;
+	}
+
+	private boolean isNetworkAvailable() {
+	    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
 	private void showError(String text) {
