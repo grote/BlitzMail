@@ -54,9 +54,9 @@ public class NotificationHandlerActivity extends Activity {
 			AlertDialog dialog = builder.create();
 			dialog.setCanceledOnTouchOutside(false);
 			dialog.show();
+		} else {
+			// close activity
+			finish();
 		}
-
-		// close activity
-		finish();
 	}
 }

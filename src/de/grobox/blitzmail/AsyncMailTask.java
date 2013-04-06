@@ -113,7 +113,5 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 		activity.notifyIntent.putExtra("ContentText", msg);
 		activity.mBuilder.setContentIntent(PendingIntent.getActivity(activity, 0, activity.notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 		activity.mNotifyManager.notify(0, activity.mBuilder.build());
-
-		activity.finish();
 	}
 }
