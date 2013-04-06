@@ -77,6 +77,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 
 		// set progress notification to finished
 		activity.mBuilder.setProgress(0, 0, false);
+		activity.mBuilder.setOngoing(false);
 
 		// set dialog to auto close when clicked
 		activity.mBuilder.setAutoCancel(true);

@@ -46,7 +46,8 @@ public class SendActivity extends Activity {
 		mBuilder = new NotificationCompat.Builder(this);
 		mBuilder.setContentTitle(getString(R.string.sending_mail))
 			.setContentText(getString(R.string.please_wait))
-			.setSmallIcon(R.drawable.ic_launcher);
+			.setSmallIcon(R.drawable.ic_launcher)
+			.setOngoing(true);
 		// Sets an activity indicator for an operation of indeterminate length
 		mBuilder.setProgress(0, 0, true);
 		// Create Pending Intent
