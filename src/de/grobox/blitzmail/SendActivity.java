@@ -183,7 +183,7 @@ public class SendActivity extends Activity {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		builder.setTitle(getString(R.string.error));
+		builder.setTitle(getString(R.string.app_name) + " - " + getString(R.string.error));
 		builder.setMessage(text);
 		builder.setIcon(android.R.drawable.ic_dialog_alert);
 

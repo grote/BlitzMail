@@ -96,7 +96,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.sent_mail));
 			msg = subject;
 		} else {
-			activity.mBuilder.setContentTitle(activity.getString(R.string.error));
+			activity.mBuilder.setContentTitle(activity.getString(R.string.app_name) + " - " + activity.getString(R.string.error));
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.error));
 			activity.mBuilder.setSmallIcon(android.R.drawable.ic_dialog_alert);
 

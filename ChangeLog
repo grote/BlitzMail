@@ -2,6 +2,7 @@ Version 0.2
 	* German Translation
 	* using status bar for notifications
 	* notification about successfull sending can be turned off
+	* check for internet connectivity before mailing
 
 Version 0.1
 	* First Version
