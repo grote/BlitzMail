@@ -2,6 +2,7 @@ Version 0.3
 	* new property: Sender Name
 	* set mail header From:
 	* set mail header Date:
+	* improved error message for untrusted mail server certificates
 
 Version 0.2
 	* German Translation
