@@ -17,6 +17,7 @@
     <string name="pref_summary_recipient">"Mails werden an diese Adresse gesendet"</string>
     <string name="pref_recipient">"Empfänger-Adresse"</string>
     <string name="pref_sender">"Absenderadresse"</string>
+    <string name="pref_sender_name">Absendername</string>
     <string name="pref_summary_sender">"Mails erscheinen, als ob sie von dieser Adresse kommen"</string>
     <string name="pref_smtp_encryption">"Verschlüsselung"</string>
     <string name="error">"Fehler"</string>

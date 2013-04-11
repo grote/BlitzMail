@@ -142,6 +142,7 @@ public class SendActivity extends Activity {
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
 		props.setProperty("mail.host", server);
+		props.setProperty("mail.user", pref.getString("pref_sender_name", getString(R.string.app_name)) + " <" + sender + ">");
 		props.setProperty("mail.smtp.auth", String.valueOf(auth));
 		props.setProperty("mail.smtp.port", port);
 		props.setProperty("mail.smtp.sender", sender);

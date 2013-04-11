@@ -16,6 +16,11 @@
             android:title="@string/pref_sender"
             android:key="pref_sender"
             android:inputType="textEmailAddress"/>
+        <EditTextPreference
+            android:defaultValue="BlitzMail"
+            android:key="pref_sender_name"
+            android:title="@string/pref_sender_name" />
+
     </PreferenceCategory>
     
     <PreferenceCategory

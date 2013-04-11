@@ -18,11 +18,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Security;
+import java.util.Date;
 import java.util.Properties;
 
 public class MailSender extends javax.mail.Authenticator {
-	private String sender;
-	private String recipients;
 	private Properties props;
 	private Session session;
 
@@ -32,8 +31,6 @@ public class MailSender extends javax.mail.Authenticator {
 
 	public MailSender(Properties props) {
 		this.props = props;
-		this.sender = props.getProperty("mail.smtp.sender", "");
-		this.recipients = props.getProperty("mail.smtp.recipients", "");
 
 		// get a new mail session, don't use the default one to ensure fresh sessions
 		session = Session.getInstance(props, this);
@@ -47,9 +44,13 @@ public class MailSender extends javax.mail.Authenticator {
 		try {
 			MimeMessage message = new MimeMessage(session);
 			DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
-			message.setSender(new InternetAddress(sender));
+			message.setSender(new InternetAddress(props.getProperty("mail.smtp.sender", "")));
+			message.setFrom(); // uses mail.user property
+			message.setSentDate(new Date());
 			message.setSubject(subject);
 			message.setDataHandler(handler);
+
+			String recipients = props.getProperty("mail.smtp.recipients", "");
 
 			if(recipients.indexOf(',') > 0) {
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));

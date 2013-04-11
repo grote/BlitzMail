@@ -1,3 +1,8 @@
+Version 0.3
+	* new property: Sender Name
+	* set mail header From:
+	* set mail header Date:
+
 Version 0.2
 	* German Translation
 	* using status bar for notifications
