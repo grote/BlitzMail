@@ -28,7 +28,7 @@
     <string name="error_no_connection">"Es besteht keine Verbindung zum Internet. Bitte stellen Sie die Verbindung her und versuchen Sie es erneut."</string>
     <string name="pref_interface">"Verhalten"</string>
     <string name="pref_success_notification">"Benachrichtigung über versendete E-Mail"</string>
-    <string name="pref_summar_success_notification_on">"Zeige eine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde."</string>
-    <string name="pref_summar_success_notification_off">"Zeige keine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde."</string>
+    <string name="pref_summary_success_notification_on">"Zeige eine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde."</string>
+    <string name="pref_summary_success_notification_off">"Zeige keine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde."</string>
 
 </resources>
