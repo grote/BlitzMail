@@ -104,14 +104,22 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 
 			if(e.getClass().getCanonicalName().equals("javax.mail.AuthenticationFailedException")) {
 				msg = activity.getString(R.string.error_auth_failed);
-			} else {
-				msg = e.getMessage();
 			}
+			else if(e.getClass().getCanonicalName().equals("javax.mail.MessagingException") &&
+					e.getCause().getClass().getCanonicalName().equals("javax.net.ssl.SSLException") &&
+					e.getCause().getCause().getClass().getCanonicalName().equals("java.security.cert.CertificateException")) {
+				// TODO use MemorizingTrustManager instead
+				msg = activity.getString(R.string.error_sslcert_invalid);
+			}
+			else {
+				msg = activity.getString(R.string.error_smtp) + '\n' + e.getMessage();
+			}
+
 			// get and show the cause for the exception if it exists
 			Throwable ecause = e.getCause(); 
 			if(ecause != null) {
 				Log.d("AsyncMailTask", ecause.getClass().getCanonicalName());
-				msg += "\n" + ecause.getMessage();
+				msg += "\nCause: " + ecause.getMessage();
 			}
 		}
 

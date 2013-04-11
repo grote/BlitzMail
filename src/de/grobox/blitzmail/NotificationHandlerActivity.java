@@ -40,7 +40,7 @@ public class NotificationHandlerActivity extends Activity {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 			builder.setTitle(getString(R.string.app_name) + " - " + getString(R.string.error));
-			builder.setMessage(getString(R.string.error_smtp) + '\n' + extras.getString("ContentText"));
+			builder.setMessage(extras.getString("ContentText"));
 			builder.setIcon(android.R.drawable.ic_dialog_alert);
 
 			// Add the buttons

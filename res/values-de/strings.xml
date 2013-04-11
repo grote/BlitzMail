@@ -26,6 +26,7 @@
     <string name="error_auth_failed">"Authentifizierung fehlgeschlagen. Bitte überprüfe den Benutzernamen und das Passwort!"</string>
     <string name="error_smtp">"Der Server antwortete mit folgendem Fehler. Bitte überprüfen Sie die SMTP-Einstellungen."</string>
     <string name="error_no_connection">"Es besteht keine Verbindung zum Internet. Bitte stellen Sie die Verbindung her und versuchen Sie es erneut."</string>
+    <string name="error_sslcert_invalid">"Ihr Android System vertraut dem SSL Zertifikat ihres Servers nicht. Bitte importieren Sie das Zertifikat ins System und versuchen es dann erneut."</string>
     <string name="pref_interface">"Verhalten"</string>
     <string name="pref_success_notification">"Benachrichtigung über versendete E-Mail"</string>
     <string name="pref_summary_success_notification_on">"Zeige eine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde."</string>

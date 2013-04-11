@@ -160,6 +160,7 @@ public class SendActivity extends Activity {
 				props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 				props.setProperty("mail.smtp.socketFactory.port", port);
 				props.setProperty("mail.smtp.socketFactory.fallback", "false");
+				props.setProperty("mail.smtp.ssl.checkserveridentity", "true");
 			} else if(pref.getString("pref_smtp_encryption", "").equals("tls")) {
 				Log.i("SendActivity", "Using TLS Encryption...");
 				props.setProperty("mail.smtp.starttls.enable", "true");
