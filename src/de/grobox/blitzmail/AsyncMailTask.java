@@ -21,6 +21,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
+import org.json.JSONObject;
+
 import android.app.PendingIntent;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -31,15 +33,12 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 	private Properties props;
 	private Exception e;
 
-	public String body;
-	public String subject;
-	public String email;
-	public String cc;
-	public String bcc;
+	private JSONObject mail;
 
-	public AsyncMailTask(SendActivity activity, Properties props) {
+	public AsyncMailTask(SendActivity activity, Properties props, JSONObject mail) {
 		this.activity = activity;
 		this.props = props;
+		this.mail = mail;
 	}
 
 	@Override
@@ -60,7 +59,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 		MailSender sender = new MailSender(props);
 
 		try {
-			sender.sendMail(subject, body, cc, bcc);
+			sender.sendMail(mail.optString("subject"), mail.optString("body"), mail.optString("cc", null), mail.optString("bcc", null));
 		} catch(Exception e) {
 			Log.d("AsyncMailTask", "ERROR: " + e.getMessage());
 
@@ -94,7 +93,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			activity.mBuilder.setSmallIcon(R.drawable.ic_launcher);
 			activity.mBuilder.setContentTitle(activity.getString(R.string.sent_mail));
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.sent_mail));
-			msg = subject;
+			msg = mail.optString("subject");
 		} else {
 			activity.mBuilder.setContentTitle(activity.getString(R.string.app_name) + " - " + activity.getString(R.string.error));
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.error));

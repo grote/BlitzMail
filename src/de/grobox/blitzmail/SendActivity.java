@@ -19,6 +19,9 @@ package de.grobox.blitzmail;
 
 import java.util.Properties;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
@@ -101,14 +104,22 @@ public class SendActivity extends Activity {
 				return;
 			}
 
+			// create JSON object with mail information
+			JSONObject mail_obj = new JSONObject();
+			try {
+				mail_obj.put("body", text);
+				mail_obj.put("subject", subject);
+				mail_obj.put("cc", cc);
+				mail_obj.put("bcc", bcc);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			// remember mail for later
+			saveMail(mail_obj);
+
 			// Start Mail Task
-			final AsyncMailTask mail = new AsyncMailTask(this, prefs);
-
-			mail.body    = text;
-			mail.subject = subject;
-			mail.cc      = cc;
-			mail.bcc     = bcc;
-
+			final AsyncMailTask mail = new AsyncMailTask(this, prefs, mail_obj);
 			mail.execute();
 		}
 		finish();
@@ -171,6 +182,10 @@ public class SendActivity extends Activity {
 		}
 
 		return props;
+	}
+
+	private void saveMail(JSONObject mail) {
+		// TODO implement
 	}
 
 	private boolean isNetworkAvailable() {
