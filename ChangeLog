@@ -1,3 +1,6 @@
+Version 0.4
+	* allow to be moved/installed to SD card
+
 Version 0.3
 	* new property: Sender Name
 	* set mail header From:
