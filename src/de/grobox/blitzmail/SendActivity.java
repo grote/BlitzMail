@@ -81,7 +81,7 @@ public class SendActivity extends Activity {
 				// cut all characters from subject after the 128th
 				subject = text.substring(0, (text.length() < 128) ? text.length() : 128);
 				// remove line breaks from subject
-				subject = subject.replace("\n", "").replace("\r", "");
+				subject = subject.replace("\n", " ").replace("\r", " ");
 			} else if(subject != null && text == null) {
 				text = subject;
 			} else if(subject == null && text == null) {

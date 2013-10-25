@@ -73,7 +73,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 
 	@Override
 	protected void onPostExecute(Boolean result) {
-		String msg;
+		String msg = "";
 
 		// set progress notification to finished
 		activity.mBuilder.setProgress(0, 0, false);
@@ -105,9 +105,10 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 				msg = activity.getString(R.string.error_auth_failed);
 			}
 			else if(e.getClass().getCanonicalName().equals("javax.mail.MessagingException") &&
+					e.getCause() != null &&
 					e.getCause().getClass().getCanonicalName().equals("javax.net.ssl.SSLException") &&
 					e.getCause().getCause().getClass().getCanonicalName().equals("java.security.cert.CertificateException")) {
-				// TODO use MemorizingTrustManager instead
+				// TODO use MemorizingTrustManager instead, issue #1
 				msg = activity.getString(R.string.error_sslcert_invalid);
 			}
 			else {
@@ -115,8 +116,8 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			}
 
 			// get and show the cause for the exception if it exists
-			Throwable ecause = e.getCause(); 
-			if(ecause != null) {
+			if(e.getCause() != null) {
+				Throwable ecause = e.getCause();
 				Log.d("AsyncMailTask", ecause.getClass().getCanonicalName());
 				msg += "\nCause: " + ecause.getMessage();
 			}
