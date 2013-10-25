@@ -5,9 +5,9 @@ import android.preference.EditTextPreference;
 import android.util.AttributeSet;
 
 public class EncryptedEditTextPreference extends EditTextPreference {
-	
+
 	Crypto crypto;
-	
+
 	public EncryptedEditTextPreference(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		crypto = new Crypto(context);

@@ -14,11 +14,11 @@ public class Crypto {
 
 	private Context context;
 	protected static final String UTF8 = "utf-8";
-	
+
 	public Crypto(Context context) {
 		this.context = context;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	protected String encrypt( String value ) {
 		try {

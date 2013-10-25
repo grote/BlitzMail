@@ -67,7 +67,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			this.e = e;
 
 			return false;
-		}		
+		}
 		return true;
 	}
 
