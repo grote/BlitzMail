@@ -1,4 +1,5 @@
 Version 0.4
+	* new notification icon when sending mail
 	* allow to be moved/installed to SD card
 
 Version 0.3
@@ -10,7 +11,7 @@ Version 0.3
 Version 0.2
 	* German Translation
 	* using status bar for notifications
-	* notification about successfull sending can be turned off
+	* notification about successful sending can be turned off
 	* check for internet connectivity before mailing
 
 Version 0.1
