@@ -94,6 +94,9 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			activity.mBuilder.setContentTitle(activity.getString(R.string.sent_mail));
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.sent_mail));
 			msg = mail.optString("subject");
+
+			// delete mail from local storage
+			MailStorage.deleteMail(activity, mail.optString("id"));
 		} else {
 			activity.mBuilder.setContentTitle(activity.getString(R.string.app_name) + " - " + activity.getString(R.string.error));
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.error));

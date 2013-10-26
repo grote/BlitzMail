@@ -17,6 +17,7 @@
 
 package de.grobox.blitzmail;
 
+import java.util.Date;
 import java.util.Properties;
 
 import org.json.JSONException;
@@ -42,7 +43,8 @@ public class SendActivity extends Activity {
 	protected NotificationManager mNotifyManager;
 	protected NotificationCompat.Builder mBuilder;
 	protected Intent notifyIntent;
-	
+	private JSONObject mMail;
+
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -51,7 +53,7 @@ public class SendActivity extends Activity {
 		mBuilder = new NotificationCompat.Builder(this);
 		mBuilder.setContentTitle(getString(R.string.sending_mail))
 			.setContentText(getString(R.string.please_wait))
-			.setSmallIcon(R.drawable.busy)
+			.setSmallIcon(R.drawable.ic_stat_notify)
 			.setOngoing(true);
 		// Sets an activity indicator for an operation of indeterminate length
 		mBuilder.setProgress(0, 0, true);
@@ -63,13 +65,23 @@ public class SendActivity extends Activity {
 		// Issues the notification
 		mNotifyManager.notify(0, mBuilder.build());
 
+		Properties prefs;
+		try {
+			prefs = getPrefs();
+		}
+		catch(Exception e) {
+			Log.i("SendActivity", "ERROR: " + e.getMessage(), e);
+			showError(e.getMessage());
+			return;
+		}
+
 		// get and handle Intent
 		Intent intent = getIntent();
 		String action = intent.getAction();
 
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		if(Intent.ACTION_SEND.equals(action)) {
+		if(action.equals(Intent.ACTION_SEND)) {
 			String text    = intent.getStringExtra(Intent.EXTRA_TEXT);
 			//String email   = intent.getStringExtra(Intent.EXTRA_EMAIL);
 			String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
@@ -96,32 +108,40 @@ public class SendActivity extends Activity {
 				return;
 			}
 
-			Properties prefs;
-			try {
-				prefs = getPrefs();
-			}
-			catch(Exception e) {
-				Log.i("SendActivity", "ERROR: " + e.getMessage(), e);
-				showError(e.getMessage());
-				return;
-			}
-
 			// create JSON object with mail information
-			JSONObject mail_obj = new JSONObject();
+			mMail = new JSONObject();
 			try {
-				mail_obj.put("body", text);
-				mail_obj.put("subject", subject);
-				mail_obj.put("cc", cc);
-				mail_obj.put("bcc", bcc);
+				mMail.put("id", String.valueOf(new Date().getTime()));
+				mMail.put("body", text);
+				mMail.put("subject", subject);
+				mMail.put("cc", cc);
+				mMail.put("bcc", bcc);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 
 			// remember mail for later
-			saveMail(mail_obj);
+			MailStorage.saveMail(this, mMail);
+
+			// pass mail on to notification dialog class
+			notifyIntent.putExtra("mail", mMail.toString());
 
 			// Start Mail Task
-			final AsyncMailTask mail = new AsyncMailTask(this, prefs, mail_obj);
+			final AsyncMailTask mail = new AsyncMailTask(this, prefs, mMail);
+			mail.execute();
+		}
+		else if(action.equals("BlitzMailReSend")) {
+			try {
+				mMail = new JSONObject(intent.getStringExtra("mail"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			// pass mail on to notification dialog class
+			notifyIntent.putExtra("mail", mMail.toString());
+
+			// Start Mail Task
+			final AsyncMailTask mail = new AsyncMailTask(this, prefs, mMail);
 			mail.execute();
 		}
 		finish();
@@ -186,14 +206,16 @@ public class SendActivity extends Activity {
 		return props;
 	}
 
-	private void saveMail(JSONObject mail) {
-		//MailStorage.saveMail(this, mail);
-	}
-
 	private boolean isNetworkAvailable() {
 		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+	private void deleteMail() {
+		if(mMail != null) {
+			MailStorage.deleteMail(this, mMail.optString("id"));
+		}
 	}
 
 	private void showError(String text) {
@@ -207,12 +229,31 @@ public class SendActivity extends Activity {
 		builder.setIcon(android.R.drawable.ic_dialog_alert);
 
 		// Add the buttons
-		builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+		builder.setNegativeButton(getResources().getString(R.string.dismiss), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				// User clicked OK button, close this Activity
+				deleteMail();
+				// User clicked Cancel button, close this Activity
 				finish();
 			}
 		});
+/*		builder.setNeutralButton(getResources().getString(R.string.send_later), new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int id) {
+			// User clicked Cancel button, close this Activity
+			finish();
+			}
+		});
+*/		builder.setPositiveButton(getResources().getString(R.string.try_again), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				// Prepare start of new activity
+				Intent intent = new Intent();
+				intent.setAction("BlitzMailReSend");
+				intent.putExtra("mail", mMail.toString());
+				finish();
+
+				startActivity(intent);
+			}
+		});
+
 		// Create and show the AlertDialog
 		AlertDialog dialog = builder.create();
 		dialog.setCanceledOnTouchOutside(false);

@@ -5,6 +5,9 @@
     <string name="sent_mail">Sent Mail</string>
     <string name="sending_mail">Sending Mail</string>
     <string name="please_wait">Sending please wait&#8230;</string>
+    <string name="try_again">"Try Again"</string>
+    <string name="send_later">"Send Later"</string>
+    <string name="dismiss">"Dismiss"</string>
     <string name="pref_sending_title">Sending</string>
     <string name="pref_mail_server">Mail Server Settings</string>
     <string name="pref_summary_smtp_auth_off">Server does not require authentication</string>

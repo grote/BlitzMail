@@ -17,18 +17,31 @@
 
 package de.grobox.blitzmail;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 public class NotificationHandlerActivity extends Activity {
+	private JSONObject mMail;
+	private Context context = this;
+
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		Intent intent = getIntent();
 		onNewIntent(intent);
+
+		try {
+			mMail = new JSONObject(intent.getStringExtra("mail"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -44,12 +57,31 @@ public class NotificationHandlerActivity extends Activity {
 			builder.setIcon(android.R.drawable.ic_dialog_alert);
 
 			// Add the buttons
-			builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			builder.setNegativeButton(getResources().getString(R.string.dismiss), new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
-					// User clicked OK button, close this Activity
+					deleteMail();
+					// User clicked Cancel button, close this Activity
 					finish();
 				}
 			});
+/*			builder.setNeutralButton(getResources().getString(R.string.send_later), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				// User clicked Cancel button, close this Activity
+				finish();
+			}
+		});
+*/			builder.setPositiveButton(getResources().getString(R.string.try_again), new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// Prepare start of new activity
+					Intent intent = new Intent(context, SendActivity.class);
+					intent.setAction("BlitzMailReSend");
+					intent.putExtra("mail", mMail.toString());
+					finish();
+
+					startActivity(intent);
+				}
+			});
+
 			// Create and show the AlertDialog
 			AlertDialog dialog = builder.create();
 			dialog.setCanceledOnTouchOutside(false);
@@ -57,6 +89,12 @@ public class NotificationHandlerActivity extends Activity {
 		} else {
 			// close activity
 			finish();
+		}
+	}
+
+	private void deleteMail() {
+		if(mMail != null) {
+			MailStorage.deleteMail(this, mMail.optString("id"));
 		}
 	}
 }

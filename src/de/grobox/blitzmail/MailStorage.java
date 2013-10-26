@@ -17,8 +17,6 @@
 
 package de.grobox.blitzmail;
 
-import java.util.Date;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,13 +47,31 @@ public class MailStorage {
 		SharedPreferences.Editor prefEditor = sharedPref.edit();
 
 		JSONObject mails = getMails(context);
-		String time = String.valueOf(new Date().getTime());
 
 		try {
-			mails.put(time, mail);
+			mails.put(mail.getString("id"), mail);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+
+		String mails_str = null;
+		try {
+			mails_str = mails.toString(4);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		prefEditor.putString("mails", mails_str);
+		prefEditor.commit();
+	}
+
+	static public void deleteMail(Context context, String id) {
+		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", Context.MODE_PRIVATE);
+		SharedPreferences.Editor prefEditor = sharedPref.edit();
+
+		JSONObject mails = getMails(context);
+
+		mails.remove(id);
 
 		String mails_str = null;
 		try {
