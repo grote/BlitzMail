@@ -23,6 +23,8 @@
     <string name="pref_sender_name">Sender Name</string>
     <string name="pref_summary_sender">Mails will appear to come from this address</string>
     <string name="pref_smtp_encryption">Encryption</string>
+    <string name="pref_send_now">Send Queued Mails Now</string>
+    <string name="pref_send_now_summary">There is %d mails waiting to be sent</string>
     <string name="error">Error</string>
     <string name="error_option_not_set">Please set this option:</string>
     <string name="error_no_body_no_subject">Did not get body or subject. Mail not send because it would be empty.</string>

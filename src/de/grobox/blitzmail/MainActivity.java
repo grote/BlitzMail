@@ -17,11 +17,19 @@
 
 package de.grobox.blitzmail;
 
+import java.util.Iterator;
+
+import org.json.JSONObject;
+
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
@@ -30,6 +38,9 @@ public class MainActivity extends PreferenceActivity implements OnSharedPreferen
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
+
+		addSendNowPref();
+
 		setPrefState();
 	}
 
@@ -58,6 +69,13 @@ public class MainActivity extends PreferenceActivity implements OnSharedPreferen
 	protected void onResume() {
 		super.onResume();
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+
+		// recreate send now preference
+		PreferenceCategory cat = (PreferenceCategory) findPreference("pref_sending");
+		if(cat.findPreference("pref_send_now") != null) {
+			cat.removePreference(findPreference("pref_send_now"));
+		}
+		addSendNowPref();
 	}
 
 	@Override
@@ -65,4 +83,45 @@ public class MainActivity extends PreferenceActivity implements OnSharedPreferen
 		super.onPause();
 		getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 	}
+
+	private void addSendNowPref() {
+		JSONObject mails = MailStorage.getMails(this);
+
+		if(mails != null && mails.length() > 0) {
+			PreferenceCategory targetCategory = (PreferenceCategory) findPreference("pref_sending");
+
+			Preference pref = new Preference(this);
+			pref.setKey("pref_send_now");
+			pref.setTitle(R.string.pref_send_now);
+			pref.setSummary(String.format(getResources().getString(R.string.pref_send_now_summary), mails.length()));
+
+			pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+				public boolean onPreferenceClick(Preference preference) {
+					sendNow();
+
+					return true;
+				}
+			});
+
+			targetCategory.addPreference(pref);
+		}
+	}
+
+	private void sendNow() {
+		JSONObject mails = MailStorage.getMails(this);
+
+		Iterator<?> i = mails.keys();
+
+		while(i.hasNext()) {
+			String mail = mails.opt((String) i.next()).toString();
+
+			Intent intent = new Intent(this, SendActivity.class);
+			intent.setAction("BlitzMailReSend");
+			intent.putExtra("mail", mail);
+			startActivity(intent);
+		}
+
+		((PreferenceCategory) findPreference("pref_sending")).removePreference(findPreference("pref_send_now"));
+	}
+
 }

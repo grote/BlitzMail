@@ -23,6 +23,8 @@
     <string name="pref_sender_name">Absendername</string>
     <string name="pref_summary_sender">"Mails erscheinen, als ob sie von dieser Adresse kommen"</string>
     <string name="pref_smtp_encryption">"Verschlüsselung"</string>
+    <string name="pref_send_now">Wartende Mails jetzt verschicken</string>
+    <string name="pref_send_now_summary">Es warten %d Mails darauf verschickt zu werden</string>
     <string name="error">"Fehler"</string>
     <string name="error_option_not_set">"Bitte konfiguriere diese Einstellung:"</string>
     <string name="error_no_body_no_subject">"Habe keinen Inhalt für die E-Mail erhalten. Sie wird nicht gesendet, denn sie wäre leer."</string>

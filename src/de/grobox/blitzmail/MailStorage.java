@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class MailStorage {
 
@@ -79,6 +80,8 @@ public class MailStorage {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+
+		Log.d("MailStorage", "Removing mail with id " + id);
 
 		prefEditor.putString("mails", mails_str);
 		prefEditor.commit();

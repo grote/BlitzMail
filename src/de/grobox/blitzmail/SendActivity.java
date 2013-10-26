@@ -31,8 +31,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -102,12 +100,6 @@ public class SendActivity extends Activity {
 				return;
 			}
 
-			// check network state before proceeding
-			if(!isNetworkAvailable()) {
-				showError(getString(R.string.error_no_connection));
-				return;
-			}
-
 			// create JSON object with mail information
 			mMail = new JSONObject();
 			try {
@@ -127,7 +119,7 @@ public class SendActivity extends Activity {
 			notifyIntent.putExtra("mail", mMail.toString());
 
 			// Start Mail Task
-			final AsyncMailTask mail = new AsyncMailTask(this, prefs, mMail);
+			AsyncMailTask mail = new AsyncMailTask(this, prefs, mMail);
 			mail.execute();
 		}
 		else if(action.equals("BlitzMailReSend")) {
@@ -141,7 +133,7 @@ public class SendActivity extends Activity {
 			notifyIntent.putExtra("mail", mMail.toString());
 
 			// Start Mail Task
-			final AsyncMailTask mail = new AsyncMailTask(this, prefs, mMail);
+			AsyncMailTask mail = new AsyncMailTask(this, prefs, mMail);
 			mail.execute();
 		}
 		finish();
@@ -206,18 +198,6 @@ public class SendActivity extends Activity {
 		return props;
 	}
 
-	private boolean isNetworkAvailable() {
-		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-	}
-
-	private void deleteMail() {
-		if(mMail != null) {
-			MailStorage.deleteMail(this, mMail.optString("id"));
-		}
-	}
-
 	private void showError(String text) {
 		// close notification first
 		mNotifyManager.cancel(0);
@@ -229,31 +209,12 @@ public class SendActivity extends Activity {
 		builder.setIcon(android.R.drawable.ic_dialog_alert);
 
 		// Add the buttons
-		builder.setNegativeButton(getResources().getString(R.string.dismiss), new DialogInterface.OnClickListener() {
+		builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				deleteMail();
 				// User clicked Cancel button, close this Activity
 				finish();
 			}
 		});
-/*		builder.setNeutralButton(getResources().getString(R.string.send_later), new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int id) {
-			// User clicked Cancel button, close this Activity
-			finish();
-			}
-		});
-*/		builder.setPositiveButton(getResources().getString(R.string.try_again), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				// Prepare start of new activity
-				Intent intent = new Intent();
-				intent.setAction("BlitzMailReSend");
-				intent.putExtra("mail", mMail.toString());
-				finish();
-
-				startActivity(intent);
-			}
-		});
-
 		// Create and show the AlertDialog
 		AlertDialog dialog = builder.create();
 		dialog.setCanceledOnTouchOutside(false);

@@ -64,13 +64,13 @@ public class NotificationHandlerActivity extends Activity {
 					finish();
 				}
 			});
-/*			builder.setNeutralButton(getResources().getString(R.string.send_later), new DialogInterface.OnClickListener() {
+			builder.setNeutralButton(getResources().getString(R.string.send_later), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				// User clicked Cancel button, close this Activity
 				finish();
 			}
 		});
-*/			builder.setPositiveButton(getResources().getString(R.string.try_again), new DialogInterface.OnClickListener() {
+			builder.setPositiveButton(getResources().getString(R.string.try_again), new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					// Prepare start of new activity
 					Intent intent = new Intent(context, SendActivity.class);

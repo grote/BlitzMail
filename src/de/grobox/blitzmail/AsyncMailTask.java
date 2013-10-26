@@ -83,7 +83,10 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 		activity.mBuilder.setAutoCancel(true);
 
 		if(result) {
-			// Everything went fine
+			// Everything went fine, so delete mail from local storage
+			MailStorage.deleteMail(activity, mail.optString("id"));
+
+			// check to see if there should be a success notification
 			if(!PreferenceManager.getDefaultSharedPreferences(activity).getBoolean("pref_success_notification", true)) {
 				// don't show success notification
 				activity.mNotifyManager.cancel(0);
@@ -94,9 +97,6 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			activity.mBuilder.setContentTitle(activity.getString(R.string.sent_mail));
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.sent_mail));
 			msg = mail.optString("subject");
-
-			// delete mail from local storage
-			MailStorage.deleteMail(activity, mail.optString("id"));
 		} else {
 			activity.mBuilder.setContentTitle(activity.getString(R.string.app_name) + " - " + activity.getString(R.string.error));
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.error));

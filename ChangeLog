@@ -1,4 +1,6 @@
 Version 0.4
+	* new option to queue mail when offline
+	* new option in preferences to send all queued mail
 	* new notification icon when sending mail
 	* allow to be moved/installed to SD card
 
