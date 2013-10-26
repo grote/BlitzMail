@@ -2,13 +2,13 @@
 
 <resources>
 
-    <string-array name="encryption">
+    <string-array name="encryption" translatable="false">
         <item name="none">None</item>
         <item name="tls">TLS</item>
         <item name="ssl">SSL</item>
     </string-array>
     
-    <string-array name="encryptionValues">
+    <string-array name="encryptionValues" translatable="false">
         <item name="none">none</item>
         <item name="tls">tls</item>
         <item name="ssl">ssl</item>
