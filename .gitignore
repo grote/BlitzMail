@@ -14,7 +14,6 @@ PrivateConstants.java
 # generated files
 bin/
 gen/
-project.properties
 
 # Local configuration file (sdk path, etc)
 local.properties
