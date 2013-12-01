@@ -44,7 +44,6 @@ public class MailSender extends javax.mail.Authenticator {
 		try {
 			MimeMessage message = new MimeMessage(session);
 			DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
-			message.setSender(new InternetAddress(props.getProperty("mail.smtp.sender", "")));
 			message.setFrom(); // uses mail.user property
 			message.setSentDate(new Date());
 			message.setSubject(subject);

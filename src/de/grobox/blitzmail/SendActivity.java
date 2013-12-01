@@ -170,7 +170,6 @@ public class SendActivity extends Activity {
 		props.setProperty("mail.user", pref.getString("pref_sender_name", getString(R.string.app_name)) + " <" + sender + ">");
 		props.setProperty("mail.smtp.auth", String.valueOf(auth));
 		props.setProperty("mail.smtp.port", port);
-		props.setProperty("mail.smtp.sender", sender);
 		props.setProperty("mail.smtp.recipients", recipients);
 		props.setProperty("mail.smtp.quitwait", "false");
 
