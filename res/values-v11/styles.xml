@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="InvisibleTheme" parent="android:Theme.Holo.Dialog">
+        
+    </style>
+
+</resources>

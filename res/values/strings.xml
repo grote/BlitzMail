@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">BlitzMail</string>
+    <string name="app_name" translatable="false">BlitzMail</string>
+    <string name="note_name" translatable="false">BlitzNote</string>
     <string name="sent_mail">Sent Mail</string>
     <string name="sending_mail">Sending Mail</string>
     <string name="please_wait">Sending please wait&#8230;</string>
