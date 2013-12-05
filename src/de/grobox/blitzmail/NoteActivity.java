@@ -44,7 +44,7 @@ public class NoteActivity extends Activity {
 				finish();
 			}
 		})
-		.setPositiveButton(R.string.sent_mail, new DialogInterface.OnClickListener() {
+		.setPositiveButton(R.string.send_mail, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				sendMail(((TextView) mView.findViewById(R.id.text)).getText().toString());
 
