@@ -27,6 +27,7 @@
         
         <activity
             android:name=".MainActivity"
+            android:taskAffinity="de.grobox.blitzmail.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,6 +59,7 @@
             android:name=".NoteActivity"
             android:icon="@drawable/ic_launcher_note"
             android:label="@string/note_name"
+            android:taskAffinity="de.grobox.blitzmail.NoteActivity"
             android:theme="@style/InvisibleTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
