@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<animation-list
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:oneshot="false" >
+
+	<item
+		android:duration="500"
+		android:drawable="@drawable/ic_stat_notify" />
+	<item
+		android:duration="500"
+		android:drawable="@drawable/ic_stat_notify_2" />
+</animation-list>
