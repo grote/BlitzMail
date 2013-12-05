@@ -14,11 +14,12 @@ PrivateConstants.java
 # generated files
 bin/
 gen/
+build/
 
 # Local configuration file (sdk path, etc)
 local.properties
 
-# Eclipse project files
-.classpath
-.project
-.settings
+# Android Studio files
+.idea/
+*.iml
+.gradle/
