@@ -26,10 +26,10 @@ Get BlitzMail
 Screenshots
 -----------
 
-[<img src="/artwork/ShareVia.png" width="200">](/artwork/ShareVia.png)
-[<img src="/artwork/SendMailActivity.png" width="200">](/artwork/SendMailActivity.png)
-[<img src="/artwork/NoteActivity.png" width="200">](/artwork/NoteActivity.png)
-[<img src="/artwork/MainActivity.png" width="200">](/artwork/MainActivity.png)
+[<img src="/artwork/screen_ShareVia.png" width="200">](/artwork/screen_ShareVia.png)
+[<img src="/artwork/screen_SendMailActivity.png" width="200">](/artwork/screen_SendMailActivity.png)
+[<img src="/artwork/screen_NoteActivity.png" width="200">](/artwork/screen_NoteActivity.png)
+[<img src="/artwork/screen_MainActivity.png" width="200">](/artwork/screen_MainActivity.png)
 
 Building from Source
 --------------------
