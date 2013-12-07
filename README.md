@@ -3,7 +3,14 @@ BlitzMail
 Share content via email with just one click!
 
 BlitzMail is an Android app that allows you to set up your email account once
-and then use it to send emails to an address of your choice. This comes in handy when you need to send a lot of things via email, because you are in a low connectivity area (e.g. subway) and want to remember things to look at later.
+and then use it to send emails or quick notes to an address of your choice.
+This comes in handy when you need to send a lot of things via email,
+because you are in a low connectivity area (e.g. subway)
+and want to remember things to look at later.
+
+It also works when you are offline.
+BlitzMail then queues your emails
+and allows you to send them later when you have connectivity again.
 
 The SMTP password is stored encrypted with a built-in key and salted with your device ID.
 This is not fully secure, but should provide reasonable protection for your password.
@@ -19,9 +26,10 @@ Get BlitzMail
 Screenshots
 -----------
 
-[<img src="/artwork/MainActivity.png" width="200">](/artwork/MainActivity.png)
 [<img src="/artwork/ShareVia.png" width="200">](/artwork/ShareVia.png)
 [<img src="/artwork/SendMailActivity.png" width="200">](/artwork/SendMailActivity.png)
+[<img src="/artwork/NoteActivity.png" width="200">](/artwork/NoteActivity.png)
+[<img src="/artwork/MainActivity.png" width="200">](/artwork/MainActivity.png)
 
 Building from Source
 --------------------
