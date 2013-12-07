@@ -62,7 +62,7 @@
         android:key="pref_interface"
         android:title="@string/pref_interface" >
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="pref_success_notification"
             android:summaryOff="@string/pref_summary_success_notification_off"
             android:summaryOn="@string/pref_summary_success_notification_on"
