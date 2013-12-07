@@ -28,4 +28,14 @@ android {
             assets.srcDirs = ['assets']
         }
     }
+
+	productFlavors {
+		normal {
+			packageName "de.grobox.blitzmail"
+		}
+
+		pro {
+			packageName "de.grobox.blitzmail.pro"
+		}
+	}
 }

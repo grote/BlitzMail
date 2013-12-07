@@ -2,6 +2,7 @@ Version 0.5
 	* added BlitzNote to quickly send a short note
 	* Holo theme for dialogs on devices that support it (3+)
 	* do not set Sender mail header (wrong headers for some servers)
+	* switched to gradle buildsystem
 
 Version 0.4
 	* new option to queue mail when offline
