@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name" translatable="false">BlitzMail Pro</string>
+    <string name="note_name" translatable="false">BlitzNote Pro</string>
+
+</resources>

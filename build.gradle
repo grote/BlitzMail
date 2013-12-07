@@ -38,4 +38,8 @@ android {
 			packageName "de.grobox.blitzmail.pro"
 		}
 	}
+
+	android.sourceSets.pro {
+		res.srcDir 'flavors/pro/res'
+	}
 }
