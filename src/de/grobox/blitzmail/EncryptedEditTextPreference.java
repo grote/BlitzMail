@@ -29,7 +29,12 @@ public class EncryptedEditTextPreference extends EditTextPreference {
 		if(value == null) {
 			return null;
 		} else {
-			return crypto.decrypt(value);
+			try {
+				return crypto.decrypt(value);
+			}
+			catch(Exception e) {
+				return null;
+			}
 		}
 	}
 

@@ -68,8 +68,17 @@ public class SendActivity extends Activity {
 			prefs = getPrefs();
 		}
 		catch(Exception e) {
-			Log.i("SendActivity", "ERROR: " + e.getMessage(), e);
-			showError(e.getMessage());
+			String msg = e.getMessage();
+
+			Log.i("SendActivity", "ERROR: " + msg, e);
+
+			if(e.getClass().getCanonicalName().equals("java.lang.RuntimeException") &&
+					e.getCause() != null &&
+					e.getCause().getClass().getCanonicalName().equals("javax.crypto.BadPaddingException")) {
+				msg = getString(R.string.error_decrypt);
+			}
+
+			showError(msg);
 			return;
 		}
 

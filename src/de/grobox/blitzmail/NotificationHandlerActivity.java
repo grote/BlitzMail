@@ -38,7 +38,9 @@ public class NotificationHandlerActivity extends Activity {
 		onNewIntent(intent);
 
 		try {
-			mMail = new JSONObject(intent.getStringExtra("mail"));
+			if(intent != null) {
+				mMail = new JSONObject(intent.getStringExtra("mail"));
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
