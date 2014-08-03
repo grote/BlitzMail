@@ -21,9 +21,13 @@ import java.util.Iterator;
 
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -39,7 +43,7 @@ public class MainActivity extends PreferenceActivity implements OnSharedPreferen
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 
-		addSendNowPref();
+		addSendNowPref(this);
 
 		setPrefState();
 	}
@@ -75,7 +79,7 @@ public class MainActivity extends PreferenceActivity implements OnSharedPreferen
 		if(cat.findPreference("pref_send_now") != null) {
 			cat.removePreference(findPreference("pref_send_now"));
 		}
-		addSendNowPref();
+		addSendNowPref(this);
 	}
 
 	@Override
@@ -84,7 +88,7 @@ public class MainActivity extends PreferenceActivity implements OnSharedPreferen
 		getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 	}
 
-	private void addSendNowPref() {
+	private void addSendNowPref(final Context c) {
 		JSONObject mails = MailStorage.getMails(this);
 
 		if(mails != null && mails.length() > 0) {
@@ -97,7 +101,36 @@ public class MainActivity extends PreferenceActivity implements OnSharedPreferen
 
 			pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 				public boolean onPreferenceClick(Preference preference) {
-					sendNow();
+					if(BuildConfig.PRO) sendNow();
+					else {
+						AlertDialog.Builder builder = new AlertDialog.Builder(c);
+
+						builder.setTitle(c.getString(R.string.app_name));
+						builder.setMessage(c.getString(R.string.error_lite_version));
+						builder.setIcon(android.R.drawable.ic_dialog_info);
+
+						// Add the buttons
+						builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=de.grobox.blitzmail.pro");
+								Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+								if (intent.resolveActivity(c.getPackageManager()) != null) {
+									c.startActivity(intent);
+								}
+								dialog.dismiss();
+							}
+						});
+						builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.dismiss();
+							}
+						});
+
+						// Create and show the AlertDialog
+						AlertDialog dialog = builder.create();
+						dialog.setCanceledOnTouchOutside(false);
+						dialog.show();
+					}
 
 					return true;
 				}

@@ -25,13 +25,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 public class NotificationHandlerActivity extends Activity {
 	private JSONObject mMail;
 	private Context context = this;
 
-	protected void onCreate (Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		Intent intent = getIntent();
@@ -68,8 +69,41 @@ public class NotificationHandlerActivity extends Activity {
 			});
 			builder.setNeutralButton(getResources().getString(R.string.send_later), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				// User clicked Cancel button, close this Activity
-				finish();
+				// User clicked Cancel button
+				if(BuildConfig.PRO) {
+					// close this Activity
+					finish();
+				} else {
+					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+					builder.setTitle(getString(R.string.app_name));
+					builder.setMessage(getString(R.string.error_lite_version));
+					builder.setIcon(android.R.drawable.ic_dialog_info);
+
+					// Add the buttons
+					builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface lite_dialog, int id) {
+							Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=de.grobox.blitzmail.pro");
+							Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+							if (intent.resolveActivity(getPackageManager()) != null) {
+								startActivity(intent);
+							}
+							lite_dialog.dismiss();
+							finish();
+						}
+					});
+					builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface lite_dialog, int id) {
+							lite_dialog.dismiss();
+							finish();
+						}
+					});
+
+					// Create and show the AlertDialog
+					AlertDialog lite_dialog = builder.create();
+					lite_dialog.setCanceledOnTouchOutside(false);
+					lite_dialog.show();
+				}
 			}
 		});
 			builder.setPositiveButton(getResources().getString(R.string.try_again), new DialogInterface.OnClickListener() {

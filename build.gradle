@@ -3,7 +3,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath 'com.android.tools.build:gradle:0.9.+'
+		classpath 'com.android.tools.build:gradle:0.12.+'
 	}
 }
 
@@ -16,7 +16,7 @@ dependencies {
 
 android {
 	compileSdkVersion 19
-	buildToolsVersion "19.0.3"
+	buildToolsVersion "19.1.0"
 
 	sourceSets {
 		main {
@@ -32,11 +32,18 @@ android {
 
 	productFlavors {
 		normal {
-			packageName "de.grobox.blitzmail"
+			applicationId "de.grobox.blitzmail"
+			buildConfigField "boolean", "PRO", "true"
 		}
 
 		pro {
-			packageName "de.grobox.blitzmail.pro"
+			applicationId "de.grobox.blitzmail.pro"
+			buildConfigField "boolean", "PRO", "true"
+		}
+
+		lite {
+			applicationId "de.grobox.blitzmail.lite"
+			buildConfigField "boolean", "PRO", "false"
 		}
 	}
 

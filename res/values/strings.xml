@@ -35,6 +35,7 @@
     <string name="error_no_connection">No connection to the internet found. Please establish connectivity and try again.</string>
     <string name="error_sslcert_invalid">Your server\'s SSL certificate is not trusted by your Android system. Please import the certificate and try again.</string>
     <string name="error_decrypt">Could not decrypt your password. Did you move the app to another device? Please enter your password again in the settings.</string>
+    <string name="error_lite_version">Unfortunately, this feature is only available in BlitzMail Pro. Please get this version to use all features and to support the development of this app.</string>
     <string name="pref_interface">Interface</string>
     <string name="pref_success_notification">Show Notification for Sent Mail</string>
     <string name="pref_summary_success_notification_on">Show notification in status bar after mail has been sent</string>
