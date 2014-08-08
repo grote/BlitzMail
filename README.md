@@ -2,6 +2,8 @@ BlitzMail
 =========
 Share content via email with just one click!
 
+![BlitzMail Logo](/res/drawable-xhdpi/ic_launcher.png)
+
 BlitzMail is an Android app that allows you to set up your email account once
 and then use it to send emails or quick notes to an address of your choice.
 This comes in handy when you need to send a lot of things via email,
