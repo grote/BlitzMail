@@ -18,6 +18,7 @@ The SMTP password is stored encrypted with a built-in key and salted with your d
 This is not fully secure, but should provide reasonable protection for your password.
 
 [![Flattr me](https://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/thing/1217295)
+[![Follow @BlitzMailApp](artwork/twitter.png)](https://twitter.com/BlitzMailApp)
 
 Get BlitzMail
 -------------
