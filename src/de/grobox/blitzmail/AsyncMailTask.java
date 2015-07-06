@@ -110,6 +110,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			else if(e.getClass().getCanonicalName().equals("javax.mail.MessagingException") &&
 					e.getCause() != null &&
 					e.getCause().getClass().getCanonicalName().equals("javax.net.ssl.SSLException") &&
+					e.getCause().getCause() != null &&
 					e.getCause().getCause().getClass().getCanonicalName().equals("java.security.cert.CertificateException")) {
 				// TODO use MemorizingTrustManager instead, issue #1
 				msg = activity.getString(R.string.error_sslcert_invalid);
