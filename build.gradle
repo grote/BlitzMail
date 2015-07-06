@@ -3,20 +3,27 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath 'com.android.tools.build:gradle:0.12.+'
+		classpath 'com.android.tools.build:gradle:1.2.3'
 	}
 }
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 dependencies {
-	compile 'com.android.support:support-v4:19.0.1'
+	compile 'com.android.support:support-v4:22.2.0'
 	compile fileTree(dir: 'libs', include: '*.jar')
 }
 
 android {
-	compileSdkVersion 19
-	buildToolsVersion "19.1.0"
+	defaultConfig {
+		versionCode 6
+		versionName "0.5.1"
+
+		compileSdkVersion 22
+		targetSdkVersion 22
+		minSdkVersion 8
+		buildToolsVersion "22.0.1"
+	}
 
 	sourceSets {
 		main {
@@ -44,6 +51,18 @@ android {
 		lite {
 			applicationId "de.grobox.blitzmail.lite"
 			buildConfigField "boolean", "PRO", "false"
+		}
+	}
+
+	sourceSets {
+		main {
+			manifest.srcFile 'AndroidManifest.xml'
+			java.srcDirs = ['src']
+			resources.srcDirs = ['src']
+			aidl.srcDirs = ['src']
+			renderscript.srcDirs = ['src']
+			res.srcDirs = ['res']
+			assets.srcDirs = ['assets']
 		}
 	}
 

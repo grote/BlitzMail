@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="de.grobox.blitzmail"
-    android:versionCode="6"
-    android:versionName="0.5.1"
     android:installLocation="auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="19" />
 
 	<uses-permission android:name="android.permission.INTERNET" />
 
