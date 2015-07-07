@@ -36,14 +36,19 @@ public class NotificationHandlerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		Intent intent = getIntent();
-		onNewIntent(intent);
 
-		try {
-			if(intent != null) {
-				mMail = new JSONObject(intent.getStringExtra("mail"));
+		if(intent != null) {
+			onNewIntent(intent);
+
+			String mail = intent.getStringExtra("mail");
+
+			try {
+				if(mail != null) {
+					mMail = new JSONObject(intent.getStringExtra("mail"));
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
-		} catch (JSONException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -52,7 +57,7 @@ public class NotificationHandlerActivity extends Activity {
 		Bundle extras = intent.getExtras(); 
 
 		// show dialog for server errors
-		if(extras != null && extras.getString("ContentTitle").equals(getString(R.string.error))) {
+		if(extras != null && extras.getString("ContentTitle") != null && extras.getString("ContentTitle").equals(getString(R.string.error))) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 			builder.setTitle(getString(R.string.app_name) + " - " + getString(R.string.error));
