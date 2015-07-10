@@ -17,9 +17,11 @@
 
 package de.grobox.blitzmail;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,8 +33,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -41,7 +45,7 @@ public class SendActivity extends Activity {
 	protected NotificationManager mNotifyManager;
 	protected NotificationCompat.Builder mBuilder;
 	protected Intent notifyIntent;
-	private JSONObject mMail;
+	private Properties prefs;
 
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,7 +67,6 @@ public class SendActivity extends Activity {
 		// Issues the notification
 		mNotifyManager.notify(0, mBuilder.build());
 
-		Properties prefs;
 		try {
 			prefs = getPrefs();
 		}
@@ -85,67 +88,136 @@ public class SendActivity extends Activity {
 		// get and handle Intent
 		Intent intent = getIntent();
 		String action = intent.getAction();
+		String type = intent.getType();
 
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		if(action.equals(Intent.ACTION_SEND)) {
-			String text    = intent.getStringExtra(Intent.EXTRA_TEXT);
+		if(Intent.ACTION_SEND.equals(action) && type != null) {
+			if("text/plain".equals(type)) {
+				handleSendText(intent);
+			}
+			else  {
+				handleSendAttachment(intent);
+			}
+		}
+		else if(Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+			if(type.startsWith("image/")) {
+				handleSendMultipleAttachment(intent);
+			}
+		}
+		else if(action.equals("BlitzMailReSend")) {
+			JSONObject jMail;
+			try {
+				jMail = new JSONObject(intent.getStringExtra("mail"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+				return;
+			}
+
+			// pass mail on to notification dialog class
+			notifyIntent.putExtra("mail", jMail.toString());
+
+			// Start Mail Task
+			AsyncMailTask mail = new AsyncMailTask(this, prefs, jMail);
+			mail.execute();
+		}
+		finish();
+	}
+
+	void handleSendText(Intent intent) {
+		String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+
+		if(text != null) {
 			//String email   = intent.getStringExtra(Intent.EXTRA_EMAIL);
 			String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-			String cc      = intent.getStringExtra(Intent.EXTRA_CC);
-			String bcc     = intent.getStringExtra(Intent.EXTRA_BCC);
+			String cc = intent.getStringExtra(Intent.EXTRA_CC);
 
 			// Check for empty content
-			if(subject == null && text != null) {
+			if(subject == null) {
 				// cut all characters from subject after the 128th
 				subject = text.substring(0, (text.length() < 128) ? text.length() : 128);
 				// remove line breaks from subject
 				subject = subject.replace("\n", " ").replace("\r", " ");
-			} else if(subject != null && text == null) {
-				text = subject;
-			} else if(subject == null && text == null) {
-				Log.e("Instant Mail", "Did not send mail, because subject and body empty.");
-				showError(getString(R.string.error_no_body_no_subject));
-				return;
 			}
 
 			// create JSON object with mail information
-			mMail = new JSONObject();
+			JSONObject jMail = new JSONObject();
 			try {
-				mMail.put("id", String.valueOf(new Date().getTime()));
-				mMail.put("body", text);
-				mMail.put("subject", subject);
-				mMail.put("cc", cc);
-				mMail.put("bcc", bcc);
+				jMail.put("id", String.valueOf(new Date().getTime()));
+				jMail.put("body", text);
+				jMail.put("subject", subject);
+				jMail.put("cc", cc);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 
 			// remember mail for later
-			MailStorage.saveMail(this, mMail);
+			MailStorage.saveMail(this, jMail);
 
 			// pass mail on to notification dialog class
-			notifyIntent.putExtra("mail", mMail.toString());
+			notifyIntent.putExtra("mail", jMail.toString());
 
 			// Start Mail Task
-			AsyncMailTask mail = new AsyncMailTask(this, prefs, mMail);
+			AsyncMailTask mail = new AsyncMailTask(this, prefs, jMail);
 			mail.execute();
+		} else {
+			Log.e("SendActivity", "Did not send mail, because subject and body empty.");
+			showError(getString(R.string.error_no_body_no_subject));
 		}
-		else if(action.equals("BlitzMailReSend")) {
+	}
+
+	private void handleSendAttachment(Intent intent) {
+		Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+
+		ArrayList<Uri> list = new ArrayList<>(1);
+		list.add(uri);
+
+		sendAttachment(getMailWithAttachments(list));
+	}
+
+	private void handleSendMultipleAttachment(Intent intent) {
+		ArrayList<Uri> attachmentUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+
+		sendAttachment(getMailWithAttachments(attachmentUris));
+	}
+
+	private void sendAttachment(@Nullable JSONObject jMail) {
+		if(jMail == null) {
+			showError(getString(R.string.error_attachment));
+			return;
+		}
+
+		// remember mail for later
+		MailStorage.saveMail(this, jMail);
+
+		// pass mail on to notification dialog class
+		notifyIntent.putExtra("mail", jMail.toString());
+
+		// Start Mail Task
+		AsyncMailTask mail = new AsyncMailTask(this, prefs, jMail);
+		mail.execute();
+	}
+
+	@Nullable
+	private JSONObject getMailWithAttachments(ArrayList<Uri> attachmentUris) {
+		if(attachmentUris != null) {
+			// create JSON object with mail information
 			try {
-				mMail = new JSONObject(intent.getStringExtra("mail"));
+				JSONObject jMail = new JSONObject();
+				jMail.put("id", String.valueOf(new Date().getTime()));
+				JSONArray attachments = new JSONArray();
+
+				for (Uri uri : attachmentUris) {
+					attachments.put(uri.toString());
+				}
+				jMail.put("attachments", attachments);
+
+				return jMail;
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-
-			// pass mail on to notification dialog class
-			notifyIntent.putExtra("mail", mMail.toString());
-
-			// Start Mail Task
-			AsyncMailTask mail = new AsyncMailTask(this, prefs, mMail);
-			mail.execute();
 		}
-		finish();
+		return null;
 	}
 
 	private Properties getPrefs() {

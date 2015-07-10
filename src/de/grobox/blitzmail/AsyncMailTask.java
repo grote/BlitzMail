@@ -56,10 +56,10 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			}
 		}
 
-		MailSender sender = new MailSender(props);
+		MailSender sender = new MailSender(activity, props, mail);
 
 		try {
-			sender.sendMail(mail.optString("subject"), mail.optString("body"), mail.optString("cc", null), mail.optString("bcc", null));
+			sender.sendMail();
 		} catch(Exception e) {
 			Log.d("AsyncMailTask", "ERROR: " + e.getMessage());
 
@@ -102,7 +102,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.error));
 			activity.mBuilder.setSmallIcon(android.R.drawable.ic_dialog_alert);
 
-			Log.d("AsyncMailTask", e.getClass().getCanonicalName());
+			e.printStackTrace();
 
 			if(e.getClass().getCanonicalName().equals("javax.mail.AuthenticationFailedException")) {
 				msg = activity.getString(R.string.error_auth_failed);
@@ -116,7 +116,8 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 				msg = activity.getString(R.string.error_sslcert_invalid);
 			}
 			else {
-				msg = activity.getString(R.string.error_smtp) + '\n' + e.getMessage();
+				// TODO improve showing the error here
+				msg = activity.getString(R.string.error_smtp) + '\n' + e.getLocalizedMessage();
 			}
 
 			// get and show the cause for the exception if it exists

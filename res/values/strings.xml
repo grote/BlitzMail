@@ -40,5 +40,7 @@
     <string name="pref_success_notification">Show Notification for Sent Mail</string>
     <string name="pref_summary_success_notification_on">Show notification in status bar after mail has been sent</string>
     <string name="pref_summary_success_notification_off">Don\'t show notification in status bar after mail has been sent</string>
+    <string name="files">Files</string>
+    <string name="error_attachment">Could not get attachment for mail.</string>
 
 </resources>
