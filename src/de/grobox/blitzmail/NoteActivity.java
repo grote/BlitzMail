@@ -26,13 +26,14 @@ import android.view.View;
 import android.widget.TextView;
 
 public class NoteActivity extends Activity {
-	private View mView;
+	private TextView textView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mView = getLayoutInflater().inflate(R.layout.activity_note, null);
+		View mView = getLayoutInflater().inflate(R.layout.activity_note, null);
+		textView = (TextView) mView.findViewById(R.id.text);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setView(mView)
@@ -41,12 +42,23 @@ public class NoteActivity extends Activity {
 		.setCancelable(false)
 		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
+				textView.setText(null);
+				saveText("");
+
+				finish();
+			}
+		})
+		.setNeutralButton(R.string.save, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
 				finish();
 			}
 		})
 		.setPositiveButton(R.string.send_mail, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				sendMail(((TextView) mView.findViewById(R.id.text)).getText().toString());
+				sendMail(textView.getText().toString());
+
+				saveText("");
+				textView.setText(null);
 
 				finish();
 			}
@@ -55,9 +67,41 @@ public class NoteActivity extends Activity {
 		builder.create().show();
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		String text = getPreferences(MODE_PRIVATE).getString("note", null);
+
+		// restore note if there is one to restore
+		if(text != null) {
+			textView.setText(text);
+		}
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		CharSequence text = textView.getText();
+
+		// save note in case app gets killed
+		if(text.length() > 0) {
+			saveText(text.toString());
+		}
+	}
+
+	private void saveText(String text) {
+		getPreferences(MODE_PRIVATE)
+				.edit()
+				.putString("note", text)
+				.commit();
+	}
+
 	private void sendMail(CharSequence text) {
 		Intent intent = new Intent(this, SendActivity.class);
 		intent.setAction(Intent.ACTION_SEND);
+		intent.setType("text/plain");
 		intent.putExtra(Intent.EXTRA_TEXT, text);
 
 		startActivity(intent);

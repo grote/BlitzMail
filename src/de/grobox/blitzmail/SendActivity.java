@@ -17,14 +17,6 @@
 
 package de.grobox.blitzmail;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Properties;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
@@ -39,6 +31,14 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Properties;
 
 public class SendActivity extends Activity {
 	// define variables to be used in AsyncMailTask
@@ -100,10 +100,8 @@ public class SendActivity extends Activity {
 				handleSendAttachment(intent);
 			}
 		}
-		else if(Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
-			if(type.startsWith("image/")) {
-				handleSendMultipleAttachment(intent);
-			}
+		else if(Intent.ACTION_SEND_MULTIPLE.equals(action)) {
+			handleSendMultipleAttachment(intent);
 		}
 		else if(action.equals("BlitzMailReSend")) {
 			JSONObject jMail;
@@ -118,9 +116,12 @@ public class SendActivity extends Activity {
 			notifyIntent.putExtra("mail", jMail.toString());
 
 			// Start Mail Task
-			AsyncMailTask mail = new AsyncMailTask(this, prefs, jMail);
-			mail.execute();
+			sendMail(jMail);
+		} else {
+			showError(getString(R.string.error_noaction));
+			return;
 		}
+
 		finish();
 	}
 
@@ -158,8 +159,7 @@ public class SendActivity extends Activity {
 			notifyIntent.putExtra("mail", jMail.toString());
 
 			// Start Mail Task
-			AsyncMailTask mail = new AsyncMailTask(this, prefs, jMail);
-			mail.execute();
+			sendMail(jMail);
 		} else {
 			Log.e("SendActivity", "Did not send mail, because subject and body empty.");
 			showError(getString(R.string.error_no_body_no_subject));
@@ -194,8 +194,7 @@ public class SendActivity extends Activity {
 		notifyIntent.putExtra("mail", jMail.toString());
 
 		// Start Mail Task
-		AsyncMailTask mail = new AsyncMailTask(this, prefs, jMail);
-		mail.execute();
+		sendMail(jMail);
 	}
 
 	@Nullable
@@ -218,6 +217,11 @@ public class SendActivity extends Activity {
 			}
 		}
 		return null;
+	}
+
+	private void sendMail(JSONObject jMail) {
+		final AsyncMailTask mail = new AsyncMailTask(this, prefs, jMail);
+		mail.execute();
 	}
 
 	private Properties getPrefs() {
