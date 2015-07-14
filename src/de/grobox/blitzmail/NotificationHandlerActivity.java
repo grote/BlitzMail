@@ -21,12 +21,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 
 public class NotificationHandlerActivity extends Activity {
 	private JSONObject mMail;
@@ -58,7 +58,7 @@ public class NotificationHandlerActivity extends Activity {
 
 		// show dialog for server errors
 		if(extras != null && extras.getString("ContentTitle") != null && extras.getString("ContentTitle").equals(getString(R.string.error))) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.InvisibleTheme);
 
 			builder.setTitle(getString(R.string.app_name) + " - " + getString(R.string.error));
 			builder.setMessage(extras.getString("ContentText"));
@@ -79,7 +79,7 @@ public class NotificationHandlerActivity extends Activity {
 					// close this Activity
 					finish();
 				} else {
-					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.InvisibleTheme);
 
 					builder.setTitle(getString(R.string.app_name));
 					builder.setMessage(getString(R.string.error_lite_version));

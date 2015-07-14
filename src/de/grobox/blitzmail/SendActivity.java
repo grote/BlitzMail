@@ -17,8 +17,6 @@
 
 package de.grobox.blitzmail;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -30,6 +28,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 
-public class SendActivity extends Activity {
+public class SendActivity extends AppCompatActivity {
 	// define variables to be used in AsyncMailTask
 	protected NotificationManager mNotifyManager;
 	protected NotificationCompat.Builder mBuilder;
@@ -286,7 +286,7 @@ public class SendActivity extends Activity {
 		// close notification first
 		mNotifyManager.cancel(0);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.InvisibleTheme);
 
 		builder.setTitle(getString(R.string.app_name) + " - " + getString(R.string.error));
 		builder.setMessage(text);

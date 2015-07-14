@@ -17,15 +17,15 @@
 
 package de.grobox.blitzmail;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-public class NoteActivity extends Activity {
+public class NoteActivity extends AppCompatActivity {
 	private TextView textView;
 
 	@Override
@@ -35,7 +35,7 @@ public class NoteActivity extends Activity {
 		View mView = getLayoutInflater().inflate(R.layout.activity_note, null);
 		textView = (TextView) mView.findViewById(R.id.text);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.InvisibleTheme);
 		builder.setView(mView)
 		.setIcon(R.drawable.ic_launcher_note)
 		.setTitle(R.string.note_name)
