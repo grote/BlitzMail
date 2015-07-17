@@ -89,7 +89,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			// check to see if there should be a success notification
 			if(!PreferenceManager.getDefaultSharedPreferences(activity).getBoolean("pref_success_notification", true)) {
 				// don't show success notification
-				activity.mNotifyManager.cancel(0);
+				activity.mNotifyManager.cancel(activity.getMailId());
 				return;
 			}
 			// show success notification
@@ -132,6 +132,6 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 		activity.mBuilder.setContentText(msg);
 		activity.notifyIntent.putExtra("ContentText", msg);
 		activity.mBuilder.setContentIntent(PendingIntent.getActivity(activity, 0, activity.notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-		activity.mNotifyManager.notify(0, activity.mBuilder.build());
+		activity.mNotifyManager.notify(activity.getMailId(), activity.mBuilder.build());
 	}
 }

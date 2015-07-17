@@ -44,28 +44,34 @@ public class SendActivity extends AppCompatActivity {
 	// define variables to be used in AsyncMailTask
 	protected NotificationManager mNotifyManager;
 	protected NotificationCompat.Builder mBuilder;
+	private int mailId;
 	protected Intent notifyIntent;
 	private Properties prefs;
 
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// generate mail id from current time
+		mailId = (int) ((new Date().getTime() / 100) % 1000000000);
+
 		// before doing anything show notification about sending process
 		mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
 		mBuilder = new NotificationCompat.Builder(this);
 		mBuilder.setContentTitle(getString(R.string.sending_mail))
 			.setContentText(getString(R.string.please_wait))
 			.setSmallIcon(R.drawable.notification_icon)
-			.setOngoing(true);
-		// Sets an activity indicator for an operation of indeterminate length
-		mBuilder.setProgress(0, 0, true);
+			.setOngoing(true)
+			.setProgress(0, 0, true);
+
 		// Create Pending Intent
 		notifyIntent = new Intent(this, NotificationHandlerActivity.class);
 		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		mBuilder.setContentIntent(pendingIntent);
+
 		// Issues the notification
-		mNotifyManager.notify(0, mBuilder.build());
+		mNotifyManager.notify(mailId, mBuilder.build());
 
 		try {
 			prefs = getPrefs();
@@ -203,7 +209,7 @@ public class SendActivity extends AppCompatActivity {
 			// create JSON object with mail information
 			try {
 				JSONObject jMail = new JSONObject();
-				jMail.put("id", String.valueOf(new Date().getTime()));
+				jMail.put("id", mailId);
 				JSONArray attachments = new JSONArray();
 
 				for (Uri uri : attachmentUris) {
@@ -282,9 +288,13 @@ public class SendActivity extends AppCompatActivity {
 		return props;
 	}
 
+	public int getMailId() {
+		return mailId;
+	}
+
 	private void showError(String text) {
 		// close notification first
-		mNotifyManager.cancel(0);
+		mNotifyManager.cancel(mailId);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.InvisibleTheme);
 
