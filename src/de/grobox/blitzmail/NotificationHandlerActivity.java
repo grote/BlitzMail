@@ -17,20 +17,18 @@
 
 package de.grobox.blitzmail;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class NotificationHandlerActivity extends Activity {
 	private JSONObject mMail;
-	private Context context = this;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,8 +36,6 @@ public class NotificationHandlerActivity extends Activity {
 		Intent intent = getIntent();
 
 		if(intent != null) {
-			onNewIntent(intent);
-
 			String mail = intent.getStringExtra("mail");
 
 			try {
@@ -49,12 +45,14 @@ public class NotificationHandlerActivity extends Activity {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+
+			onNewIntent(intent);
 		}
 	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		Bundle extras = intent.getExtras(); 
+		Bundle extras = intent.getExtras();
 
 		// show dialog for server errors
 		if(extras != null && extras.getString("ContentTitle") != null && extras.getString("ContentTitle").equals(getString(R.string.error))) {
@@ -79,7 +77,7 @@ public class NotificationHandlerActivity extends Activity {
 					// close this Activity
 					finish();
 				} else {
-					AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.InvisibleTheme);
+					AlertDialog.Builder builder = new AlertDialog.Builder(NotificationHandlerActivity.this, R.style.InvisibleTheme);
 
 					builder.setTitle(getString(R.string.app_name));
 					builder.setMessage(getString(R.string.error_lite_version));
@@ -114,7 +112,7 @@ public class NotificationHandlerActivity extends Activity {
 			builder.setPositiveButton(getResources().getString(R.string.try_again), new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					// Prepare start of new activity
-					Intent intent = new Intent(context, SendActivity.class);
+					Intent intent = new Intent(NotificationHandlerActivity.this, SendActivity.class);
 					intent.setAction("BlitzMailReSend");
 					intent.putExtra("mail", mMail.toString());
 					finish();

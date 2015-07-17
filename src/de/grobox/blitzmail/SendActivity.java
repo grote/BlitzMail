@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -61,6 +62,7 @@ public class SendActivity extends AppCompatActivity {
 		mBuilder.setContentTitle(getString(R.string.sending_mail))
 			.setContentText(getString(R.string.please_wait))
 			.setSmallIcon(R.drawable.notification_icon)
+			.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
 			.setOngoing(true)
 			.setProgress(0, 0, true);
 
@@ -69,6 +71,13 @@ public class SendActivity extends AppCompatActivity {
 		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		mBuilder.setContentIntent(pendingIntent);
+
+		// TODO allow sending to be cancelled, might need a service with broadcast receiver
+//		Intent dismissIntent = new Intent(this, NotificationHandlerActivity.class);
+//		dismissIntent.setAction("test");
+//		PendingIntent piCancel = PendingIntent.getActivity(this, 0, dismissIntent, 0);
+
+//		mBuilder.addAction(R.drawable.ic_action_cancel, getString(android.R.string.cancel), piCancel);
 
 		// Issues the notification
 		mNotifyManager.notify(mailId, mBuilder.build());
@@ -113,16 +122,22 @@ public class SendActivity extends AppCompatActivity {
 			JSONObject jMail;
 			try {
 				jMail = new JSONObject(intent.getStringExtra("mail"));
+
+				// Dirty Hack: Cancel the notification with the wrong ID
+				mNotifyManager.cancel(mailId);
+
+				// get proper ID from saved mail
+				mailId = jMail.optInt("id");
+
+				// issue new notification
+				mNotifyManager.notify(mailId, mBuilder.build());
 			} catch (JSONException e) {
 				e.printStackTrace();
 				return;
 			}
 
-			// pass mail on to notification dialog class
-			notifyIntent.putExtra("mail", jMail.toString());
-
 			// Start Mail Task
-			sendMail(jMail);
+			sendMail(jMail, false);
 		} else {
 			showError(getString(R.string.error_noaction));
 			return;
@@ -150,19 +165,13 @@ public class SendActivity extends AppCompatActivity {
 			// create JSON object with mail information
 			JSONObject jMail = new JSONObject();
 			try {
-				jMail.put("id", String.valueOf(new Date().getTime()));
+				jMail.put("id", mailId);
 				jMail.put("body", text);
 				jMail.put("subject", subject);
 				jMail.put("cc", cc);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-
-			// remember mail for later
-			MailStorage.saveMail(this, jMail);
-
-			// pass mail on to notification dialog class
-			notifyIntent.putExtra("mail", jMail.toString());
 
 			// Start Mail Task
 			sendMail(jMail);
@@ -193,11 +202,11 @@ public class SendActivity extends AppCompatActivity {
 			return;
 		}
 
-		// remember mail for later
-		MailStorage.saveMail(this, jMail);
-
-		// pass mail on to notification dialog class
-		notifyIntent.putExtra("mail", jMail.toString());
+		try {
+			jMail.put("subject", getString(R.string.files));
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
 
 		// Start Mail Task
 		sendMail(jMail);
@@ -225,9 +234,27 @@ public class SendActivity extends AppCompatActivity {
 		return null;
 	}
 
-	private void sendMail(JSONObject jMail) {
+	private void sendMail(JSONObject jMail, boolean save) {
+		try {
+			mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(jMail.getString("subject")));
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
+
+		if(save) {
+			// remember mail for later
+			MailStorage.saveMail(this, jMail);
+		}
+
+		// pass mail on to notification dialog class
+		notifyIntent.putExtra("mail", jMail.toString());
+
 		final AsyncMailTask mail = new AsyncMailTask(this, prefs, jMail);
 		mail.execute();
+	}
+
+	private void sendMail(JSONObject jMail) {
+		sendMail(jMail, true);
 	}
 
 	private Properties getPrefs() {

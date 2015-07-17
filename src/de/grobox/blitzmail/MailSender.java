@@ -93,7 +93,7 @@ public class MailSender extends javax.mail.Authenticator {
 			// actually send message
 			MimeMessage message = getMessage();
 			message.setContent(mp);
-			message.setSubject(context.getString(R.string.files));
+			message.setSubject(mail.optString("subject"));
 			Transport.send(message);
 		}
 	}
