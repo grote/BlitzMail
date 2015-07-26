@@ -31,8 +31,6 @@ import android.support.v7.app.AlertDialog;
 
 import org.json.JSONObject;
 
-import java.util.Iterator;
-
 public class PrefFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	@Override
@@ -95,10 +93,12 @@ public class PrefFragment extends PreferenceFragment implements SharedPreference
 			pref.setTitle(R.string.pref_send_now);
 			pref.setSummary(String.format(getResources().getString(R.string.pref_send_now_summary), mails.length()));
 
-			pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
+			pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				public boolean onPreferenceClick(Preference preference) {
-					if(BuildConfig.PRO) sendNow();
-					else {
+					if(BuildConfig.PRO) {
+						MainActivity.sendOldMails(getActivity());
+						((PreferenceCategory) findPreference("pref_sending")).removePreference(findPreference("pref_send_now"));
+					} else {
 						AlertDialog.Builder builder = new AlertDialog.Builder(c, R.style.InvisibleTheme);
 
 						builder.setTitle(c.getString(R.string.app_name));
@@ -110,7 +110,7 @@ public class PrefFragment extends PreferenceFragment implements SharedPreference
 							public void onClick(DialogInterface dialog, int id) {
 								Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=de.grobox.blitzmail.pro");
 								Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-								if (intent.resolveActivity(c.getPackageManager()) != null) {
+								if(intent.resolveActivity(c.getPackageManager()) != null) {
 									c.startActivity(intent);
 								}
 								dialog.dismiss();
@@ -134,23 +134,6 @@ public class PrefFragment extends PreferenceFragment implements SharedPreference
 
 			targetCategory.addPreference(pref);
 		}
-	}
-
-	private void sendNow() {
-		JSONObject mails = MailStorage.getMails(getActivity());
-
-		Iterator<?> i = mails.keys();
-
-		while(i.hasNext()) {
-			String mail = mails.opt((String) i.next()).toString();
-
-			Intent intent = new Intent(getActivity(), SendActivity.class);
-			intent.setAction("BlitzMailReSend");
-			intent.putExtra("mail", mail);
-			startActivity(intent);
-		}
-
-		((PreferenceCategory) findPreference("pref_sending")).removePreference(findPreference("pref_send_now"));
 	}
 
 }

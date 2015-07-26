@@ -24,8 +24,11 @@ import java.util.Properties;
 import org.json.JSONObject;
 
 import android.app.PendingIntent;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
@@ -61,7 +64,7 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 		try {
 			sender.sendMail();
 		} catch(Exception e) {
-			Log.d("AsyncMailTask", "ERROR: " + e.getMessage());
+			Log.d("AsyncMailTask", "ERROR: " + e.getLocalizedMessage());
 
 			// remember exception for when task is finished
 			this.e = e;
@@ -93,14 +96,34 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 				return;
 			}
 			// show success notification
-			activity.mBuilder.setSmallIcon(R.drawable.ic_launcher);
-			activity.mBuilder.setContentTitle(activity.getString(R.string.sent_mail));
+			activity.mBuilder.setContentTitle(activity.getString(R.string.sent_mail))
+					.setLargeIcon(BitmapFactory.decodeResource(activity.getResources(), R.drawable.ic_launcher))
+					.setSmallIcon(R.drawable.ic_stat_notify);
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.sent_mail));
 			msg = mail.optString("subject");
 		} else {
-			activity.mBuilder.setContentTitle(activity.getString(R.string.app_name) + " - " + activity.getString(R.string.error));
+			// show error notification
+			activity.mBuilder.setContentTitle(activity.getString(R.string.app_name) + " - " + activity.getString(R.string.error))
+					.setLargeIcon(BitmapFactory.decodeResource(activity.getResources(), R.drawable.ic_launcher))
+					.setSmallIcon(android.R.drawable.ic_dialog_alert);
+
+			// Quick Action: Try Again
+			Intent tryAgainIntent = new Intent(activity, NotificationHandlerActivity.class);
+			tryAgainIntent.setAction(NotificationHandlerActivity.ACTION_TRY_AGAIN);
+			tryAgainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			tryAgainIntent.putExtra("mail", mail.toString());
+			PendingIntent piTryAgain = PendingIntent.getActivity(activity, 0, tryAgainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			activity.mBuilder.addAction(R.drawable.ic_action_try_again, activity.getString(R.string.try_again), piTryAgain);
+
+			// Quick Action: Send Later
+			Intent sendLaterIntent = new Intent(activity, NotificationHandlerActivity.class);
+			sendLaterIntent.setAction(NotificationHandlerActivity.ACTION_SEND_LATER);
+			tryAgainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			sendLaterIntent.putExtra("mail", mail.toString());
+			PendingIntent piSendLater = PendingIntent.getActivity(activity, 0, sendLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			activity.mBuilder.addAction(R.drawable.ic_action_send_later, activity.getString(R.string.send_later), piSendLater);
+
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.error));
-			activity.mBuilder.setSmallIcon(android.R.drawable.ic_dialog_alert);
 
 			e.printStackTrace();
 
@@ -124,14 +147,16 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			if(e.getCause() != null) {
 				Throwable ecause = e.getCause();
 				Log.d("AsyncMailTask", ecause.getClass().getCanonicalName());
-				msg += "\nCause: " + ecause.getMessage();
+				msg += "\nCause: " + ecause.getLocalizedMessage();
 			}
 		}
 
 		// Update the notification
-		activity.mBuilder.setContentText(msg);
+		activity.notifyIntent.setAction(NotificationHandlerActivity.ACTION_DIALOG);
 		activity.notifyIntent.putExtra("ContentText", msg);
-		activity.mBuilder.setContentIntent(PendingIntent.getActivity(activity, 0, activity.notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+		activity.mBuilder.setContentText(activity.getString(R.string.error))
+				.setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+				.setContentIntent(PendingIntent.getActivity(activity, 0, activity.notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 		activity.mNotifyManager.notify(activity.getMailId(), activity.mBuilder.build());
 	}
 }

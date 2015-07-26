@@ -17,10 +17,18 @@
 
 package de.grobox.blitzmail;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import org.json.JSONObject;
+
+import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity {
 	@Override
@@ -47,5 +55,30 @@ public class MainActivity extends AppCompatActivity {
 		} else {
 			return false;
 		}
+	}
+
+	public static void sendOldMails(Context context) {
+		JSONObject mails = MailStorage.getMails(context);
+
+		Iterator<?> i = mails.keys();
+
+		while(i.hasNext()) {
+			String mail = mails.opt((String) i.next()).toString();
+
+			Intent intent = new Intent(context, SendActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+			intent.setAction("BlitzMailReSend");
+			intent.putExtra("mail", mail);
+			context.startActivity(intent);
+		}
+
+		// stop listening to changes in network connectivity
+		ComponentName receiver = new ComponentName(context, NetworkChangeReceiver.class);
+
+		PackageManager pm = context.getPackageManager();
+		pm.setComponentEnabledSetting(receiver,
+				PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+				PackageManager.DONT_KILL_APP);
 	}
 }
