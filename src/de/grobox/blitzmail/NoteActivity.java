@@ -39,7 +39,6 @@ public class NoteActivity extends AppCompatActivity {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.InvisibleTheme);
 		builder.setView(mView)
-		.setIcon(R.drawable.ic_launcher_note)
 		.setTitle(R.string.note_name)
 		.setCancelable(false)
 		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
