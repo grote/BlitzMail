@@ -17,12 +17,14 @@
 
 package de.grobox.blitzmail;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 public class NoteActivity extends AppCompatActivity {
@@ -64,7 +66,11 @@ public class NoteActivity extends AppCompatActivity {
 			}
 		});
 		// Create the AlertDialog object and show it
-		builder.create().show();
+		Dialog dialog = builder.create();
+		dialog.show();
+
+		// Open keyboard
+		dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 	}
 
 	@Override
