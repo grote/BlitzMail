@@ -1,44 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-
-
     <string name="send_mail">E-Mail senden</string>
-    <string name="sent_mail">"E-Mail gesendet"</string>
-    <string name="sending_mail">"Verschicke E-Mail"</string>
-    <string name="please_wait">"Sende, bitte warten&#8230;"</string>
-    <string name="try_again">"Nochmal Versuchen"</string>
-    <string name="send_later">"Später senden"</string>
-    <string name="dismiss">"Wegwerfen"</string>
-    <string name="pref_sending_title">"Senden"</string>
-    <string name="pref_mail_server">"E-Mail-Server Einstellungen"</string>
-    <string name="pref_summary_smtp_auth_off">"Server erfordert keine Authentifizierung"</string>
-    <string name="pref_summary_smtp_auth_on">"Server erfordert Authentifizierung"</string>
-    <string name="pref_smtp_server">"SMTP Server"</string>
-    <string name="pref_smtp_port">"SMTP Port"</string>
-    <string name="pref_smtp_auth">"SMTP Authentifizierung"</string>
-    <string name="pref_smtp_user">"Benutzername"</string>
-    <string name="pref_smtp_pass">"Passwort"</string>
-    <string name="pref_summary_recipient">"Mails werden an diese Adresse gesendet"</string>
-    <string name="pref_recipient">"Empfänger-Adresse"</string>
-    <string name="pref_sender">"Absenderadresse"</string>
+    <string name="sent_mail">E-Mail gesendet</string>
+    <string name="sending_mail">Verschicke E-Mail</string>
+    <string name="please_wait">Sende, bitte warten&#8230;</string>
+    <string name="try_again">Erneut versuchen</string>
+    <string name="send_later">Später senden</string>
+    <string name="dismiss">Wegwerfen</string>
+    <string name="pref_sending_title">Senden</string>
+    <string name="pref_mail_server">E-Mail-Server Einstellungen</string>
+    <string name="pref_summary_smtp_auth_off">Server erfordert keine Authentifizierung</string>
+    <string name="pref_summary_smtp_auth_on">Server erfordert Authentifizierung</string>
+    <string name="pref_smtp_server">SMTP Server</string>
+    <string name="pref_smtp_port">SMTP Port</string>
+    <string name="pref_smtp_auth">SMTP Authentifizierung</string>
+    <string name="pref_smtp_user">Benutzername</string>
+    <string name="pref_smtp_pass">Passwort</string>
+    <string name="pref_summary_recipient">Mails werden an diese Adresse gesendet</string>
+    <string name="pref_recipient">Empfänger-Adresse</string>
+    <string name="pref_sender">Absenderadresse</string>
     <string name="pref_sender_name">Absendername</string>
-    <string name="pref_summary_sender">"Mails erscheinen, als ob sie von dieser Adresse kommen"</string>
-    <string name="pref_smtp_encryption">"Verschlüsselung"</string>
+    <string name="pref_summary_sender">Mails erscheinen, als ob sie von dieser Adresse kommen</string>
+    <string name="pref_smtp_encryption">Verschlüsselung</string>
     <string name="pref_send_now">Wartende Mails jetzt verschicken</string>
     <string name="pref_send_now_summary">Es warten %d Mails darauf verschickt zu werden</string>
-    <string name="error">"Fehler"</string>
-    <string name="error_option_not_set">"Bitte konfiguriere diese Einstellung:"</string>
-    <string name="error_no_body_no_subject">"Habe keinen Inhalt für die E-Mail erhalten. Sie wird nicht gesendet, denn sie wäre leer."</string>
-    <string name="error_auth_failed">"Authentifizierung fehlgeschlagen. Bitte überprüfe den Benutzernamen und das Passwort!"</string>
-    <string name="error_smtp">"Der Server antwortete mit folgendem Fehler. Bitte überprüfen Sie die SMTP-Einstellungen."</string>
-    <string name="error_no_connection">"Es besteht keine Verbindung zum Internet. Bitte stellen Sie die Verbindung her und versuchen Sie es erneut."</string>
-    <string name="error_sslcert_invalid">"Ihr Android System vertraut dem SSL Zertifikat ihres Servers nicht. Bitte importieren Sie das Zertifikat ins System und versuchen es dann erneut."</string>
+    <string name="error">Fehler</string>
+    <string name="error_option_not_set">Bitte konfigurieren Sie diese Einstellung:</string>
+    <string name="error_no_body_no_subject">Habe keinen Inhalt für die E-Mail erhalten. Sie wird nicht gesendet, denn sie wäre leer.</string>
+    <string name="error_auth_failed">Authentifizierung fehlgeschlagen. Bitte überprüfen Sie den Benutzernamen und das Passwort!</string>
+    <string name="error_smtp">Der Server antwortete mit folgendem Fehler. Bitte überprüfen Sie die SMTP-Einstellungen.</string>
+    <string name="error_no_connection">Es besteht keine Verbindung zum Internet. Bitte stellen Sie die Verbindung her und versuchen Sie es erneut.</string>
+    <string name="error_sslcert_invalid">Ihr Android-System vertraut dem SSL Zertifikat ihres Servers nicht. Bitte importieren Sie das Zertifikat ins System und versuchen es dann erneut.</string>
     <string name="error_decrypt">Das Password konnte nicht entschlüsselt werden. Haben Sie die App auf ein anderes Gerät kopiert? Bitte geben Sie das E-Mail-Passwort in den Einstellungen neu ein.</string>
     <string name="error_lite_version">Leider steht diese Funktion nur in BlitzMail Pro zur Verfügung. Bitte kaufen Sie diese Version, um alle Funktionen nutzen zu können und die Entwicklung dieser App zu unterstützen.</string>
-    <string name="pref_interface">"Verhalten"</string>
-    <string name="pref_success_notification">"Benachrichtigung über versendete E-Mail"</string>
-    <string name="pref_summary_success_notification_on">"Zeige eine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde."</string>
-    <string name="pref_summary_success_notification_off">"Zeige keine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde."</string>
+    <string name="pref_interface">Verhalten</string>
+    <string name="pref_success_notification">Benachrichtigung über versendete E-Mail</string>
+    <string name="pref_summary_success_notification_on">Zeige eine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde.</string>
+    <string name="pref_summary_success_notification_off">Zeige keine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde.</string>
+    <string name="files">Dateien</string>
+    <string name="save">Speichern</string>
+    <string name="error_attachment">Der Anhang der E-Mail konnte nicht geladen werden.</string>
+    <string name="error_noaction">Die Methode zum Aufruf von BlitzMail wird nicht unterstützt. Bitte senden Sie dem Entwickler was Sie getan haben, um diesen Fehler auszulösen!</string>
+    <string name="error_timeout">Zeitüberschreitung bei der Verbindung zum Server. Bitte versuchen Sie es später erneut oder prüfen Sie die SMTP-Einstellungen.</string>
 
 </resources>
