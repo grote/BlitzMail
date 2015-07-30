@@ -25,6 +25,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class NoteActivity extends AppCompatActivity {
@@ -37,39 +38,44 @@ public class NoteActivity extends AppCompatActivity {
 		View mView = getLayoutInflater().inflate(R.layout.activity_note, null);
 		textView = (TextView) mView.findViewById(R.id.text);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.InvisibleTheme);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogStyle);
 		builder.setView(mView)
 		.setTitle(R.string.note_name)
-		.setCancelable(false)
-		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
+		.setCancelable(false);
+
+		mView.findViewById(R.id.button_note_cancel).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
 				textView.setText(null);
 				saveText("");
-
-				finish();
-			}
-		})
-		.setNeutralButton(R.string.save, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				finish();
-			}
-		})
-		.setPositiveButton(R.string.send_mail, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				sendMail(textView.getText().toString());
-
-				saveText("");
-				textView.setText(null);
-
 				finish();
 			}
 		});
+		mView.findViewById(R.id.button_note_save).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		mView.findViewById(R.id.button_note_send_mail).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				sendMail(textView.getText().toString());
+				saveText("");
+				textView.setText(null);
+				finish();
+			}
+		});
+
 		// Create the AlertDialog object and show it
 		Dialog dialog = builder.create();
 		dialog.show();
 
 		// Open keyboard
 		dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
+		// Make dialog fill the screen
+		dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 	}
 
 	@Override

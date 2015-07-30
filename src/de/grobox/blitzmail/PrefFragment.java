@@ -99,7 +99,7 @@ public class PrefFragment extends PreferenceFragment implements SharedPreference
 						MainActivity.sendOldMails(getActivity());
 						((PreferenceCategory) findPreference("pref_sending")).removePreference(findPreference("pref_send_now"));
 					} else {
-						AlertDialog.Builder builder = new AlertDialog.Builder(c, R.style.InvisibleTheme);
+						AlertDialog.Builder builder = new AlertDialog.Builder(c, R.style.DialogStyle);
 
 						builder.setTitle(c.getString(R.string.app_name));
 						builder.setMessage(c.getString(R.string.error_lite_version));

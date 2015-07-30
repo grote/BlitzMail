@@ -1,0 +1,6 @@
+<resources>
+    <style name="BaseDialogButtonStyle" parent="@style/Widget.AppCompat.Button">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+</resources>
