@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- material theme colors -->
-    <color name="primary">#fbc02d</color>
-    <color name="primary_dark">#f57f17</color>
-    <color name="accent">#ffeb3b</color>
+    <color name="primary">#fff4b94b</color>
+    <color name="primary_dark">#ffd69d45</color>
+    <color name="accent">#fff4b94b</color>
+    <color name="dialog_background">#ff393939</color>
 </resources>

@@ -323,7 +323,7 @@ public class SendActivity extends AppCompatActivity {
 		// close notification first
 		mNotifyManager.cancel(mailId);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.InvisibleTheme);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogStyle);
 
 		builder.setTitle(getString(R.string.app_name) + " - " + getString(R.string.error));
 		builder.setMessage(text);

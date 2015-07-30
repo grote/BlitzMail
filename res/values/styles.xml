@@ -31,4 +31,25 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
+    <style name="BaseDialogButtonStyle" parent="@style/Widget.AppCompat.Button">
+    </style>
+
+    <style name="DialogButtonStyle" parent="@style/BaseDialogButtonStyle">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/button_bg_selector</item>
+        <item name="android:shadowColor">@android:color/transparent</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="DialogStyle" parent="@style/InvisibleTheme">
+        <item name="android:background">@color/dialog_background</item>
+    </style>
+
 </resources>
