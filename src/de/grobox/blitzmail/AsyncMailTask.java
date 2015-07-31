@@ -95,12 +95,18 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 				activity.mNotifyManager.cancel(activity.getMailId());
 				return;
 			}
+
+			msg = mail.optString("subject");
+
 			// show success notification
 			activity.mBuilder.setContentTitle(activity.getString(R.string.sent_mail))
 					.setLargeIcon(BitmapFactory.decodeResource(activity.getResources(), R.drawable.ic_launcher))
 					.setSmallIcon(R.drawable.ic_stat_notify);
-			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.sent_mail));
-			msg = mail.optString("subject");
+			activity.notifyIntent.setAction(NotificationHandlerActivity.ACTION_FINISH);
+
+			// Quick Action: Dismiss
+			PendingIntent piDismiss = PendingIntent.getActivity(activity, 0, activity.notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			activity.mBuilder.addAction(R.drawable.ic_action_cancel, activity.getString(R.string.dismiss), piDismiss);
 		} else {
 			// show error notification
 			activity.mBuilder.setContentTitle(activity.getString(R.string.app_name) + " - " + activity.getString(R.string.error))
@@ -123,7 +129,9 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			PendingIntent piSendLater = PendingIntent.getActivity(activity, 0, sendLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			activity.mBuilder.addAction(R.drawable.ic_action_send_later, activity.getString(R.string.send_later), piSendLater);
 
+			activity.notifyIntent.setAction(NotificationHandlerActivity.ACTION_DIALOG);
 			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.error));
+			activity.notifyIntent.putExtra("ContentText", msg);
 
 			e.printStackTrace();
 
@@ -152,10 +160,8 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 		}
 
 		// Update the notification
-		activity.notifyIntent.setAction(NotificationHandlerActivity.ACTION_DIALOG);
-		activity.notifyIntent.putExtra("ContentText", msg);
-		activity.mBuilder.setContentText(activity.getString(R.string.error))
-				.setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+		activity.mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+				.setContentText(msg.substring(0, msg.length() <= 32 ? msg.length() : 32))
 				.setContentIntent(PendingIntent.getActivity(activity, 0, activity.notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 		activity.mNotifyManager.notify(activity.getMailId(), activity.mBuilder.build());
 	}

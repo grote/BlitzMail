@@ -35,6 +35,7 @@ public class NotificationHandlerActivity extends Activity {
 	private JSONObject mMail;
 
 	public final static String ACTION_DIALOG = "de.grobox.blitzmail.action.DIALOG";
+	public final static String ACTION_FINISH = "de.grobox.blitzmail.action.FINISH";
 	public final static String ACTION_SEND_LATER = "de.grobox.blitzmail.action.SEND_LATER";
 	public final static String ACTION_TRY_AGAIN = "de.grobox.blitzmail.action.TRY_AGAIN";
 
@@ -103,6 +104,9 @@ public class NotificationHandlerActivity extends Activity {
 		}
 		else if(action.equals(ACTION_TRY_AGAIN)) {
 			tryAgain();
+		}
+		else if(action.equals(ACTION_FINISH)) {
+			killNotificationAndFinish();
 		}
 		else {
 			// simply close activity
