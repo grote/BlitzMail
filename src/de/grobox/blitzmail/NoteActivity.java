@@ -41,7 +41,6 @@ public class NoteActivity extends AppCompatActivity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.InvisibleTheme);
 		builder.setView(mView)
 		.setTitle(R.string.note_name)
-		.setCancelable(false)
 		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				textView.setText(null);
@@ -69,9 +68,17 @@ public class NoteActivity extends AppCompatActivity {
 				}
 				finish();
 			}
+		})
+		.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				finish();
+			}
 		});
+
 		// Create the AlertDialog object and show it
 		Dialog dialog = builder.create();
+		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
 
 		// Open keyboard
