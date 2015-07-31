@@ -26,6 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class NoteActivity extends AppCompatActivity {
 	private TextView textView;
@@ -56,11 +57,16 @@ public class NoteActivity extends AppCompatActivity {
 		})
 		.setPositiveButton(R.string.send_mail, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				sendMail(textView.getText().toString());
+				String msg = textView.getText().toString();
 
-				saveText("");
-				textView.setText(null);
+				if(msg.length() < 1) {
+					Toast.makeText(NoteActivity.this, R.string.warning_nothing_to_send, Toast.LENGTH_SHORT).show();
+				} else {
+					sendMail(msg);
 
+					saveText("");
+					textView.setText(null);
+				}
 				finish();
 			}
 		});
