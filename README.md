@@ -34,8 +34,23 @@ Screenshots
 [<img src="/artwork/screen_NoteActivity.png" width="200">](/artwork/screen_NoteActivity.png)
 [<img src="/artwork/screen_MainActivity.png" width="200">](/artwork/screen_MainActivity.png)
 
-Building from Source
---------------------
+Contributing
+------------
+
+Contributions are both encouraged and appreciated. If you want to do more than fixing bugs, please talk to me *before* doing any major work so that we can coordinate, prevent duplicated work and discuss the best approach for your undertaking.
+
+Missing features are documented in the [issue tracker](https://github.com/grote/BlitzMail/issues?labels=enhancement&state=open). Feel free to look there for ideas or to add your own.
+
+### Translate BlitzMail Into Your Language ###
+
+Translating BlitzMail is very easy. Just sign up for an account at [Transifex](https://www.transifex.com). After you are logged in, go to the [BlitzMail translation project](https://www.transifex.com/projects/p/blitzmail/). There you can click the "Request language" button if your language does not exist, or if you want to improve existing translations, apply for the respective language team.
+
+What you translate there will then be included in the next release of BlitzMail.
+
+Please do not send translations as a pull request in GitHub since this not only causes more work, but also might overwrite other people's translations in Transifex.
+
+### Building from Source ###
+
 Before building BlitzMail from source, make sure to run the following command.
 
 ```bash
