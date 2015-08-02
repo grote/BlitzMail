@@ -24,6 +24,8 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +82,10 @@ public class NoteActivity extends AppCompatActivity {
 		Dialog dialog = builder.create();
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
+
+		// stretch horizontally across screen
+		Window window = dialog.getWindow();
+		window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		// Open keyboard
 		dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
