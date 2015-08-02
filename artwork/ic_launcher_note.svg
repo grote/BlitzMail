@@ -14,7 +14,7 @@
    height="401.29999"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="ic_launcher_note.svg"
    inkscape:export-filename="/home/tovok7/android/eclipse/InstantMail/instantmail.png"
    inkscape:export-xdpi="114.82681"
@@ -3012,9 +3012,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1879394"
-     inkscape:cx="25.496961"
-     inkscape:cy="229.15497"
+     inkscape:zoom="0.84000001"
+     inkscape:cx="184.86281"
+     inkscape:cy="196.02976"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -3022,10 +3022,10 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1680"
-     inkscape:window-height="987"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="1280"
+     inkscape:window-height="938"
+     inkscape:window-x="-6"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
@@ -3054,6 +3054,18 @@
        d="M 345.59047 116.02525 L 345.59047 346.53807 C 345.59047 361.0476 333.90952 372.72855 319.4 372.72855 L 81.899998 372.72855 C 67.390474 372.72855 55.709522 361.0476 55.709522 346.53807 L 55.709522 52.490467 C 55.709522 37.980944 67.390474 26.299992 81.899998 26.299992 L 81.899998 26.299992 L 254.11875 26.299992 "
        id="path4594"
        transform="translate(322.66914,55.584339)" />
+    <g
+       id="g4007-4"
+       transform="matrix(2.9624236,0,0,3.035907,384.5061,134.6694)"
+       style="fill:#000000;fill-opacity:1;stroke:none;opacity:0.25">
+      <path
+         inkscape:connector-curvature="0"
+         transform="translate(-14,-12)"
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         d="m 57.59375,13.59375 c -0.997246,-0.0059 -1.960975,0.680564 -2.28125,1.625 L 42.035015,55.535015 c -0.50758,1.44412 0.750595,3.202118 2.28125,3.1875 l 6.03125,0 L 37.71875,95.25 c -0.371469,1.094876 0.18635,2.423934 1.227956,2.92573 C 39.988312,98.677526 41.375318,98.28539 42,97.3125 L 74.222515,48.996235 c 0.476964,-0.717727 0.52271,-1.69983 0.114532,-2.458787 -0.408179,-0.758957 -1.252777,-1.262219 -2.114532,-1.259963 l -6.34375,0 L 81.96875,17.1875 c 0.418408,-0.722269 0.420318,-1.667543 0.0048,-2.391496 -0.415486,-0.723953 -1.23263,-1.199162 -2.067332,-1.202254 l -22.3125,0 z"
+         id="path3779-6"
+         sodipodi:nodetypes="ccccccsccscccscc" />
+    </g>
     <g
        id="g4007"
        transform="matrix(2.9624236,0,0,3.035907,380.5061,130.6694)"

@@ -14,7 +14,7 @@
    height="401.29999"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="blitzmail.svg"
    inkscape:export-filename="/home/tovok7/android/eclipse/InstantMail/instantmail.png"
    inkscape:export-xdpi="114.82681"
@@ -610,18 +610,6 @@
        gradientTransform="matrix(-1,0,0,-1,137.51153,27.5134)" />
     <filter
        inkscape:collect="always"
-       id="filter3883"
-       x="-0.11903834"
-       width="1.2380767"
-       y="-0.11264742"
-       height="1.2252948">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="1.8337914"
-         id="feGaussianBlur3885" />
-    </filter>
-    <filter
-       inkscape:collect="always"
        id="filter3928">
       <feGaussianBlur
          inkscape:collect="always"
@@ -636,9 +624,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1879394"
-     inkscape:cx="173.95055"
-     inkscape:cy="216.80186"
+     inkscape:zoom="0.42"
+     inkscape:cx="741.55835"
+     inkscape:cy="-44.502949"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -646,10 +634,10 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1680"
-     inkscape:window-height="987"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="1280"
+     inkscape:window-height="938"
+     inkscape:window-x="-6"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
@@ -715,6 +703,18 @@
          d="M 86.58658,13.765427 51.02311,13.754581 68.267808,34.717158 z"
          style="color:#000000;fill:url(#linearGradient3939);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible"
          inkscape:connector-curvature="0" />
+    </g>
+    <g
+       id="g4007-1-4"
+       transform="matrix(3.3014493,0,0,3.3833423,381.5286,132.01121)"
+       style="fill:#000000;fill-opacity:1;stroke:none;opacity:0.25">
+      <path
+         inkscape:connector-curvature="0"
+         transform="translate(-14,-12)"
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         d="m 57.59375,13.59375 c -0.997246,-0.0059 -1.960975,0.680564 -2.28125,1.625 L 42.035015,55.535015 c -0.50758,1.44412 0.750595,3.202118 2.28125,3.1875 l 6.03125,0 L 37.71875,95.25 c -0.371469,1.094876 0.18635,2.423934 1.227956,2.92573 C 39.988312,98.677526 41.375318,98.28539 42,97.3125 L 74.222515,48.996235 c 0.476964,-0.717727 0.52271,-1.69983 0.114532,-2.458787 -0.408179,-0.758957 -1.252777,-1.262219 -2.114532,-1.259963 l -6.34375,0 L 81.96875,17.1875 c 0.418408,-0.722269 0.420318,-1.667543 0.0048,-2.391496 -0.415486,-0.723953 -1.23263,-1.199162 -2.067332,-1.202254 l -22.3125,0 z"
+         id="path3779-7-6"
+         sodipodi:nodetypes="ccccccsccscccscc" />
     </g>
     <g
        id="g4007-1"
