@@ -129,10 +129,6 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 			PendingIntent piSendLater = PendingIntent.getActivity(activity, 0, sendLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			activity.mBuilder.addAction(R.drawable.ic_action_send_later, activity.getString(R.string.send_later), piSendLater);
 
-			activity.notifyIntent.setAction(NotificationHandlerActivity.ACTION_DIALOG);
-			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.error));
-			activity.notifyIntent.putExtra("ContentText", msg);
-
 			e.printStackTrace();
 
 			if(e.getClass().getCanonicalName().equals("javax.mail.AuthenticationFailedException")) {
@@ -157,6 +153,10 @@ public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 				Log.d("AsyncMailTask", ecause.getClass().getCanonicalName());
 				msg += "\nCause: " + ecause.getLocalizedMessage();
 			}
+
+			activity.notifyIntent.setAction(NotificationHandlerActivity.ACTION_DIALOG);
+			activity.notifyIntent.putExtra("ContentTitle", activity.getString(R.string.error));
+			activity.notifyIntent.putExtra("ContentText", msg);
 		}
 
 		// Update the notification
