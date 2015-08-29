@@ -17,12 +17,15 @@
 
 package de.grobox.blitzmail;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import java.io.File;
 
 public class MailStorage {
 
@@ -63,7 +66,7 @@ public class MailStorage {
 		}
 
 		prefEditor.putString("mails", mails_str);
-		prefEditor.commit();
+		prefEditor.apply();
 	}
 
 	static public void deleteMail(Context context, String id) {
@@ -72,6 +75,24 @@ public class MailStorage {
 
 		JSONObject mails = getMails(context);
 
+		// also delete temporary file
+		try {
+			if(mails.getJSONObject(id).has("attachments")) {
+				JSONArray attachments = mails.getJSONObject(id).getJSONArray("attachments");
+
+				// iterate over all attachments
+				for(int i = 0; i < attachments.length(); i++) {
+					JSONObject attachment = attachments.getJSONObject(i);
+
+					File file = new File(attachment.getString("path"));
+					file.delete();
+				}
+			}
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
+
+		// remove actual email
 		mails.remove(id);
 
 		String mails_str = null;
@@ -84,6 +105,6 @@ public class MailStorage {
 		Log.d("MailStorage", "Removing mail with id " + id);
 
 		prefEditor.putString("mails", mails_str);
-		prefEditor.commit();
+		prefEditor.apply();
 	}
 }

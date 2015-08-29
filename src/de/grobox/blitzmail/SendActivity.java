@@ -23,10 +23,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.OpenableColumns;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
@@ -37,6 +39,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
@@ -221,8 +231,55 @@ public class SendActivity extends AppCompatActivity {
 				jMail.put("id", mailId);
 				JSONArray attachments = new JSONArray();
 
-				for (Uri uri : attachmentUris) {
-					attachments.put(uri.toString());
+				for(Uri uri : attachmentUris) {
+					JSONObject attachment = new JSONObject();
+
+					// get file name
+					String filename;
+					Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+					if(cursor != null) {
+						int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+						cursor.moveToFirst();
+						filename = cursor.getString(nameIndex);
+						cursor.close();
+					}
+					else {
+						filename = uri.getLastPathSegment();
+					}
+					attachment.put("filename", filename);
+
+					// copy file into a temporary file
+					try {
+						File file = File.createTempFile(filename, null);
+						FileOutputStream fos = new FileOutputStream(file);
+
+						FileDescriptor fd = getContentResolver().openFileDescriptor(uri, "r").getFileDescriptor();
+						FileInputStream fis = new FileInputStream(fd);
+
+						copyLarge(fis, fos);
+
+						attachment.put("path", file.getAbsolutePath());
+					}
+					catch(FileNotFoundException e) {
+						showError(getString(R.string.error_file_not_found));
+					}
+					catch(IOException e) {
+						e.printStackTrace();
+					}
+
+					// get mime type
+					String mimeType = getContentResolver().getType(uri);
+					if(mimeType == null) {
+						// guess mime type
+						if(filename.endsWith(".jpg") || filename.endsWith(".jpeg")) {
+							mimeType = " image/jpeg";
+						} else {
+							mimeType = "application/octet-stream";
+						}
+					}
+					attachment.put("mimeType", mimeType);
+
+					attachments.put(attachment);
 				}
 				jMail.put("attachments", attachments);
 
@@ -340,5 +397,16 @@ public class SendActivity extends AppCompatActivity {
 		AlertDialog dialog = builder.create();
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
+	}
+
+	public static long copyLarge(InputStream input, OutputStream output) throws IOException	{
+		byte[] buffer = new byte[4096];
+		long count = 0L;
+		int n = 0;
+		while (-1 != (n = input.read(buffer))) {
+			output.write(buffer, 0, n);
+			count += n;
+		}
+		return count;
 	}
 }

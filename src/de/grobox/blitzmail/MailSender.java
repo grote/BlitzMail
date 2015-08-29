@@ -1,23 +1,18 @@
 package de.grobox.blitzmail;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.OpenableColumns;
 
 import com.provider.JSSEProvider;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.Security;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.activation.DataHandler;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -28,7 +23,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
 
 public class MailSender extends javax.mail.Authenticator {
 	private Context context;
@@ -76,10 +70,10 @@ public class MailSender extends javax.mail.Authenticator {
 
 			Multipart mp = new MimeMultipart();
 
-			for (int i = 0; i < attachments.length(); i++) {
-				Uri uri = Uri.parse(attachments.getString(i));
+			for(int i = 0; i < attachments.length(); i++) {
+				JSONObject attachment = attachments.getJSONObject(i);
 
-				MimeBodyPart mbp = getMimeBodyPart(uri);
+				MimeBodyPart mbp = getMimeBodyPart(attachment);
 
 				if(mbp != null) {
 					mp.addBodyPart(mbp);
@@ -98,45 +92,16 @@ public class MailSender extends javax.mail.Authenticator {
 		}
 	}
 
-	private MimeBodyPart getMimeBodyPart(Uri uri) throws IOException, MessagingException {
+	private MimeBodyPart getMimeBodyPart(JSONObject attachment) throws IOException, MessagingException {
 		MimeBodyPart mbp = new MimeBodyPart();
 
-		// check if image is still available
-		InputStream is;
 		try {
-			is = context.getContentResolver().openInputStream(uri);
+			mbp.attachFile(attachment.getString("path"));
+			mbp.setFileName(attachment.getString("filename"));
+			mbp.setHeader("Content-Type", attachment.getString("mimeType") + "; name=" + mbp.getFileName());
+		} catch(JSONException e) {
+			e.printStackTrace();
 		}
-		catch(FileNotFoundException e) {
-			throw new FileNotFoundException("File not found! Maybe it has been deleted since you tried to send the mail?");
-		}
-
-		// get file name
-		String filename;
-		Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-		if(cursor != null) {
-			int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-			cursor.moveToFirst();
-			filename = cursor.getString(nameIndex);
-			cursor.close();
-		}
-		else {
-			filename = uri.getLastPathSegment();
-		}
-
-		// get mime type
-		String mimeType = context.getContentResolver().getType(uri);
-		if(mimeType == null) {
-			// guess mime type
-			if(filename.endsWith(".jpg") || filename.endsWith(".jpeg")) {
-				mimeType = " image/jpeg";
-			} else {
-				mimeType = "application/octet-stream";
-			}
-		}
-
-		ByteArrayDataSource fds = new ByteArrayDataSource(is, mimeType);
-		mbp.setDataHandler(new DataHandler(fds));
-		mbp.setFileName(filename);
 
 		return mbp;
 	}
