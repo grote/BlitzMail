@@ -213,7 +213,8 @@ public class SendActivity extends AppCompatActivity {
 		}
 
 		try {
-			jMail.put("subject", getString(R.string.files));
+			String num = String.valueOf(jMail.getJSONArray("attachments").length());
+			jMail.put("subject", num + " " + getString(R.string.files_shared) + " " + getString(R.string.app_name));
 		} catch(JSONException e) {
 			e.printStackTrace();
 		}

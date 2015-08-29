@@ -37,7 +37,7 @@
     <string name="pref_success_notification">Benachrichtigung über versendete E-Mail</string>
     <string name="pref_summary_success_notification_on">Zeige eine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde.</string>
     <string name="pref_summary_success_notification_off">Zeige keine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde.</string>
-    <string name="files">Dateien</string>
+    <string name="files_shared">Datei(en) versendet mit</string>
     <string name="save">Speichern</string>
     <string name="error_attachment">Der Anhang der E-Mail konnte nicht geladen werden.</string>
     <string name="error_noaction">Die Methode zum Aufruf von BlitzMail wird nicht unterstützt. Bitte senden Sie dem Entwickler was Sie getan haben, um diesen Fehler auszulösen!</string>
