@@ -1,3 +1,10 @@
+Version 0.6
+	* Material Design
+	* New logo
+	* Allow files and images to be blitzmailed
+	* Send mails automatically when connectivity is restored
+	* some bugfixes
+
 Version 0.5
 	* added BlitzNote to quickly send a short note
 	* Holo theme for dialogs on devices that support it (3+)

@@ -10,14 +10,14 @@ buildscript {
 apply plugin: 'com.android.application'
 
 dependencies {
-	compile 'com.android.support:appcompat-v7:23.0.0'
+	compile 'com.android.support:appcompat-v7:23.0.1'
 	compile fileTree(dir: 'libs', include: '*.jar')
 }
 
 android {
 	defaultConfig {
-		versionCode 10
-		versionName "0.6-rc2"
+		versionCode 11
+		versionName "0.6"
 
 		compileSdkVersion 23
 		targetSdkVersion 23
