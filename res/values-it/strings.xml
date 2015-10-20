@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="send_mail">Invia</string>
+  <string name="sent_mail">Invia email</string>
+  <string name="sending_mail">Invio BlitzMail</string>
+  <string name="please_wait">Invio attendere prego...</string>
+  <string name="try_again">Prova di nuovo</string>
+  <string name="send_later">Invia dopo</string>
+  <string name="dismiss">Annulla</string>
+  <string name="pref_sending_title">Invio</string>
+  <string name="pref_mail_server">Impostazioni server email</string>
+  <string name="pref_summary_smtp_auth_off">Il server non richiede l\'autenticazione</string>
+  <string name="pref_summary_smtp_auth_on">Il server richiedere l\'autenticazione</string>
+  <string name="pref_smtp_server">Server SMTP</string>
+  <string name="pref_smtp_port">Porta SMTP</string>
+  <string name="pref_smtp_auth">Autenticazione SMTP</string>
+  <string name="pref_smtp_user">Nome utente</string>
+  <string name="pref_smtp_pass">Password</string>
+  <string name="pref_summary_recipient">Le email verranno inviate a questo indirizzo</string>
+  <string name="pref_sender">Indirizzo mittente</string>
+  <string name="pref_sender_name">Nome mittente</string>
+  <string name="pref_summary_sender">Le email sembreranno inviate da questo indirizzo</string>
+  <string name="pref_send_now">Invia email in coda adesso</string>
+  <string name="error">Errore</string>
+  <string name="error_option_not_set">Imposta questa opzione:</string>
+  <string name="pref_interface">Interfaccia</string>
+  <string name="pref_success_notification">Mostra notifiche per le email inviate</string>
+  <string name="pref_summary_success_notification_on">Mostra notifiche nella barra di stato dopo che le email sono state inviate</string>
+  <string name="pref_summary_success_notification_off">Non mostrare le notifiche nella barra di stato dopo che le mail sono state inviate</string>
+  <string name="save">Salva</string>
+  <string name="warning_nothing_to_send">Niente da inviare</string>
+</resources>

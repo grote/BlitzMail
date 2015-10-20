@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="send_mail">Send</string>
+  <string name="sent_mail">Sendt e-post</string>
+  <string name="sending_mail">Sender Blitz-e-post</string>
+  <string name="please_wait">Sender...</string>
+  <string name="try_again">Prøv igjen</string>
+  <string name="send_later">Send senere</string>
+  <string name="dismiss">Avslå</string>
+  <string name="pref_sending_title">Sender</string>
+  <string name="pref_mail_server">Tjenerinnstillinger for e-post</string>
+  <string name="pref_summary_smtp_auth_off">Tjeneren krever ikke bekreftelse</string>
+  <string name="pref_summary_smtp_auth_on">Tjeneren krever bekreftelse</string>
+  <string name="pref_smtp_server">SMTP-tjener</string>
+  <string name="pref_smtp_port">SMTP-port</string>
+  <string name="pref_smtp_auth">SMTP-bekreft.</string>
+  <string name="pref_smtp_user">Brukernavn</string>
+  <string name="pref_smtp_pass">Passord</string>
+  <string name="pref_summary_recipient">E-poster vil bli sendt til denne adressen</string>
+  <string name="pref_recipient">Mottakers adresse</string>
+  <string name="pref_sender">Avsenders adresse</string>
+  <string name="pref_sender_name">Avsenders adresse</string>
+  <string name="pref_summary_sender">E-poster vil tilsynelatende komme fra denne adressen</string>
+  <string name="pref_smtp_encryption">Kryptering</string>
+  <string name="pref_send_now">Send e-postene oppsamlingskø nå</string>
+  <string name="pref_send_now_summary">%d meldinger står i sendingskø</string>
+  <string name="error">Feil</string>
+  <string name="error_option_not_set">Ta dette valget:</string>
+  <string name="error_no_body_no_subject">Fikk ikke kroppsfelt eller emnetittel. E-post ble sendt fordi det kan hende den er tom.</string>
+  <string name="error_auth_failed">Bekreftelse feilet. Sjekk brukernavn og passord.</string>
+  <string name="error_smtp">Tjeneren svarte med følgende feilmelding. Sjekk dine SMTP-innstillinger.</string>
+  <string name="error_no_connection">Ingen internettilkobling. Tilsørg sådan, og prøv igjen.</string>
+  <string name="error_sslcert_invalid">Din tjeners SSL-sertifikat ble ikke betrodd av ditt Android-system. Importer sertifikatet og prøv igjen.</string>
+  <string name="error_decrypt">Kunne ikke dekryptere passordet ditt. Flyttet du programmet til en annen enhet? Før opp passordet ditt i innstillingene.</string>
+  <string name="error_lite_version">Beklageligvis er dette trekkplasteret bare tilgjengelig i BlitzMail Pro. Installer denne hvis du vil ha fullversjon. Du støtter da utviklingen av programmet.</string>
+  <string name="error_timeout">Tidsavbrudd for tilkobling til e-posttjeneren. Prøv igjen senere eller sjekk SMTP-innstillingene.</string>
+  <string name="error_noaction">Kan ikke påkalle BlitzMail på denne måten. Si ifra om hva du gjorde for å framprovosere denne adferden til utvikleren.</string>
+  <string name="error_attachment">Kunne ikke innhente e-postens vedlegg.</string>
+  <string name="error_file_not_found">Fant ikke fila. Kanskje den har blitt slettet etter at du prøvde å sende e-posten?</string>
+  <string name="pref_interface">Grensesnitt</string>
+  <string name="pref_success_notification">Vis merknad for sendt e-post</string>
+  <string name="pref_summary_success_notification_on">Vis merknad i statusfeltet etter at e-posten har blitt sendt</string>
+  <string name="pref_summary_success_notification_off">Ikke vis merknader i statusfeltet etter at e-post har blitt sendt.</string>
+  <string name="files_shared">Fil(er) delt med</string>
+  <string name="save">Lagre</string>
+  <string name="warning_nothing_to_send">Ingenting å sende</string>
+</resources>
