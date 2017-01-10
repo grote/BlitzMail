@@ -1,6 +1,6 @@
 buildscript {
 	repositories {
-		mavenCentral()
+		jcenter()
 	}
 	dependencies {
 		classpath 'com.android.tools.build:gradle:2.2.3'
@@ -16,8 +16,8 @@ dependencies {
 
 android {
 	defaultConfig {
-		versionCode 11
-		versionName "0.6"
+		versionCode 12
+		versionName "0.6.1"
 
 		compileSdkVersion 25
 		targetSdkVersion 25
