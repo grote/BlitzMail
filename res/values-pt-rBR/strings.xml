@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="send_mail">Enviar</string>
+  <string name="sent_mail">Email Enviado</string>
+  <string name="sending_mail">Enviando BlitzMail</string>
+  <string name="please_wait">Enviando, por favor aguarde...</string>
+  <string name="try_again">Tente Novamente</string>
+  <string name="send_later">Enviar mais Tarde</string>
+  <string name="pref_sending_title">Enviando</string>
+  <string name="pref_mail_server">Configuração do servidor de Email</string>
+  <string name="pref_summary_smtp_auth_off">O servidor não requer autenticação</string>
+  <string name="pref_summary_smtp_auth_on">O servidor requer autenticação</string>
+  <string name="pref_smtp_server">Servidor SMTP</string>
+  <string name="pref_smtp_port">Porta SMTP</string>
+  <string name="pref_smtp_auth">Autenticação SMTP</string>
+  <string name="pref_smtp_user">Nome de Usuário</string>
+  <string name="pref_smtp_pass">Senha</string>
+  <string name="pref_summary_recipient">Emails serão enviados para este endereço</string>
+  <string name="pref_recipient">Endereço do Destinatário</string>
+  <string name="pref_sender">Endereço do Remetente</string>
+  <string name="pref_sender_name">Nome do Remetente</string>
+  <string name="pref_summary_sender">Emails serão mostrados vindo deste endereço</string>
+  <string name="pref_smtp_encryption">Encriptação</string>
+  <string name="pref_send_now">Enviar emails na fila de espera Agora</string>
+  <string name="pref_send_now_summary">Existem %d emails aguardando para serem enviados</string>
+  <string name="error">Erro</string>
+  <string name="error_option_not_set">Por favor, defina esta opção:</string>
+  <string name="error_no_body_no_subject">Não obteve o conteúdo ou assunto. O email não foi enviado porque seria vazio.</string>
+  <string name="error_auth_failed">Falha na Autenticação. Por favor, cheque seu nome de usuário e senha!</string>
+  <string name="error_smtp">O servidor retornou o erro seguinte. Por favor, cheque suas configurações de SMTP.</string>
+  <string name="error_no_connection">Sem conexão com a Internet. Por favor, estabeleça a conectividade e tente novamente.</string>
+  <string name="error_decrypt">Não foi possível desencriptar a sua senha. Você moveu o aplicativo para outro aparelho? Por favor, entre sua senha novamente nas configurações.</string>
+  <string name="error_lite_version">Infelizmente, esse recurso está disponível somente no BlitzMail Pro. Por favor, obtenha esta versão para usar todos os recursos e apoiar o desenvolvimento deste aplicativo.</string>
+  <string name="error_timeout">A conexão com o servidor de email expirou. Por favor, tente novamente mais tarde ou verifique suas configurações de SMTP.</string>
+  <string name="error_noaction">Forma não suportada de chamar o BlitzMail. Por favor, reporte ao desenvolvedor o que você fez para que isto ocorresse.</string>
+  <string name="error_attachment">Não foi possível obter o anexo para o email.</string>
+  <string name="error_file_not_found">Arquivo não encontrado. Talvez tenha sido excluído desde que você tentou enviar o email?</string>
+  <string name="pref_interface">Interface</string>
+  <string name="pref_success_notification">Mostrar Notificação para emails Enviados</string>
+  <string name="pref_summary_success_notification_on">Mostrar notificação na barra de status após o email ser enviado</string>
+  <string name="pref_summary_success_notification_off">Não mostrar notificação na barra de status após o email ser enviado</string>
+  <string name="files_shared">Arquivo(s) compartilhados com</string>
+  <string name="save">Salvar</string>
+  <string name="warning_nothing_to_send">Nada para enviar</string>
+</resources>

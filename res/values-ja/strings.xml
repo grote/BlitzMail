@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="send_mail">送信</string>
+  <string name="sent_mail">メールを送信</string>
+  <string name="sending_mail">BlitzMail の送信中</string>
+  <string name="please_wait">送信中、しばらくお待ちください…</string>
+  <string name="try_again">再試行</string>
+  <string name="send_later">後で送信</string>
+  <string name="dismiss">消去</string>
+  <string name="pref_sending_title">送信中</string>
+  <string name="pref_mail_server">メールサーバー設定</string>
+  <string name="pref_summary_smtp_auth_off">サーバーは認証が必要ありません</string>
+  <string name="pref_summary_smtp_auth_on">サーバーは認証が必要です</string>
+  <string name="pref_smtp_server">SMTP サーバー</string>
+  <string name="pref_smtp_port">SMTP ポート</string>
+  <string name="pref_smtp_auth">SMTP 認証</string>
+  <string name="pref_smtp_user">ユーザー名</string>
+  <string name="pref_smtp_pass">パスワード</string>
+  <string name="pref_summary_recipient">メールはこのアドレスに送信されます</string>
+  <string name="pref_recipient">受信者のアドレス</string>
+  <string name="pref_sender">送信者のアドレス</string>
+  <string name="pref_sender_name">送信者名</string>
+  <string name="pref_summary_sender">メールはこのアドレスから来たものとして表示されます</string>
+  <string name="pref_smtp_encryption">暗号化</string>
+  <string name="pref_send_now">キューにあるメールを今すぐ送信</string>
+  <string name="pref_send_now_summary">%d の送信待機中のメールがあります</string>
+  <string name="error">エラー</string>
+  <string name="error_option_not_set">このオプションを設定してください:</string>
+  <string name="error_no_body_no_subject">本文または件名を取得できませんでした。空のメールは送信されません。</string>
+  <string name="error_auth_failed">認証に失敗しました。ユーザー名とパスワードを確認してください!</string>
+  <string name="error_smtp">サーバーが次のエラーを返しました。SMTP の設定を確認してください。</string>
+  <string name="error_no_connection">インターネットの接続が見つかりませんでした。接続を確立して、もう一度試してください。</string>
+  <string name="error_sslcert_invalid">サーバーの SSL 証明書が、お使いの Android システムによって信頼されていません。証明書をインポートして、もう一度試してください。</string>
+  <string name="error_decrypt">パスワードを復号化できませんでした。別のデバイスにアプリを移動しましたか? 設定で、再度パスワードを入力してください。</string>
+  <string name="error_lite_version">残念ながら、この機能は BlitzMail Pro でのみ利用可能です。すべての機能を使用するために、そしてこのアプリの開発をサポートするために、このバージョンを入手してください。</string>
+  <string name="error_timeout">メールサーバーへの接続がタイムアウトしました。後でもう一度試すか、SMTP の設定を確認してください。</string>
+  <string name="error_noaction">サポートされていない方法で BlitzMail を呼び出しました。何を行ってこれを引き起したかを、開発者に報告してください!</string>
+  <string name="error_attachment">メールの添付ファイルを取得できません。</string>
+  <string name="error_file_not_found">ファイルが見つかりません! メールを送信しようとしてから、削除されていませんか?</string>
+  <string name="pref_interface">インターフェイス</string>
+  <string name="pref_success_notification">メール送信済の通知を表示</string>
+  <string name="pref_summary_success_notification_on">メールが送信された後、ステータスバーに通知を表示します</string>
+  <string name="pref_summary_success_notification_off">メールが送信された後、ステータスバーに通知を表示しません</string>
+  <string name="files_shared">ファイルを共有</string>
+  <string name="save">保存</string>
+  <string name="warning_nothing_to_send">送信するものはありません</string>
+</resources>

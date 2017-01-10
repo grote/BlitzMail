@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="send_mail">Gönder</string>
+  <string name="sent_mail">Gönderilen Posta</string>
+  <string name="sending_mail">BlitzMail Gönderiliyor</string>
+  <string name="please_wait">Gönderiliyor lütfen bekleyin...</string>
+  <string name="try_again">Tekrar Dene</string>
+  <string name="send_later">Daha Sonra Gönder</string>
+  <string name="dismiss">İptal Et</string>
+  <string name="pref_sending_title">Gönderiliyor</string>
+  <string name="pref_mail_server">Posta Sunucusu Ayarları</string>
+  <string name="pref_summary_smtp_auth_off">Sunucu kimlik doğrulaması gerektirmiyor</string>
+  <string name="pref_summary_smtp_auth_on">Sunucu kimlik doğrulaması gerektiriyor</string>
+  <string name="pref_smtp_server">SMTP Sunucusu</string>
+  <string name="pref_smtp_port">SMTP Portu</string>
+  <string name="pref_smtp_auth">SMTP Kimlik Doğrulaması</string>
+  <string name="pref_smtp_user">Kullanıcı Adı</string>
+  <string name="pref_smtp_pass">Şifre</string>
+  <string name="pref_summary_recipient">Postalar bu adrese gönderilecek</string>
+  <string name="pref_recipient">Alıcı Adresi</string>
+  <string name="pref_sender">Gönderici Adresi</string>
+  <string name="pref_sender_name">Gönderici Adı</string>
+  <string name="pref_summary_sender">Postalar bu adresten gelmiş görünecek</string>
+  <string name="pref_smtp_encryption">Şifreleme</string>
+  <string name="pref_send_now">Kuyruğa Eklenmiş Postaları Şimdi Gönder</string>
+  <string name="pref_send_now_summary">Gönderilmeyi bekleyen %d posta var</string>
+  <string name="error">Hata</string>
+  <string name="error_option_not_set">Lütfen bu seçeneği ayarlayın:</string>
+  <string name="error_auth_failed">Kimlik doğrulama başarısız oldu. Lütfen kullanıcı adı ve şifrenizi kontrol edin!</string>
+  <string name="error_sslcert_invalid">Sunucunuzun SSL sertifikası Android sisteminiz tarafından güvenilmiyor. Lütfen sertifikayı içeri aktarın ve tekrar deneyin.</string>
+  <string name="pref_interface">Arayüz</string>
+  <string name="files_shared">Paylaşılan dosya(lar)</string>
+  <string name="save">Kaydet</string>
+  <string name="warning_nothing_to_send">Gönderilecek bir şey yok</string>
+</resources>

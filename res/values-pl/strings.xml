@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="send_mail">Wyślij</string>
+  <string name="sent_mail">Wyślij el-wiadomość</string>
+  <string name="sending_mail">Wysyłanie BlitzMail-a</string>
+  <string name="please_wait">Wysyłanie, proszę czekać...</string>
+  <string name="try_again">Spróbuj ponownie</string>
+  <string name="send_later">Wyślij później</string>
+  <string name="dismiss">Odrzuć</string>
+  <string name="pref_sending_title">Wysyłanie</string>
+  <string name="pref_mail_server">Ustawienia serwera poczty</string>
+  <string name="pref_summary_smtp_auth_off">Serwer nie wymaga uwierzytelnienia</string>
+  <string name="pref_summary_smtp_auth_on">Serwer wymaga uwierzytelnienia</string>
+  <string name="pref_smtp_server">Serwer SMTP</string>
+  <string name="pref_smtp_port">Port SMTP</string>
+  <string name="pref_smtp_auth">SMTP Auth</string>
+  <string name="pref_smtp_user">Nazwa użytkownika</string>
+  <string name="pref_smtp_pass">Hasło</string>
+  <string name="pref_summary_recipient">Wiadomości zostaną wysłane na ten adres</string>
+  <string name="pref_recipient">Adres odbiorcy</string>
+  <string name="pref_sender">Adres nadawcy</string>
+  <string name="pref_sender_name">Nazwa nadawcy</string>
+  <string name="pref_summary_sender">Wiadomości zostaną wysłane z tego adresu</string>
+  <string name="pref_smtp_encryption">Szyfrowanie</string>
+  <string name="pref_send_now">Wyślij teraz zakolejkowane wiadomości</string>
+  <string name="pref_send_now_summary">%d wiadomości oczekuje na przesłanie</string>
+  <string name="error">Błąd</string>
+  <string name="error_option_not_set">Proszę ustawić tę opcję:</string>
+  <string name="error_no_body_no_subject">Nie ma ani tematu, ani treści wiadomości. Pusta wiadomość nie zostanie wysłana.</string>
+  <string name="error_auth_failed">Błąd uwierzytelniania. Sprawdź nazwę użytkownika i hasło!</string>
+  <string name="error_smtp">Serwer zwrócił następujący błąd. Sprawdź ustawienia serwera SMTP.</string>
+  <string name="error_no_connection">Brak połączenia z Internetem. Połącz się z siecią i spróbuj ponownie.</string>
+  <string name="error_sslcert_invalid">Certyfikat SSL Twojego serwera jest nie jest zaufany w systemie Android. Zaimportuj certyfikat i spróbuj ponownie.</string>
+  <string name="error_decrypt">Nie można odszyfrować hasła. Może przeniosłeś aplikację z innego urządzenia? Wpisz ponownie swoje hasło w ustawieniach.</string>
+  <string name="error_lite_version">Niestety ta funkcja jest możliwa tylko w BlitzMail Pro. Pobierz tę wersję aby uzyskać dostęp do wszystkich funkcji i wesprzeć rozwój programu.</string>
+  <string name="error_timeout">Przekroczono czas oczekiwania na połączenie z serwerem poczty. Spróbuj ponownie później, lub sprawdź ustawienia SMTP.</string>
+  <string name="error_noaction">Niewspierany sposób wywołania programu BlitzMail. Prosimy skontaktować się z twórcą programu i opisać co spowodowało błąd!</string>
+  <string name="error_attachment">Problem dołączania załącznika do wiadomości.</string>
+  <string name="error_file_not_found">Nie znaleziono pliku! Może został on usunięty przed próbą wysłania wiadomości?</string>
+  <string name="pref_interface">Interfejs</string>
+  <string name="pref_success_notification">Pokaż powiadomienia wysłanych wiadomości</string>
+  <string name="pref_summary_success_notification_on">Pokaż powiadomienie na belce powiadomień po każdej wysłanej wiadomości</string>
+  <string name="pref_summary_success_notification_off">Nie pokazuj powiadomień na belce powiadomień po każdej wysłanej wiadomości</string>
+  <string name="files_shared">Plik(i) wysłane przez</string>
+  <string name="save">Zapisz</string>
+  <string name="warning_nothing_to_send">Nic do wysłania</string>
+</resources>
