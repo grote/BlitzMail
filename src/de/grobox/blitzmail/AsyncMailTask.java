@@ -76,7 +76,7 @@ class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 
 	@Override
 	protected void onPostExecute(Boolean result) {
-		String msg = "";
+		String msg;
 
 		// set progress notification to finished
 		activity.mBuilder.setProgress(0, 0, false);

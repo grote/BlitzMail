@@ -70,7 +70,7 @@ public class NotificationHandlerActivity extends Activity {
 
 		// show dialog for server errors
 		if(action.equals(ACTION_DIALOG)) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.InvisibleTheme);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogTheme);
 
 			builder.setTitle(intent.getStringExtra("ContentTitle"))
 					.setMessage(intent.getStringExtra("ContentText"))
@@ -134,7 +134,7 @@ public class NotificationHandlerActivity extends Activity {
 			// close this Activity
 			killNotificationAndFinish();
 		} else {
-			AlertDialog.Builder builder = new AlertDialog.Builder(NotificationHandlerActivity.this, R.style.InvisibleTheme);
+			AlertDialog.Builder builder = new AlertDialog.Builder(NotificationHandlerActivity.this, R.style.DialogTheme);
 
 			builder.setTitle(getString(R.string.app_name));
 			builder.setMessage(getString(R.string.error_lite_version));

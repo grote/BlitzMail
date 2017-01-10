@@ -34,7 +34,7 @@
         <activity
             android:name=".SendActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/InvisibleTheme">
+            android:theme="@style/DialogTheme">
 
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -55,7 +55,7 @@
             android:excludeFromRecents="true"
             android:taskAffinity=""
             android:launchMode="singleTask"
-            android:theme="@style/InvisibleTheme">
+            android:theme="@style/DialogTheme">
         </activity>
 
         <activity
@@ -63,7 +63,7 @@
             android:icon="@drawable/ic_launcher_note"
             android:label="@string/note_name"
             android:taskAffinity="de.grobox.blitzmail.NoteActivity"
-            android:theme="@style/InvisibleTheme">
+            android:theme="@style/DialogTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

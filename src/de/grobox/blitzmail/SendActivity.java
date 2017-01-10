@@ -29,11 +29,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.OpenableColumns;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,6 +56,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.os.Build.VERSION.SDK_INT;
+
 public class SendActivity extends AppCompatActivity {
 	// define variables to be used in AsyncMailTask
 	protected NotificationManager mNotifyManager;
@@ -58,7 +67,12 @@ public class SendActivity extends AppCompatActivity {
 	private int mailId;
 	protected Intent notifyIntent;
 	private Properties prefs;
+	private boolean error = false, requestingPermission = false;
+	private ArrayList<Uri> uris;
 
+	private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 42;
+
+	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -67,30 +81,8 @@ public class SendActivity extends AppCompatActivity {
 
 		// before doing anything show notification about sending process
 		mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
 		mBuilder = new NotificationCompat.Builder(this);
-		mBuilder.setContentTitle(getString(R.string.sending_mail))
-			.setContentText(getString(R.string.please_wait))
-			.setSmallIcon(R.drawable.notification_icon)
-			.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
-			.setOngoing(true)
-			.setProgress(0, 0, true);
-
-		// Create Pending Intent
-		notifyIntent = new Intent(this, NotificationHandlerActivity.class);
-		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		mBuilder.setContentIntent(pendingIntent);
-
-		// TODO allow sending to be cancelled, might need a service with broadcast receiver
-//		Intent dismissIntent = new Intent(this, NotificationHandlerActivity.class);
-//		dismissIntent.setAction("test");
-//		PendingIntent piCancel = PendingIntent.getActivity(this, 0, dismissIntent, 0);
-
-//		mBuilder.addAction(R.drawable.ic_action_cancel, getString(android.R.string.cancel), piCancel);
-
-		// Issues the notification
-		mNotifyManager.notify(mailId, mBuilder.build());
+		showNotification();
 
 		try {
 			prefs = getPrefs();
@@ -150,10 +142,52 @@ public class SendActivity extends AppCompatActivity {
 			sendMail(jMail, false);
 		} else {
 			showError(getString(R.string.error_noaction));
-			return;
 		}
 
-		finish();
+		if(error || requestingPermission) {
+			mNotifyManager.cancel(mailId);
+		} else {
+			finish();
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+		if(requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+			requestingPermission = false;
+			if(grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
+				showNotification();
+				sendAttachment(getMailWithAttachments(uris));
+				finish();
+			} else {
+				showError(getString(R.string.error_permission_denied));
+			}
+		}
+	}
+
+	private void showNotification() {
+		mBuilder.setContentTitle(getString(R.string.sending_mail))
+				.setContentText(getString(R.string.please_wait))
+				.setSmallIcon(R.drawable.notification_icon)
+				.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
+				.setOngoing(true)
+				.setProgress(0, 0, true);
+
+		// Create Pending Intent
+		notifyIntent = new Intent(this, NotificationHandlerActivity.class);
+		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		mBuilder.setContentIntent(pendingIntent);
+
+		// TODO allow sending to be cancelled, might need a service with broadcast receiver
+//		Intent dismissIntent = new Intent(this, NotificationHandlerActivity.class);
+//		dismissIntent.setAction("test");
+//		PendingIntent piCancel = PendingIntent.getActivity(this, 0, dismissIntent, 0);
+
+//		mBuilder.addAction(R.drawable.ic_action_cancel, getString(android.R.string.cancel), piCancel);
+
+		// Issues the notification
+		mNotifyManager.notify(mailId, mBuilder.build());
 	}
 
 	void handleSendText(Intent intent) {
@@ -186,7 +220,6 @@ public class SendActivity extends AppCompatActivity {
 			// Start Mail Task
 			sendMail(jMail);
 		} else {
-			Log.e("SendActivity", "Did not send mail, because subject and body empty.");
 			showError(getString(R.string.error_no_body_no_subject));
 		}
 	}
@@ -207,7 +240,9 @@ public class SendActivity extends AppCompatActivity {
 	}
 
 	private void sendAttachment(@Nullable JSONObject jMail) {
-		if(jMail == null) {
+		if (jMail == null && requestingPermission) {
+			return;
+		} else if(jMail == null) {
 			showError(getString(R.string.error_attachment));
 			return;
 		}
@@ -226,6 +261,15 @@ public class SendActivity extends AppCompatActivity {
 	@Nullable
 	private JSONObject getMailWithAttachments(ArrayList<Uri> attachmentUris) {
 		if(attachmentUris != null) {
+			// check if permission is needed for an URI and request if so
+			for(Uri uri : attachmentUris) {
+				if(uri.getScheme().equals("file") && SDK_INT >= 23) requestPermission();
+				if (requestingPermission) {
+					uris = attachmentUris;
+					return null;
+				}
+			}
+
 			// create JSON object with mail information
 			try {
 				JSONObject jMail = new JSONObject();
@@ -263,6 +307,7 @@ public class SendActivity extends AppCompatActivity {
 					}
 					catch(FileNotFoundException e) {
 						showError(getString(R.string.error_file_not_found));
+						return null;
 					}
 					catch(IOException e) {
 						e.printStackTrace();
@@ -377,11 +422,25 @@ public class SendActivity extends AppCompatActivity {
 		return mailId;
 	}
 
+	@RequiresApi(api = 16)
+	private void requestPermission() {
+		if(ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
+			// Should we show an explanation?
+			if (ActivityCompat.shouldShowRequestPermissionRationale(this, READ_EXTERNAL_STORAGE)) {
+				Toast.makeText(this, R.string.error_no_permission, Toast.LENGTH_LONG).show();
+			} else {
+				requestingPermission = true;
+				ActivityCompat.requestPermissions(this, new String[]{READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+			}
+		}
+	}
+
 	private void showError(String text) {
+		error = true;
 		// close notification first
 		mNotifyManager.cancel(mailId);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.InvisibleTheme);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogTheme);
 
 		builder.setTitle(getString(R.string.app_name) + " - " + getString(R.string.error));
 		builder.setMessage(text);
@@ -403,7 +462,7 @@ public class SendActivity extends AppCompatActivity {
 	public static long copyLarge(InputStream input, OutputStream output) throws IOException	{
 		byte[] buffer = new byte[4096];
 		long count = 0L;
-		int n = 0;
+		int n;
 		while (-1 != (n = input.read(buffer))) {
 			output.write(buffer, 0, n);
 			count += n;

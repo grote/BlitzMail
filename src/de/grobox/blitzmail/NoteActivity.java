@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class NoteActivity extends AppCompatActivity {
+
 	private TextView textView;
 
 	@Override
@@ -40,8 +41,8 @@ public class NoteActivity extends AppCompatActivity {
 		View mView = getLayoutInflater().inflate(R.layout.activity_note, null);
 		textView = (TextView) mView.findViewById(R.id.text);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.InvisibleTheme);
-		builder.setView(mView)
+		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogTheme)
+		.setView(mView)
 		.setTitle(R.string.note_name)
 		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
@@ -119,7 +120,7 @@ public class NoteActivity extends AppCompatActivity {
 		getPreferences(MODE_PRIVATE)
 				.edit()
 				.putString("note", text)
-				.commit();
+				.apply();
 	}
 
 	private void sendMail(CharSequence text) {
