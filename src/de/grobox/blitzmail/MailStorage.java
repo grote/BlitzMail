@@ -17,19 +17,19 @@
 
 package de.grobox.blitzmail;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 
-public class MailStorage {
+class MailStorage {
 
-	static public JSONObject getMails(Context context) {
+	static JSONObject getMails(Context context) {
 		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", Context.MODE_PRIVATE);
 		String mails_str = sharedPref.getString("mails", null);
 
@@ -46,7 +46,7 @@ public class MailStorage {
 		return mails;
 	}
 
-	static public void saveMail(Context context, JSONObject mail) {
+	static void saveMail(Context context, JSONObject mail) {
 		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", Context.MODE_PRIVATE);
 		SharedPreferences.Editor prefEditor = sharedPref.edit();
 
@@ -69,7 +69,7 @@ public class MailStorage {
 		prefEditor.apply();
 	}
 
-	static public void deleteMail(Context context, String id) {
+	static void deleteMail(Context context, String id) {
 		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", Context.MODE_PRIVATE);
 		SharedPreferences.Editor prefEditor = sharedPref.edit();
 

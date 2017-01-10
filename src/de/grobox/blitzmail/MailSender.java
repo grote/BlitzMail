@@ -24,7 +24,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-public class MailSender extends javax.mail.Authenticator {
+class MailSender extends javax.mail.Authenticator {
 	private Context context;
 	private Properties props;
 	private JSONObject mail;
@@ -34,7 +34,7 @@ public class MailSender extends javax.mail.Authenticator {
 		Security.addProvider(new JSSEProvider());
 	}
 
-	public MailSender(Context context, Properties props, JSONObject mail) {
+	MailSender(Context context, Properties props, JSONObject mail) {
 		this.context = context;
 		this.props = props;
 		this.mail = mail;
@@ -47,7 +47,7 @@ public class MailSender extends javax.mail.Authenticator {
 		return new PasswordAuthentication(props.getProperty("mail.smtp.user", ""), props.getProperty("mail.smtp.pass", ""));
 	}
 
-	public synchronized void sendMail() throws Exception {
+	synchronized void sendMail() throws Exception {
 
 		if(mail.has("body")) {
 			MimeMessage message = getMessage();

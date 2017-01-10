@@ -17,12 +17,6 @@
 
 package de.grobox.blitzmail;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Properties;
-
-import org.json.JSONObject;
-
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -31,14 +25,20 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
-public class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
+import org.json.JSONObject;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Properties;
+
+class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 	private SendActivity activity;
 	private Properties props;
 	private Exception e;
 
 	private JSONObject mail;
 
-	public AsyncMailTask(SendActivity activity, Properties props, JSONObject mail) {
+	AsyncMailTask(SendActivity activity, Properties props, JSONObject mail) {
 		this.activity = activity;
 		this.props = props;
 		this.mail = mail;

@@ -1,26 +1,26 @@
 package de.grobox.blitzmail;
 
+import android.content.Context;
+import android.provider.Settings;
+import android.util.Base64;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
-import android.content.Context;
-import android.provider.Settings;
-import android.util.Base64;
-
-public class Crypto {
+class Crypto {
 
 	private Context context;
-	protected static final String UTF8 = "utf-8";
+	private static final String UTF8 = "utf-8";
 
-	public Crypto(Context context) {
+	Crypto(Context context) {
 		this.context = context;
 	}
 
 	@SuppressWarnings("deprecation")
-	protected String encrypt( String value ) {
+	String encrypt( String value ) {
 		try {
 			final byte[] bytes = value!=null ? value.getBytes(UTF8) : new byte[0];
 			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
@@ -36,7 +36,7 @@ public class Crypto {
 	}
 
 	@SuppressWarnings("deprecation")
-	protected String decrypt(String value){
+	String decrypt(String value){
 		try {
 			final byte[] bytes = value!=null ? Base64.decode(value,Base64.DEFAULT) : new byte[0];
 			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
