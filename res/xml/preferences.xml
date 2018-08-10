@@ -54,7 +54,8 @@
         <de.grobox.blitzmail.EncryptedEditTextPreference
             android:title="@string/pref_smtp_pass"
             android:key="pref_smtp_pass"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:importantForAccessibility="no"/>
         
     </PreferenceCategory>
 
