@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat.BigTextStyle;
+import androidx.core.app.NotificationCompat.BigTextStyle;
 import android.util.Log;
 
 import org.json.JSONObject;

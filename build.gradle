@@ -18,7 +18,7 @@ allprojects {
 apply plugin: 'com.android.application'
 
 dependencies {
-	implementation 'com.android.support:appcompat-v7:28.0.0'
+	implementation 'androidx.appcompat:appcompat:1.0.0'
 	implementation 'com.sun.mail:android-mail:1.6.2'
 	implementation 'com.sun.mail:android-activation:1.6.2'
 }
