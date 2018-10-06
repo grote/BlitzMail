@@ -13,6 +13,7 @@ import java.security.Security;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -24,7 +25,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-class MailSender extends javax.mail.Authenticator {
+class MailSender extends Authenticator {
 	private Context context;
 	private Properties props;
 	private JSONObject mail;

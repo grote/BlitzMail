@@ -17,14 +17,13 @@
 
 package de.grobox.blitzmail;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -57,7 +56,9 @@ import java.util.Date;
 import java.util.Properties;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.app.NotificationManager.IMPORTANCE_LOW;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.graphics.BitmapFactory.decodeResource;
 import static android.os.Build.VERSION.SDK_INT;
 
 public class SendActivity extends AppCompatActivity {
@@ -70,18 +71,26 @@ public class SendActivity extends AppCompatActivity {
 	private boolean error = false, requestingPermission = false;
 	private ArrayList<Uri> uris;
 
+	private static final String NOTIFICATION_CHANNEL_ID = "BlitzMail";
 	private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 42;
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// setup notification channels
+		mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		assert mNotifyManager != null;
+		if (SDK_INT >= 26) {
+			NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, getString(R.string.app_name), IMPORTANCE_LOW);
+			mNotifyManager.createNotificationChannel(channel);
+		}
+
 		// generate mail id from current time
 		mailId = (int) ((new Date().getTime() / 100) % 1000000000);
 
 		// before doing anything show notification about sending process
-		mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		mBuilder = new NotificationCompat.Builder(this);
+		mBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
 		showNotification();
 
 		try {
@@ -120,7 +129,7 @@ public class SendActivity extends AppCompatActivity {
 		else if(Intent.ACTION_SEND_MULTIPLE.equals(action)) {
 			handleSendMultipleAttachment(intent);
 		}
-		else if(action.equals("BlitzMailReSend")) {
+		else if("BlitzMailReSend".equals(action)) {
 			JSONObject jMail;
 			try {
 				jMail = new JSONObject(intent.getStringExtra("mail"));
@@ -169,9 +178,10 @@ public class SendActivity extends AppCompatActivity {
 		mBuilder.setContentTitle(getString(R.string.sending_mail))
 				.setContentText(getString(R.string.please_wait))
 				.setSmallIcon(R.drawable.notification_icon)
-				.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
+				.setLargeIcon(decodeResource(getResources(), R.drawable.ic_launcher))
 				.setOngoing(true)
-				.setProgress(0, 0, true);
+				.setProgress(0, 0, true)
+				.setSound(null);
 
 		// Create Pending Intent
 		notifyIntent = new Intent(this, NotificationHandlerActivity.class);
@@ -263,7 +273,7 @@ public class SendActivity extends AppCompatActivity {
 		if(attachmentUris != null) {
 			// check if permission is needed for an URI and request if so
 			for(Uri uri : attachmentUris) {
-				if(uri.getScheme().equals("file") && SDK_INT >= 23) requestPermission();
+				if("file".equals(uri.getScheme()) && SDK_INT >= 23) requestPermission();
 				if (requestingPermission) {
 					uris = attachmentUris;
 					return null;
@@ -388,7 +398,9 @@ public class SendActivity extends AppCompatActivity {
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
 		props.setProperty("mail.host", server);
-		props.setProperty("mail.user", pref.getString("pref_sender_name", getString(R.string.app_name)) + " <" + sender + ">");
+		String from = pref.getString("pref_sender_name", getString(R.string.app_name)) + " <" + sender + ">";
+		props.setProperty("mail.user", from);
+		props.setProperty("mail.from", from);
 		props.setProperty("mail.smtp.auth", String.valueOf(auth));
 		props.setProperty("mail.smtp.port", port);
 		props.setProperty("mail.smtp.recipients", recipients);
@@ -402,14 +414,12 @@ public class SendActivity extends AppCompatActivity {
 			// set encryption properties
 			if(pref.getString("pref_smtp_encryption", "").equals("ssl")) {
 				Log.i("SendActivity", "Using SSL Encryption...");
-				props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-				props.setProperty("mail.smtp.socketFactory.port", port);
-				props.setProperty("mail.smtp.socketFactory.fallback", "false");
-				props.setProperty("mail.smtp.ssl.checkserveridentity", "true");
+				props.setProperty("mail.smtp.ssl.enable", "true");
 			} else if(pref.getString("pref_smtp_encryption", "").equals("tls")) {
 				Log.i("SendActivity", "Using TLS Encryption...");
 				props.setProperty("mail.smtp.starttls.enable", "true");
 			}
+			props.setProperty("mail.smtp.ssl.checkserveridentity", "true");
 		} else {
 			// set some hostname for proper HELO greeting
 			props.setProperty("mail.smtp.localhost",  "android.com");

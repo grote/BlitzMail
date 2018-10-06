@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.BigTextStyle;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -160,7 +160,7 @@ class AsyncMailTask extends AsyncTask<Void, Void, Boolean> {
 		}
 
 		// Update the notification
-		activity.mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+		activity.mBuilder.setStyle(new BigTextStyle().bigText(msg))
 				.setContentText(msg.substring(0, msg.length() <= 32 ? msg.length() : 32))
 				.setContentIntent(PendingIntent.getActivity(activity, 0, activity.notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 		activity.mNotifyManager.notify(activity.getMailId(), activity.mBuilder.build());
