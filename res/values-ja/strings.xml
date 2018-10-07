@@ -37,6 +37,8 @@
   <string name="error_noaction">サポートされていない方法で BlitzMail を呼び出しました。何を行ってこれを引き起したかを、開発者に報告してください!</string>
   <string name="error_attachment">メールの添付ファイルを取得できません。</string>
   <string name="error_file_not_found">ファイルが見つかりません! メールを送信しようとしてから、削除されていませんか?</string>
+  <string name="error_permission_denied">必要なアクセス許可がないためメールを送信できませんでした。</string>
+  <string name="error_no_permission">ファイルにアクセスする権限がありません。 設定でアクセス許可を与えてください!</string>
   <string name="pref_interface">インターフェイス</string>
   <string name="pref_success_notification">メール送信済の通知を表示</string>
   <string name="pref_summary_success_notification_on">メールが送信された後、ステータスバーに通知を表示します</string>

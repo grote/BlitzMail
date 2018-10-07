@@ -37,6 +37,8 @@
   <string name="error_noaction">Die Methode zum Aufruf von BlitzMail wird nicht unterstützt. Bitte senden Sie dem Entwickler was Sie getan haben, um diesen Fehler auszulösen!</string>
   <string name="error_attachment">Der Anhang der E-Mail konnte nicht geladen werden.</string>
   <string name="error_file_not_found">Datei nicht gefunden! Wurde sie vielleicht vor dem Senden der E-Mail gelöscht?</string>
+  <string name="error_permission_denied">E-Mail konnte ohne die erforderliche Berechtigung nicht gesendet werden.</string>
+  <string name="error_no_permission">Keine Zugriffsberechtigung. Bitte erteilen Sie die Berechtigung in den Einstellungen!</string>
   <string name="pref_interface">Verhalten</string>
   <string name="pref_success_notification">Benachrichtigung über versendete E-Mail</string>
   <string name="pref_summary_success_notification_on">Zeige eine Benachrichtigung nachdem eine E-Mail erfolgreich verschickt wurde.</string>

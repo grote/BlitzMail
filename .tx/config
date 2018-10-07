@@ -1,6 +1,6 @@
 [main]
 host = https://www.transifex.com
-lang_map = pt_BR: pt-rBR
+lang_map = pt_BR: pt-rBR, pt_PT: pt-rPT
 
 [blitzmail.strings]
 file_filter = res/values-<lang>/strings.xml

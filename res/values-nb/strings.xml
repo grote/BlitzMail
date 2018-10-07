@@ -37,6 +37,8 @@
   <string name="error_noaction">Kan ikke påkalle BlitzMail på denne måten. Si ifra om hva du gjorde for å framprovosere denne adferden til utvikleren.</string>
   <string name="error_attachment">Kunne ikke innhente e-postens vedlegg.</string>
   <string name="error_file_not_found">Fant ikke fila. Kanskje den har blitt slettet etter at du prøvde å sende e-posten?</string>
+  <string name="error_permission_denied">Kunne ikke sende e-post uten påkrevd tilgang.</string>
+  <string name="error_no_permission">Du har ikke tilgang til denne fila. Gi filtilgang i innstillingene!</string>
   <string name="pref_interface">Grensesnitt</string>
   <string name="pref_success_notification">Vis merknad for sendt e-post</string>
   <string name="pref_summary_success_notification_on">Vis merknad i statusfeltet etter at e-posten har blitt sendt</string>

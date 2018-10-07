@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="send_mail">Wyślij</string>
-  <string name="sent_mail">Wyślij el-wiadomość</string>
+  <string name="sent_mail">Wyślij wiadomość</string>
   <string name="sending_mail">Wysyłanie BlitzMail-a</string>
   <string name="please_wait">Wysyłanie, proszę czekać...</string>
   <string name="try_again">Spróbuj ponownie</string>
@@ -37,11 +37,13 @@
   <string name="error_noaction">Niewspierany sposób wywołania programu BlitzMail. Prosimy skontaktować się z twórcą programu i opisać co spowodowało błąd!</string>
   <string name="error_attachment">Problem dołączania załącznika do wiadomości.</string>
   <string name="error_file_not_found">Nie znaleziono pliku! Może został on usunięty przed próbą wysłania wiadomości?</string>
+  <string name="error_permission_denied">Nie można wysłać wiadomości bez wymaganego zezwolenia.</string>
+  <string name="error_no_permission">Nie masz zezwolenia na dostęp do pliku. Udziel zezwolenia w ustawieniach!</string>
   <string name="pref_interface">Interfejs</string>
   <string name="pref_success_notification">Pokaż powiadomienia wysłanych wiadomości</string>
   <string name="pref_summary_success_notification_on">Pokaż powiadomienie na belce powiadomień po każdej wysłanej wiadomości</string>
   <string name="pref_summary_success_notification_off">Nie pokazuj powiadomień na belce powiadomień po każdej wysłanej wiadomości</string>
   <string name="files_shared">Plik(i) wysłane przez</string>
   <string name="save">Zapisz</string>
-  <string name="warning_nothing_to_send">Nic do wysłania</string>
+  <string name="warning_nothing_to_send">Nie ma nic do wysłania</string>
 </resources>
