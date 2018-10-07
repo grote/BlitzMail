@@ -20,7 +20,6 @@ import de.grobox.blitzmail.R
 import de.grobox.blitzmail.notification.NotificationHandlerActivity.Companion.ACTION_DIALOG
 import de.grobox.blitzmail.notification.NotificationHandlerActivity.Companion.ACTION_FINISH
 import de.grobox.blitzmail.notification.NotificationHandlerActivity.Companion.ACTION_SEND_LATER
-import org.json.JSONObject
 import java.security.cert.CertificateException
 import javax.crypto.BadPaddingException
 import javax.mail.AuthenticationFailedException
@@ -38,8 +37,9 @@ fun getMailNotificationManager(context: Context): MailNotificationManager {
     return mailNotificationManager ?: MailNotificationManager(context)
 }
 
+const val NOTIFICATION_ID_SENDING = 1
+const val NOTIFICATION_ID_ERROR = 2
 private const val NOTIFICATION_CHANNEL_ID = "BlitzMail"
-private const val NOTIFICATION_ERROR_ADD = 1
 
 class MailNotificationManager internal constructor(val c: Context) {
 
@@ -106,12 +106,12 @@ class MailNotificationManager internal constructor(val c: Context) {
         notificationManager.notify(mailId, notificationBuilder.build())
     }
 
-    fun showErrorNotification(mailId: Int, mail: JSONObject, e: Exception) {
+    fun showErrorNotification(e: Exception) {
         // set progress notification to finished
         notificationBuilder.setProgress(0, 0, false)
         notificationBuilder.setOngoing(false)
 
-        // set dialog to auto close when clicked
+        // set notification to auto close when clicked
         notificationBuilder.setAutoCancel(true)
 
         // show error notification
@@ -123,7 +123,6 @@ class MailNotificationManager internal constructor(val c: Context) {
         val tryAgainIntent = Intent(c, NotificationHandlerActivity::class.java)
         tryAgainIntent.action = NotificationHandlerActivity.ACTION_TRY_AGAIN
         tryAgainIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        tryAgainIntent.putExtra("mail", mail.toString())
         val piTryAgain = PendingIntent.getActivity(c, 0, tryAgainIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         notificationBuilder.addAction(R.drawable.ic_action_try_again, c.getString(R.string.try_again), piTryAgain)
 
@@ -131,7 +130,6 @@ class MailNotificationManager internal constructor(val c: Context) {
         val sendLaterIntent = Intent(c, NotificationHandlerActivity::class.java)
         sendLaterIntent.action = ACTION_SEND_LATER
         tryAgainIntent.flags = FLAG_ACTIVITY_NEW_TASK
-        sendLaterIntent.putExtra("mail", mail.toString())
         val piSendLater = PendingIntent.getActivity(c, 0, sendLaterIntent, FLAG_UPDATE_CURRENT)
         notificationBuilder.addAction(R.drawable.ic_action_send_later, c.getString(R.string.send_later), piSendLater)
 
@@ -160,13 +158,16 @@ class MailNotificationManager internal constructor(val c: Context) {
         notifyIntent.action = ACTION_DIALOG
         notifyIntent.putExtra("ContentTitle", c.getString(R.string.error))
         notifyIntent.putExtra("ContentText", msg)
-        notifyIntent.putExtra("mail", mail.toString())
 
         // Update the notification
         notificationBuilder.setStyle(NotificationCompat.BigTextStyle().bigText(msg))
                 .setContentText(msg.substring(0, if (msg.length <= 32) msg.length else 32))
                 .setContentIntent(PendingIntent.getActivity(c, 0, notifyIntent, FLAG_UPDATE_CURRENT))
-        notificationManager.notify(mailId + NOTIFICATION_ERROR_ADD, notificationBuilder.build())
+        notificationManager.notify(NOTIFICATION_ID_ERROR, notificationBuilder.build())
+    }
+
+    fun cancelErrorNotification() {
+        notificationManager.cancel(NOTIFICATION_ID_ERROR)
     }
 
 }

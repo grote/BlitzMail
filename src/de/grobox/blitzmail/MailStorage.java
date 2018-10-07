@@ -17,6 +17,7 @@
 
 package de.grobox.blitzmail;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -48,7 +49,8 @@ public class MailStorage {
 		return mails;
 	}
 
-	public static void saveMail(Context context, JSONObject mail) {
+	@SuppressLint("ApplySharedPref")
+	public static synchronized void saveMail(Context context, JSONObject mail) {
 		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", MODE_PRIVATE);
 		SharedPreferences.Editor prefEditor = sharedPref.edit();
 
@@ -61,10 +63,10 @@ public class MailStorage {
 		}
 
 		prefEditor.putString("mails", mails.toString());
-		prefEditor.apply();
+		prefEditor.commit();  // save this right away
 	}
 
-	public static void deleteMail(Context context, String id) {
+	public static synchronized void deleteMail(Context context, String id) {
 		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", MODE_PRIVATE);
 		SharedPreferences.Editor prefEditor = sharedPref.edit();
 

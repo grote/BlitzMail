@@ -18,20 +18,17 @@
 package de.grobox.blitzmail.notification
 
 import android.app.Activity
-import android.app.NotificationManager
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import de.grobox.blitzmail.BuildConfig
-import de.grobox.blitzmail.MailStorage
 import de.grobox.blitzmail.NetworkChangeReceiver
 import de.grobox.blitzmail.R
 import de.grobox.blitzmail.send.SendActivity
-import org.json.JSONObject
+import de.grobox.blitzmail.send.SendActivity.ACTION_RESEND
 
 class NotificationHandlerActivity : Activity() {
 
@@ -42,8 +39,12 @@ class NotificationHandlerActivity : Activity() {
         const val ACTION_TRY_AGAIN = "de.grobox.blitzmail.action.TRY_AGAIN"
     }
 
+    private lateinit var mailNotificationManager: MailNotificationManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mailNotificationManager = getMailNotificationManager(applicationContext)
 
         if (intent != null) {
             onNewIntent(intent)
@@ -51,8 +52,6 @@ class NotificationHandlerActivity : Activity() {
     }
 
     override fun onNewIntent(intent: Intent) {
-        val mail = JSONObject(intent.getStringExtra("mail"))
-
         // show dialog for server errors
         when (intent.action) {
             ACTION_DIALOG -> {
@@ -62,26 +61,24 @@ class NotificationHandlerActivity : Activity() {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         // Add the buttons
                         .setNegativeButton(resources.getString(R.string.dismiss)) { _, _ ->
-                            MailStorage.deleteMail(this, mail.optString("id"))
-                            // User clicked Cancel button, close this Activity
                             finish()
                         }
-                        .setNeutralButton(resources.getString(R.string.send_later)) { _, _ -> sendLater(mail) }
-                        .setPositiveButton(resources.getString(R.string.try_again)) { _, _ -> tryAgain(mail) }
+                        .setNeutralButton(resources.getString(R.string.send_later)) { _, _ -> sendLater() }
+                        .setPositiveButton(resources.getString(R.string.try_again)) { _, _ -> tryAgain() }
 
                 // Create and show the AlertDialog
                 val dialog = builder.create()
                 dialog.setCanceledOnTouchOutside(false)
                 dialog.show()
             }
-            ACTION_SEND_LATER -> sendLater(mail)
-            ACTION_TRY_AGAIN -> tryAgain(mail)
-            ACTION_FINISH -> killNotificationAndFinish(mail)
+            ACTION_SEND_LATER -> sendLater()
+            ACTION_TRY_AGAIN -> tryAgain()
+            ACTION_FINISH -> killNotificationAndFinish()
             else -> finish()
         }
     }
 
-    private fun sendLater(mail: JSONObject) {
+    private fun sendLater() {
         // User clicked Cancel button
         if (BuildConfig.PRO) {
             // start listening for network connectivity changes
@@ -93,7 +90,7 @@ class NotificationHandlerActivity : Activity() {
                     PackageManager.DONT_KILL_APP)
 
             // close this Activity
-            killNotificationAndFinish(mail)
+            killNotificationAndFinish()
         } else {
             val builder = AlertDialog.Builder(this, R.style.DialogTheme)
 
@@ -123,21 +120,18 @@ class NotificationHandlerActivity : Activity() {
         }
     }
 
-    private fun tryAgain(mail: JSONObject) {
+    private fun tryAgain() {
         // Prepare start of new activity
         val intent = Intent(this, SendActivity::class.java)
-        intent.action = "BlitzMailReSend"
-        intent.putExtra("mail", mail.toString())
+        intent.action = ACTION_RESEND
 
-        killNotificationAndFinish(mail)
+        killNotificationAndFinish()
 
         startActivity(intent)
     }
 
-    private fun killNotificationAndFinish(mail: JSONObject) {
-        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.cancel(mail.optInt("id"))
-
+    private fun killNotificationAndFinish() {
+        mailNotificationManager.cancelErrorNotification()
         finish()
     }
 }

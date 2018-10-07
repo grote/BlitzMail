@@ -2,9 +2,9 @@ package de.grobox.blitzmail.send
 
 import android.app.IntentService
 import android.content.Intent
-import android.util.Log
 import de.grobox.blitzmail.MailStorage
 import de.grobox.blitzmail.notification.MailNotificationManager
+import de.grobox.blitzmail.notification.NOTIFICATION_ID_SENDING
 import de.grobox.blitzmail.notification.getMailNotificationManager
 import de.grobox.blitzmail.preferences.getProperties
 import org.json.JSONObject
@@ -28,17 +28,31 @@ class SenderService : IntentService("SenderService") {
     override fun onHandleIntent(intent: Intent?) {
         if (intent == null) return
 
-        val mail = JSONObject(intent.getStringExtra(MAIL))
+        mailNotificationManager.createNotificationChannel();
+        startForeground(NOTIFICATION_ID_SENDING, mailNotificationManager.getForegroundNotification());
+
+        intent.getStringExtra(MAIL)?.let {
+            // save mail before sending all saved mails
+            MailStorage.saveMail(this, JSONObject(it))
+        }
+
+        // send all saved mails
+        val mails = MailStorage.getMails(this)
+        mails.keys().forEach {
+            val mail = mails.getJSONObject(it);
+            sendMail(mail)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopForeground(true)
+    }
+
+    private fun sendMail(mail: JSONObject) {
         val mailId = mail.getInt(MAIL_ID)
         val subject = mail.getString(MAIL_SUBJECT)
-
-        mailNotificationManager.createNotificationChannel();
-        startForeground(mailId, mailNotificationManager.getForegroundNotification());
-
         try {
-            // save mail, will be removed by sender on
-            MailStorage.saveMail(this, mail)
-
             MailSender(getProperties(applicationContext), mail).sendMail()
 
             mailNotificationManager.showSuccessNotification(mailId, subject)
@@ -46,15 +60,9 @@ class SenderService : IntentService("SenderService") {
             // Everything went fine, so delete mail from local storage
             MailStorage.deleteMail(applicationContext, mailId.toString())
         } catch (e: Exception) {
-            Log.d("AsyncMailTask", "ERROR: " + e.localizedMessage)
-
-            mailNotificationManager.showErrorNotification(mailId, mail, e)
+            e.printStackTrace()
+            mailNotificationManager.showErrorNotification(e)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        stopForeground(true)
     }
 
 }

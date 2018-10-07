@@ -22,16 +22,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import de.grobox.blitzmail.preferences.PrefFragment;
 import de.grobox.blitzmail.send.SendActivity;
 
-import android.view.MenuItem;
-
-import org.json.JSONObject;
-
-import java.util.Iterator;
+import static de.grobox.blitzmail.send.SendActivity.ACTION_RESEND;
 
 public class MainActivity extends AppCompatActivity {
 	@Override
@@ -61,20 +59,11 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public static void sendOldMails(Context context) {
-		JSONObject mails = MailStorage.getMails(context);
-
-		Iterator<?> i = mails.keys();
-
-		while(i.hasNext()) {
-			String mail = mails.opt((String) i.next()).toString();
-
-			Intent intent = new Intent(context, SendActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-			intent.setAction("BlitzMailReSend");
-			intent.putExtra("mail", mail);
-			context.startActivity(intent);
-		}
+		Intent intent = new Intent(context, SendActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+		intent.setAction(ACTION_RESEND);
+		context.startActivity(intent);
 
 		// stop listening to changes in network connectivity
 		ComponentName receiver = new ComponentName(context, NetworkChangeReceiver.class);

@@ -55,6 +55,7 @@ import static android.content.Intent.ACTION_SEND_MULTIPLE;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION.SDK_INT;
+import static android.widget.Toast.LENGTH_LONG;
 import static de.grobox.blitzmail.send.SenderServiceKt.MAIL;
 import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_ATTACHMENTS;
 import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_BODY;
@@ -69,6 +70,7 @@ public class SendActivity extends AppCompatActivity {
 	private boolean error = false, requestingPermission = false;
 	private ArrayList<Uri> uris;
 
+	public static final String ACTION_RESEND = "BlitzMailReSend";
 	private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 42;
 
 	@Override
@@ -97,16 +99,8 @@ public class SendActivity extends AppCompatActivity {
 			}
 		} else if(ACTION_SEND_MULTIPLE.equals(action)) {
 			handleSendMultipleAttachment(intent);
-		} else if("BlitzMailReSend".equals(action)) {
-			JSONObject jMail;
-			try {
-				jMail = new JSONObject(intent.getStringExtra("mail"));
-			} catch (JSONException e) {
-				throw new AssertionError(e);
-			}
-
-			// Start Mail Task
-			sendMail(jMail);
+		} else if(ACTION_RESEND.equals(action)) {
+			sendMail(null);
 		} else {
 			showError(getString(R.string.error_noaction));
 		}
@@ -276,9 +270,9 @@ public class SendActivity extends AppCompatActivity {
 		return null;
 	}
 
-	private void sendMail(JSONObject jMail) {
+	private void sendMail(@Nullable JSONObject jMail) {
 		Intent intent = new Intent(this, SenderService.class);
-		intent.putExtra(MAIL, jMail.toString());
+		intent.putExtra(MAIL, jMail == null ? null : jMail.toString());
 		ContextCompat.startForegroundService(this, intent);
 	}
 
@@ -287,7 +281,7 @@ public class SendActivity extends AppCompatActivity {
 		if(ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
 			// Should we show an explanation?
 			if (ActivityCompat.shouldShowRequestPermissionRationale(this, READ_EXTERNAL_STORAGE)) {
-				Toast.makeText(this, R.string.error_no_permission, Toast.LENGTH_LONG).show();
+				Toast.makeText(this, R.string.error_no_permission, LENGTH_LONG).show();
 			} else {
 				requestingPermission = true;
 				ActivityCompat.requestPermissions(this, new String[]{READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
