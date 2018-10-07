@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -33,10 +34,11 @@ import org.json.JSONObject;
 import androidx.appcompat.app.AlertDialog;
 import de.grobox.blitzmail.BuildConfig;
 import de.grobox.blitzmail.MailStorage;
-import de.grobox.blitzmail.MainActivity;
 import de.grobox.blitzmail.R;
 
-public class PrefFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+import static de.grobox.blitzmail.send.SendLaterWorkerKt.sendQueuedMails;
+
+public class PrefFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -101,7 +103,7 @@ public class PrefFragment extends PreferenceFragment implements SharedPreference
 			pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				public boolean onPreferenceClick(Preference preference) {
 					if(BuildConfig.PRO) {
-						MainActivity.sendOldMails(getActivity());
+						sendQueuedMails(getContext());
 						((PreferenceCategory) findPreference("pref_sending")).removePreference(findPreference("pref_send_now"));
 					} else {
 						AlertDialog.Builder builder = new AlertDialog.Builder(c, R.style.DialogTheme);

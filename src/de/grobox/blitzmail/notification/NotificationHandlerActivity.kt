@@ -18,17 +18,15 @@
 package de.grobox.blitzmail.notification
 
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import de.grobox.blitzmail.BuildConfig
-import de.grobox.blitzmail.NetworkChangeReceiver
 import de.grobox.blitzmail.R
 import de.grobox.blitzmail.send.SendActivity
 import de.grobox.blitzmail.send.SendActivity.ACTION_RESEND
+import de.grobox.blitzmail.send.scheduleSending
 
 class NotificationHandlerActivity : Activity() {
 
@@ -81,15 +79,7 @@ class NotificationHandlerActivity : Activity() {
     private fun sendLater() {
         // User clicked Cancel button
         if (BuildConfig.PRO) {
-            // start listening for network connectivity changes
-            val receiver = ComponentName(this, NetworkChangeReceiver::class.java)
-
-            val pm = packageManager
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP)
-
-            // close this Activity
+            scheduleSending()
             killNotificationAndFinish()
         } else {
             val builder = AlertDialog.Builder(this, R.style.DialogTheme)

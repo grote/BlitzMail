@@ -22,9 +22,11 @@ apply plugin: 'kotlin-android'
 
 dependencies {
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
 	implementation 'androidx.appcompat:appcompat:1.0.0'
+	implementation "android.arch.work:work-runtime-ktx:1.0.0-alpha09"
+
 	implementation 'com.sun.mail:android-mail:1.6.2'
-	implementation 'com.sun.mail:android-activation:1.6.2'
 }
 
 android {
