@@ -18,15 +18,16 @@ class SendLaterWorker(context: Context, params: WorkerParameters) : Worker(conte
 
 }
 
-fun scheduleSending() {
+fun scheduleSending(delayInMinutes: Long = 5) {
+    val workManager = WorkManager.getInstance()
     val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
     val worker = OneTimeWorkRequestBuilder<SendLaterWorker>()
-            .setInitialDelay(5, TimeUnit.MINUTES)
+            .setInitialDelay(delayInMinutes, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
-    WorkManager.getInstance().enqueue(worker)
+    workManager.enqueue(worker)
 }
 
 fun sendQueuedMails(context: Context) {

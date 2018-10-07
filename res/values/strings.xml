@@ -49,5 +49,6 @@
     <string name="files_shared">File(s) shared with</string>
     <string name="save">Save</string>
     <string name="warning_nothing_to_send">Nothing to send</string>
+    <string name="mail_queued">Mail will be send when online</string>
 
 </resources>

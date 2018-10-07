@@ -2,7 +2,13 @@ package de.grobox.blitzmail.send
 
 import android.app.IntentService
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.os.Handler
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
+import de.grobox.blitzmail.BuildConfig
 import de.grobox.blitzmail.MailStorage
+import de.grobox.blitzmail.R
 import de.grobox.blitzmail.notification.MailNotificationManager
 import de.grobox.blitzmail.notification.NOTIFICATION_ID_SENDING
 import de.grobox.blitzmail.notification.getMailNotificationManager
@@ -19,10 +25,12 @@ const val MAIL_ATTACHMENTS = "attachments"
 class SenderService : IntentService("SenderService") {
 
     private lateinit var mailNotificationManager: MailNotificationManager
+    private lateinit var connectivityManager: ConnectivityManager
 
     override fun onCreate() {
         super.onCreate()
         mailNotificationManager = getMailNotificationManager(applicationContext)
+        connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
     override fun onHandleIntent(intent: Intent?) {
@@ -61,7 +69,16 @@ class SenderService : IntentService("SenderService") {
             MailStorage.deleteMail(applicationContext, mailId.toString())
         } catch (e: Exception) {
             e.printStackTrace()
-            mailNotificationManager.showErrorNotification(e)
+
+            val networkInfo = connectivityManager.activeNetworkInfo
+            if (BuildConfig.PRO && (networkInfo == null || !networkInfo.isConnected)) {
+                scheduleSending(0)
+                Handler(mainLooper).post {
+                    Toast.makeText(applicationContext, getString(R.string.mail_queued), LENGTH_LONG).show()
+                }
+            } else {
+                mailNotificationManager.showErrorNotification(e)
+            }
         }
     }
 

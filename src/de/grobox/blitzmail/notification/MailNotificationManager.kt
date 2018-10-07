@@ -14,7 +14,6 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.preference.PreferenceManager
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import de.grobox.blitzmail.R
 import de.grobox.blitzmail.notification.NotificationHandlerActivity.Companion.ACTION_DIALOG
@@ -149,7 +148,6 @@ class MailNotificationManager internal constructor(val c: Context) {
         // get and show the cause for the exception if it exists
         if (e.cause is Exception) {
             val cause = e.cause as Exception
-            Log.d("AsyncMailTask", cause.javaClass.canonicalName)
             msg += "\nCause: " + cause.localizedMessage
         }
 
