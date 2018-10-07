@@ -1,4 +1,4 @@
-package de.grobox.blitzmail;
+package de.grobox.blitzmail.crypto;
 
 import android.content.Context;
 import android.preference.EditTextPreference;

@@ -24,6 +24,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import de.grobox.blitzmail.preferences.PrefFragment;
+import de.grobox.blitzmail.send.SendActivity;
+
 import android.view.MenuItem;
 
 import org.json.JSONObject;

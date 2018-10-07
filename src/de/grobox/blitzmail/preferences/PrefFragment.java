@@ -15,7 +15,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.grobox.blitzmail;
+package de.grobox.blitzmail.preferences;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,9 +27,14 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
-import androidx.appcompat.app.AlertDialog;
 
 import org.json.JSONObject;
+
+import androidx.appcompat.app.AlertDialog;
+import de.grobox.blitzmail.BuildConfig;
+import de.grobox.blitzmail.MailStorage;
+import de.grobox.blitzmail.MainActivity;
+import de.grobox.blitzmail.R;
 
 public class PrefFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 

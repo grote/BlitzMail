@@ -1,6 +1,4 @@
-package de.grobox.blitzmail;
-
-import android.content.Context;
+package de.grobox.blitzmail.send;
 
 import com.provider.JSSEProvider;
 
@@ -26,7 +24,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 class MailSender extends Authenticator {
-	private Context context;
+
 	private Properties props;
 	private JSONObject mail;
 	private Session session;
@@ -35,8 +33,7 @@ class MailSender extends Authenticator {
 		Security.addProvider(new JSSEProvider());
 	}
 
-	MailSender(Context context, Properties props, JSONObject mail) {
-		this.context = context;
+	MailSender(Properties props, JSONObject mail) {
 		this.props = props;
 		this.mail = mail;
 
@@ -44,6 +41,7 @@ class MailSender extends Authenticator {
 		session = Session.getInstance(props, this);
 	}
 
+	@Override
 	protected PasswordAuthentication getPasswordAuthentication() {
 		return new PasswordAuthentication(props.getProperty("mail.smtp.user", ""), props.getProperty("mail.smtp.pass", ""));
 	}
@@ -82,7 +80,7 @@ class MailSender extends Authenticator {
 			}
 
 			if(mp.getCount() == 0) {
-				throw new RuntimeException(context.getString(R.string.error_attachment));
+				throw new RuntimeException("Could not get attachment for mail.");
 			}
 
 			// actually send message

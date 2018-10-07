@@ -15,28 +15,15 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.grobox.blitzmail;
+package de.grobox.blitzmail.send;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.OpenableColumns;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -52,26 +39,36 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Properties;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import de.grobox.blitzmail.R;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.app.NotificationManager.IMPORTANCE_LOW;
+import static android.content.Intent.ACTION_SEND;
+import static android.content.Intent.ACTION_SEND_MULTIPLE;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static android.graphics.BitmapFactory.decodeResource;
 import static android.os.Build.VERSION.SDK_INT;
+import static de.grobox.blitzmail.send.SenderServiceKt.MAIL;
+import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_ATTACHMENTS;
+import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_BODY;
+import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_CC;
+import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_ID;
+import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_SUBJECT;
 
 public class SendActivity extends AppCompatActivity {
 	// define variables to be used in AsyncMailTask
 	protected NotificationManager mNotifyManager;
-	protected NotificationCompat.Builder mBuilder;
 	private int mailId;
-	protected Intent notifyIntent;
-	private Properties prefs;
 	private boolean error = false, requestingPermission = false;
 	private ArrayList<Uri> uris;
 
-	private static final String NOTIFICATION_CHANNEL_ID = "BlitzMail";
 	private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 42;
 
 	@Override
@@ -80,82 +77,41 @@ public class SendActivity extends AppCompatActivity {
 
 		// setup notification channels
 		mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		assert mNotifyManager != null;
-		if (SDK_INT >= 26) {
-			NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, getString(R.string.app_name), IMPORTANCE_LOW);
-			mNotifyManager.createNotificationChannel(channel);
-		}
 
 		// generate mail id from current time
-		mailId = (int) ((new Date().getTime() / 100) % 1000000000);
-
-		// before doing anything show notification about sending process
-		mBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-		showNotification();
-
-		try {
-			prefs = getPrefs();
-		}
-		catch(Exception e) {
-			String msg = e.getMessage();
-
-			Log.i("SendActivity", "ERROR: " + msg, e);
-
-			if(e.getClass().getCanonicalName().equals("java.lang.RuntimeException") &&
-					e.getCause() != null &&
-					e.getCause().getClass().getCanonicalName().equals("javax.crypto.BadPaddingException")) {
-				msg = getString(R.string.error_decrypt);
-			}
-
-			showError(msg);
-			return;
-		}
+		mailId = (int) (System.currentTimeMillis() - 1000000) / 100;
 
 		// get and handle Intent
 		Intent intent = getIntent();
 		String action = intent.getAction();
 		String type = intent.getType();
 
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
 
-		if(Intent.ACTION_SEND.equals(action) && type != null) {
+		if(ACTION_SEND.equals(action) && type != null) {
 			if("text/plain".equals(type)) {
 				handleSendText(intent);
 			}
 			else  {
 				handleSendAttachment(intent);
 			}
-		}
-		else if(Intent.ACTION_SEND_MULTIPLE.equals(action)) {
+		} else if(ACTION_SEND_MULTIPLE.equals(action)) {
 			handleSendMultipleAttachment(intent);
-		}
-		else if("BlitzMailReSend".equals(action)) {
+		} else if("BlitzMailReSend".equals(action)) {
 			JSONObject jMail;
 			try {
 				jMail = new JSONObject(intent.getStringExtra("mail"));
-
-				// Dirty Hack: Cancel the notification with the wrong ID
-				mNotifyManager.cancel(mailId);
-
-				// get proper ID from saved mail
-				mailId = jMail.optInt("id");
-
-				// issue new notification
-				mNotifyManager.notify(mailId, mBuilder.build());
 			} catch (JSONException e) {
-				e.printStackTrace();
-				return;
+				throw new AssertionError(e);
 			}
 
 			// Start Mail Task
-			sendMail(jMail, false);
+			sendMail(jMail);
 		} else {
 			showError(getString(R.string.error_noaction));
 		}
 
-		if(error || requestingPermission) {
-			mNotifyManager.cancel(mailId);
-		} else {
+		if(!error && !requestingPermission) {
 			finish();
 		}
 	}
@@ -165,39 +121,12 @@ public class SendActivity extends AppCompatActivity {
 		if(requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
 			requestingPermission = false;
 			if(grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
-				showNotification();
 				sendAttachment(getMailWithAttachments(uris));
 				finish();
 			} else {
 				showError(getString(R.string.error_permission_denied));
 			}
 		}
-	}
-
-	private void showNotification() {
-		mBuilder.setContentTitle(getString(R.string.sending_mail))
-				.setContentText(getString(R.string.please_wait))
-				.setSmallIcon(R.drawable.notification_icon)
-				.setLargeIcon(decodeResource(getResources(), R.drawable.ic_launcher))
-				.setOngoing(true)
-				.setProgress(0, 0, true)
-				.setSound(null);
-
-		// Create Pending Intent
-		notifyIntent = new Intent(this, NotificationHandlerActivity.class);
-		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		mBuilder.setContentIntent(pendingIntent);
-
-		// TODO allow sending to be cancelled, might need a service with broadcast receiver
-//		Intent dismissIntent = new Intent(this, NotificationHandlerActivity.class);
-//		dismissIntent.setAction("test");
-//		PendingIntent piCancel = PendingIntent.getActivity(this, 0, dismissIntent, 0);
-
-//		mBuilder.addAction(R.drawable.ic_action_cancel, getString(android.R.string.cancel), piCancel);
-
-		// Issues the notification
-		mNotifyManager.notify(mailId, mBuilder.build());
 	}
 
 	void handleSendText(Intent intent) {
@@ -219,10 +148,10 @@ public class SendActivity extends AppCompatActivity {
 			// create JSON object with mail information
 			JSONObject jMail = new JSONObject();
 			try {
-				jMail.put("id", mailId);
-				jMail.put("body", text);
-				jMail.put("subject", subject);
-				jMail.put("cc", cc);
+				jMail.put(MAIL_ID, mailId);
+				jMail.put(MAIL_BODY, text);
+				jMail.put(MAIL_SUBJECT, subject);
+				jMail.put(MAIL_CC, cc);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -337,7 +266,7 @@ public class SendActivity extends AppCompatActivity {
 
 					attachments.put(attachment);
 				}
-				jMail.put("attachments", attachments);
+				jMail.put(MAIL_ATTACHMENTS, attachments);
 
 				return jMail;
 			} catch (JSONException e) {
@@ -347,89 +276,10 @@ public class SendActivity extends AppCompatActivity {
 		return null;
 	}
 
-	private void sendMail(JSONObject jMail, boolean save) {
-		try {
-			mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(jMail.getString("subject")));
-		} catch(JSONException e) {
-			e.printStackTrace();
-		}
-
-		if(save) {
-			// remember mail for later
-			MailStorage.saveMail(this, jMail);
-		}
-
-		// pass mail on to notification dialog class
-		notifyIntent.putExtra("mail", jMail.toString());
-
-		final AsyncMailTask mail = new AsyncMailTask(this, prefs, jMail);
-		mail.execute();
-	}
-
 	private void sendMail(JSONObject jMail) {
-		sendMail(jMail, true);
-	}
-
-	private Properties getPrefs() {
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-		Crypto crypto = new Crypto(this);
-
-		String recipients = pref.getString("pref_recipient", null);
-		String sender = pref.getString("pref_sender", null);
-
-		String server = pref.getString("pref_smtp_server", null);
-		String port = pref.getString("pref_smtp_port", null);
-		Boolean auth = pref.getBoolean("pref_smtp_auth", false);
-		String user = pref.getString("pref_smtp_user", null);
-		String password = pref.getString("pref_smtp_pass", null);
-
-		if(recipients == null) throw new RuntimeException(getString(R.string.error_option_not_set)+" "+getString(R.string.pref_recipient));
-		if(sender == null)     throw new RuntimeException(getString(R.string.error_option_not_set)+" "+getString(R.string.pref_sender));
-		if(server == null)     throw new RuntimeException(getString(R.string.error_option_not_set)+" "+getString(R.string.pref_smtp_server));
-		if(port == null)       throw new RuntimeException(getString(R.string.error_option_not_set)+" "+getString(R.string.pref_smtp_port));
-		if(auth) {
-			if(user == null)     throw new RuntimeException(getString(R.string.error_option_not_set)+" "+getString(R.string.pref_smtp_user));
-			if(password == null) throw new RuntimeException(getString(R.string.error_option_not_set)+" "+getString(R.string.pref_smtp_pass));
-
-			// Decrypt password
-			password = crypto.decrypt(password);
-		}
-
-		Properties props = new Properties();
-		props.setProperty("mail.transport.protocol", "smtp");
-		props.setProperty("mail.host", server);
-		String from = pref.getString("pref_sender_name", getString(R.string.app_name)) + " <" + sender + ">";
-		props.setProperty("mail.user", from);
-		props.setProperty("mail.from", from);
-		props.setProperty("mail.smtp.auth", String.valueOf(auth));
-		props.setProperty("mail.smtp.port", port);
-		props.setProperty("mail.smtp.recipients", recipients);
-		props.setProperty("mail.smtp.quitwait", "false");
-
-		if(auth) {
-			// set username and password
-			props.setProperty("mail.smtp.user", user);
-			props.setProperty("mail.smtp.pass", password);
-
-			// set encryption properties
-			if(pref.getString("pref_smtp_encryption", "").equals("ssl")) {
-				Log.i("SendActivity", "Using SSL Encryption...");
-				props.setProperty("mail.smtp.ssl.enable", "true");
-			} else if(pref.getString("pref_smtp_encryption", "").equals("tls")) {
-				Log.i("SendActivity", "Using TLS Encryption...");
-				props.setProperty("mail.smtp.starttls.enable", "true");
-			}
-			props.setProperty("mail.smtp.ssl.checkserveridentity", "true");
-		} else {
-			// set some hostname for proper HELO greeting
-			props.setProperty("mail.smtp.localhost",  "android.com");
-		}
-
-		return props;
-	}
-
-	public int getMailId() {
-		return mailId;
+		Intent intent = new Intent(this, SenderService.class);
+		intent.putExtra(MAIL, jMail.toString());
+		ContextCompat.startForegroundService(this, intent);
 	}
 
 	@RequiresApi(api = 16)
@@ -469,14 +319,12 @@ public class SendActivity extends AppCompatActivity {
 		dialog.show();
 	}
 
-	public static long copyLarge(InputStream input, OutputStream output) throws IOException	{
+	private static void copyLarge(InputStream input, OutputStream output) throws IOException	{
 		byte[] buffer = new byte[4096];
-		long count = 0L;
 		int n;
 		while (-1 != (n = input.read(buffer))) {
 			output.write(buffer, 0, n);
-			count += n;
 		}
-		return count;
 	}
+
 }

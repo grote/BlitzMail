@@ -1,10 +1,12 @@
 buildscript {
+	ext.kotlin_version = '1.2.71'
 	repositories {
 		jcenter()
 		google()
 	}
 	dependencies {
 		classpath 'com.android.tools.build:gradle:3.2.0'
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 	}
 }
 
@@ -16,8 +18,10 @@ allprojects {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 dependencies {
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 	implementation 'androidx.appcompat:appcompat:1.0.0'
 	implementation 'com.sun.mail:android-mail:1.6.2'
 	implementation 'com.sun.mail:android-activation:1.6.2'

@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import de.grobox.blitzmail.send.SendActivity;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;

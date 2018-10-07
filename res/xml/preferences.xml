@@ -51,7 +51,7 @@
             android:title="@string/pref_smtp_user"
             android:inputType="textNoSuggestions"
             android:key="pref_smtp_user"/>
-        <de.grobox.blitzmail.EncryptedEditTextPreference
+        <de.grobox.blitzmail.crypto.EncryptedEditTextPreference
             android:title="@string/pref_smtp_pass"
             android:key="pref_smtp_pass"
             android:inputType="textPassword"

@@ -27,10 +27,12 @@ import org.json.JSONObject;
 
 import java.io.File;
 
-class MailStorage {
+import static android.content.Context.MODE_PRIVATE;
 
-	static JSONObject getMails(Context context) {
-		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", Context.MODE_PRIVATE);
+public class MailStorage {
+
+	public static JSONObject getMails(Context context) {
+		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", MODE_PRIVATE);
 		String mails_str = sharedPref.getString("mails", null);
 
 		JSONObject mails = new JSONObject();
@@ -46,8 +48,8 @@ class MailStorage {
 		return mails;
 	}
 
-	static void saveMail(Context context, JSONObject mail) {
-		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", Context.MODE_PRIVATE);
+	public static void saveMail(Context context, JSONObject mail) {
+		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", MODE_PRIVATE);
 		SharedPreferences.Editor prefEditor = sharedPref.edit();
 
 		JSONObject mails = getMails(context);
@@ -55,22 +57,15 @@ class MailStorage {
 		try {
 			mails.put(mail.getString("id"), mail);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			throw new AssertionError(e);
 		}
 
-		String mails_str = null;
-		try {
-			mails_str = mails.toString(4);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		prefEditor.putString("mails", mails_str);
+		prefEditor.putString("mails", mails.toString());
 		prefEditor.apply();
 	}
 
-	static void deleteMail(Context context, String id) {
-		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", Context.MODE_PRIVATE);
+	public static void deleteMail(Context context, String id) {
+		SharedPreferences sharedPref = context.getSharedPreferences("BlitzMail", MODE_PRIVATE);
 		SharedPreferences.Editor prefEditor = sharedPref.edit();
 
 		JSONObject mails = getMails(context);
