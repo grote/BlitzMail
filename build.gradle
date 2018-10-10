@@ -32,7 +32,7 @@ dependencies {
 android {
 	defaultConfig {
 		versionCode 13
-		versionName "0.7.0"
+		versionName "0.7"
 
 		compileSdkVersion 28
 		targetSdkVersion 28
