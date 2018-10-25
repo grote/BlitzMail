@@ -17,8 +17,10 @@ BlitzMail has some other capabilities which are functions the software can remot
 
 ## Information and data collection
 
-The developer does not externally collect any information or data when the services of BlitzMail is utilized. When performing some activities with the software, personal data is not collected by the developer because all the information are locally stored on your device. 
-### How it works
+The developer does not externally collect any information or data when the services of BlitzMail are utilized. When performing some activities with the software, personal data is not collected by the developer because all the information are locally stored on your device. 
+
+**How it works**
+
 Users enter connection information for their email server and this server, of course, knows about the emails that are sent, also their clear-text, but this is normal and necessary. Otherwise, BlitzMail is not making any other internet connection and not sending any data anywhere.
 If an email can't be sent right away, it might be saved locally (on the user's device) until it can be sent.
 
