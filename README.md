@@ -23,8 +23,12 @@ This is not fully secure, but should provide reasonable protection for your pass
 Get BlitzMail
 -------------
 
-[![Available on F-Droid](https://f-droid.org/wiki/images/c/c4/F-Droid-button_available-on.png)](https://f-droid.org/repository/browse/?fdid=de.grobox.blitzmail)
-[![Available on Google Play](https://developer.android.com/images/brand/en_app_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=de.grobox.blitzmail.pro)
+[<img src="https://f-droid.org/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/de.grobox.blitzmail/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=de.grobox.blitzmail.pro)
 
 Screenshots
 -----------
