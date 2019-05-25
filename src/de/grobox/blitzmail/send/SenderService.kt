@@ -77,7 +77,7 @@ class SenderService : IntentService("SenderService") {
                     Toast.makeText(applicationContext, getString(R.string.mail_queued), LENGTH_LONG).show()
                 }
             } else {
-                mailNotificationManager.showErrorNotification(e)
+                mailNotificationManager.showErrorNotification(e, mailId.toString())
             }
         }
     }

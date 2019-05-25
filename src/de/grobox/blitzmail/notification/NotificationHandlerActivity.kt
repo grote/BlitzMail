@@ -23,6 +23,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import de.grobox.blitzmail.BuildConfig
+import de.grobox.blitzmail.MailStorage
 import de.grobox.blitzmail.R
 import de.grobox.blitzmail.send.SendActivity
 import de.grobox.blitzmail.send.SendActivity.ACTION_RESEND
@@ -35,6 +36,7 @@ class NotificationHandlerActivity : Activity() {
         const val ACTION_FINISH = "de.grobox.blitzmail.action.FINISH"
         const val ACTION_SEND_LATER = "de.grobox.blitzmail.action.SEND_LATER"
         const val ACTION_TRY_AGAIN = "de.grobox.blitzmail.action.TRY_AGAIN"
+        const val EXTRA_MAIL_ID = "de.grobox.blitzmail.extra.mailId"
     }
 
     private lateinit var mailNotificationManager: MailNotificationManager
@@ -53,14 +55,13 @@ class NotificationHandlerActivity : Activity() {
         // show dialog for server errors
         when (intent.action) {
             ACTION_DIALOG -> {
+                val mailId = intent.getStringExtra(EXTRA_MAIL_ID)
                 val builder = AlertDialog.Builder(this, R.style.DialogTheme)
                         .setTitle(intent.getStringExtra("ContentTitle"))
                         .setMessage(intent.getStringExtra("ContentText"))
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         // Add the buttons
-                        .setNegativeButton(resources.getString(R.string.dismiss)) { _, _ ->
-                            finish()
-                        }
+                        .setNegativeButton(resources.getString(R.string.delete)) { _, _ -> deleteMail(mailId) }
                         .setNeutralButton(resources.getString(R.string.send_later)) { _, _ -> sendLater() }
                         .setPositiveButton(resources.getString(R.string.try_again)) { _, _ -> tryAgain() }
 
@@ -118,6 +119,11 @@ class NotificationHandlerActivity : Activity() {
         killNotificationAndFinish()
 
         startActivity(intent)
+    }
+
+    private fun deleteMail(mailId: String) {
+        MailStorage.deleteMail(applicationContext, mailId)
+        finish()
     }
 
     private fun killNotificationAndFinish() {
