@@ -2,9 +2,9 @@ package de.grobox.blitzmail.send
 
 import android.content.Context
 import android.content.Intent
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startForegroundService
 import androidx.work.*
-import androidx.work.Worker.Result.SUCCESS
+import androidx.work.ListenableWorker.Result.success
 import de.grobox.blitzmail.send.SendActivity.ACTION_RESEND
 import java.util.concurrent.TimeUnit
 
@@ -12,8 +12,8 @@ class SendLaterWorker(context: Context, params: WorkerParameters) : Worker(conte
 
     override fun doWork(): Result {
         val intent = Intent(applicationContext, SenderService::class.java)
-        ContextCompat.startForegroundService(applicationContext, intent)
-        return SUCCESS
+        startForegroundService(applicationContext, intent)
+        return success()
     }
 
 }
