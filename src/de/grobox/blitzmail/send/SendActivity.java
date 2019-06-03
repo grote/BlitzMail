@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,6 +63,7 @@ import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_BODY;
 import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_CC;
 import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_ID;
 import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_SUBJECT;
+import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_DATE;
 
 public class SendActivity extends AppCompatActivity {
 	// define variables to be used in AsyncMailTask
@@ -146,6 +148,7 @@ public class SendActivity extends AppCompatActivity {
 				jMail.put(MAIL_BODY, text);
 				jMail.put(MAIL_SUBJECT, subject);
 				jMail.put(MAIL_CC, cc);
+				jMail.put(MAIL_DATE, new Date().getTime());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
