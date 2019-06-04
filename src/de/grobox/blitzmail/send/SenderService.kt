@@ -20,6 +20,7 @@ const val MAIL_ID = "id"
 const val MAIL_BODY = "body"
 const val MAIL_SUBJECT = "subject"
 const val MAIL_CC = "cc"
+const val MAIL_DATE = "date"
 const val MAIL_ATTACHMENTS = "attachments"
 
 class SenderService : IntentService("SenderService") {

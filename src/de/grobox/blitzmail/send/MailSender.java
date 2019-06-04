@@ -23,6 +23,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import static de.grobox.blitzmail.send.SenderServiceKt.MAIL_DATE;
+
 class MailSender extends Authenticator {
 
 	private Properties props;
@@ -108,7 +110,12 @@ class MailSender extends Authenticator {
 	private MimeMessage getMessage() throws Exception {
 		MimeMessage message = new MimeMessage(session);
 		message.setFrom(); // uses mail.user property
-		message.setSentDate(new Date());
+		long date = mail.optLong(MAIL_DATE);
+		if (date != 0) {
+			message.setSentDate(new Date(date));
+		} else {
+			message.setSentDate(new Date());
+		}
 
 		String recipients = props.getProperty("mail.smtp.recipients", "");
 
