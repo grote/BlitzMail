@@ -18,6 +18,8 @@
 package de.grobox.blitzmail;
 
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,19 +31,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class NoteActivity extends AppCompatActivity {
 
-	private TextView textView;
+	private EditText textView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		View mView = getLayoutInflater().inflate(R.layout.activity_note, null);
-		textView = (TextView) mView.findViewById(R.id.text);
+		textView = (EditText) mView.findViewById(R.id.text);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogTheme)
 		.setView(mView)
@@ -49,7 +51,7 @@ public class NoteActivity extends AppCompatActivity {
 		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				textView.setText(null);
-				saveText("");
+				saveText(null);
 
 				finish();
 			}
@@ -85,6 +87,16 @@ public class NoteActivity extends AppCompatActivity {
 		Dialog dialog = builder.create();
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
+
+		 ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+		 ClipData cd = cm.getPrimaryClip();
+		 if (cd != null) {
+			 CharSequence text = cd.getItemAt(0).getText();
+			 if (text != null && text.length() > 0) {
+				textView.setText(text.toString());
+				textView.setSelection(0, text.length());
+			 }
+		 }
 
 		// stretch horizontally across screen
 		Window window = dialog.getWindow();
