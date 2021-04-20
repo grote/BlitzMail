@@ -60,11 +60,9 @@ public class PrefFragment extends PreferenceFragment implements OnSharedPreferen
 	private void setPrefState() {
 		CheckBoxPreference authPref = (CheckBoxPreference) findPreference("pref_smtp_auth");
 		if(authPref.isChecked()) {
-			findPreference("pref_smtp_encryption").setEnabled(true);
 			findPreference("pref_smtp_user").setEnabled(true);
 			findPreference("pref_smtp_pass").setEnabled(true);
 		} else {
-			findPreference("pref_smtp_encryption").setEnabled(false);
 			findPreference("pref_smtp_user").setEnabled(false);
 			findPreference("pref_smtp_pass").setEnabled(false);
 		}

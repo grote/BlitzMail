@@ -36,17 +36,17 @@
             android:key="pref_smtp_port"
             android:inputType="number"
             android:defaultValue="25"/>
+        <ListPreference
+            android:title="@string/pref_smtp_encryption"
+            android:key="pref_smtp_encryption"
+            android:entries="@array/encryption"
+            android:entryValues="@array/encryptionValues" android:defaultValue="none"/>
         <CheckBoxPreference
             android:title="@string/pref_smtp_auth"
             android:key="pref_smtp_auth"
             android:defaultValue="false"
             android:summaryOff="@string/pref_summary_smtp_auth_off"
             android:summaryOn="@string/pref_summary_smtp_auth_on"/>
-        <ListPreference
-            android:title="@string/pref_smtp_encryption"
-            android:key="pref_smtp_encryption"
-            android:entries="@array/encryption"
-            android:entryValues="@array/encryptionValues" android:defaultValue="none"/>
         <EditTextPreference
             android:title="@string/pref_smtp_user"
             android:inputType="textNoSuggestions"

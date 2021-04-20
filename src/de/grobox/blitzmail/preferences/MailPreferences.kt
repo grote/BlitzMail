@@ -19,6 +19,7 @@ fun getProperties(c: Context): Properties {
 
     val server = pref.getString("pref_smtp_server", null)
     val port = pref.getString("pref_smtp_port", null)
+    val encryption = pref.getString("pref_smtp_encryption", null)
     val auth = pref.getBoolean("pref_smtp_auth", false)
     val user = pref.getString("pref_smtp_user", null)
     var password = pref.getString("pref_smtp_pass", null)
@@ -51,19 +52,20 @@ fun getProperties(c: Context): Properties {
         // set username and password
         props.setProperty("mail.smtp.user", user)
         props.setProperty("mail.smtp.pass", password)
-
-        // set encryption properties
-        if (pref.getString("pref_smtp_encryption", "") == "ssl") {
-            Log.i("SendActivity", "Using SSL Encryption...")
-            props.setProperty("mail.smtp.ssl.enable", "true")
-        } else if (pref.getString("pref_smtp_encryption", "") == "tls") {
-            Log.i("SendActivity", "Using TLS Encryption...")
-            props.setProperty("mail.smtp.starttls.enable", "true")
-        }
-        props.setProperty("mail.smtp.ssl.checkserveridentity", "true")
     } else {
         // set some hostname for proper HELO greeting
         props.setProperty("mail.smtp.localhost", "android.com")
+    }
+
+    // set encryption properties
+    if (encryption == "ssl") {
+        Log.i("SendActivity", "Using SSL Encryption...")
+        props.setProperty("mail.smtp.ssl.enable", "true")
+        props.setProperty("mail.smtp.ssl.checkserveridentity", "true")
+    } else if (encryption == "tls") {
+        Log.i("SendActivity", "Using STARTTLS Encryption...")
+        props.setProperty("mail.smtp.starttls.enable", "true")
+        props.setProperty("mail.smtp.ssl.checkserveridentity", "true")
     }
 
     // try to get proper hostname and set fake one if failed
