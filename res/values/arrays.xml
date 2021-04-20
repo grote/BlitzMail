@@ -4,7 +4,7 @@
 
     <string-array name="encryption" translatable="false">
         <item name="none">None</item>
-        <item name="tls">TLS</item>
+        <item name="tls">STARTTLS</item>
         <item name="ssl">SSL</item>
     </string-array>
     
