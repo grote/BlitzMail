@@ -134,7 +134,7 @@ public class SendActivity extends AppCompatActivity {
 			String cc = intent.getStringExtra(Intent.EXTRA_CC);
 
 			// Check for empty content
-			if(subject == null) {
+			if(subject == null || subject.isEmpty()) {
 				// cut all characters from subject after the 128th
 				subject = text.substring(0, (text.length() < 128) ? text.length() : 128);
 				// remove line breaks from subject
