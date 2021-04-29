@@ -22,6 +22,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,10 +51,7 @@ public class NoteActivity extends AppCompatActivity {
 		.setTitle(R.string.note_name)
 		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				textView.setText(null);
-				saveText(null);
-
-				finish();
+				dialog.cancel();
 			}
 		})
 		.setNeutralButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -65,13 +63,11 @@ public class NoteActivity extends AppCompatActivity {
 			public void onClick(DialogInterface dialog, int id) {
 				String msg = textView.getText().toString();
 
-				if(msg.length() < 1) {
+				if (msg.trim().isEmpty()) {
 					Toast.makeText(NoteActivity.this, R.string.warning_nothing_to_send, Toast.LENGTH_SHORT).show();
 				} else {
 					sendMail(msg);
-
-					saveText("");
-					textView.setText(null);
+					textView.setText("");
 				}
 				finish();
 			}
@@ -79,6 +75,7 @@ public class NoteActivity extends AppCompatActivity {
 		.setOnCancelListener(new DialogInterface.OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
+				textView.setText("");
 				finish();
 			}
 		});
@@ -87,16 +84,6 @@ public class NoteActivity extends AppCompatActivity {
 		Dialog dialog = builder.create();
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
-
-		 ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-		 ClipData cd = cm.getPrimaryClip();
-		 if (cd != null) {
-			 CharSequence text = cd.getItemAt(0).getText();
-			 if (text != null && text.length() > 0) {
-				textView.setText(text.toString());
-				textView.setSelection(0, text.length());
-			 }
-		 }
 
 		// stretch horizontally across screen
 		Window window = dialog.getWindow();
@@ -110,11 +97,30 @@ public class NoteActivity extends AppCompatActivity {
 	protected void onResume() {
 		super.onResume();
 
-		String text = getPreferences(MODE_PRIVATE).getString("note", null);
-
 		// restore note if there is one to restore
-		if(text != null) {
-			textView.setText(text);
+		SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+		String savedNote = prefs.getString("note", null);
+
+		if (savedNote != null && !savedNote.isEmpty()) {
+			// pre-fill with saved note
+			textView.setText(savedNote);
+			textView.setSelection(prefs.getInt("selStart", 0), prefs.getInt("selEnd", 0));
+		} else {
+			// pre-fill with clipboard content note
+			ClipData clip = ((ClipboardManager)getSystemService(CLIPBOARD_SERVICE)).getPrimaryClip();
+			if (clip != null) {
+				String text = clip.getItemAt(0).getText().toString();
+				if (!text.isEmpty()) {
+					// only pre-fill a particular clipboard content once
+					int lastClip = text.hashCode();
+					if (lastClip != prefs.getInt("lastClip", 0)) {
+						textView.setText(text);
+						textView.selectAll();
+						// we use the hashcode to avoid storing sensitive data
+						prefs.edit().putInt("lastClip", lastClip).apply();
+					}
+				}
+			}
 		}
 	}
 
@@ -122,19 +128,12 @@ public class NoteActivity extends AppCompatActivity {
 	protected void onPause() {
 		super.onPause();
 
-		CharSequence text = textView.getText();
-
 		// save note in case app gets killed
-		if(text.length() > 0) {
-			saveText(text.toString());
-		}
-	}
-
-	private void saveText(String text) {
-		getPreferences(MODE_PRIVATE)
-				.edit()
-				.putString("note", text)
-				.apply();
+		SharedPreferences.Editor prefs = getPreferences(MODE_PRIVATE).edit();
+		prefs.putString("note", textView.getText().toString());
+		prefs.putInt("selStart", textView.getSelectionStart());
+		prefs.putInt("selEnd", textView.getSelectionEnd());
+		prefs.apply();
 	}
 
 	private void sendMail(CharSequence text) {
