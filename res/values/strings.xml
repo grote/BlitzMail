@@ -52,4 +52,7 @@
     <string name="warning_nothing_to_send">Nothing to send</string>
     <string name="mail_queued">Mail will be send when online</string>
 
+    <string name="files_shared_1">File: %s</string>
+    <string name="files_shared_2">Files: %s and %s</string>
+    <string name="files_shared_3">Files: %s and %d more</string>
 </resources>

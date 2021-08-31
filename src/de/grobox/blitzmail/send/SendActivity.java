@@ -74,6 +74,8 @@ public class SendActivity extends AppCompatActivity {
 
 	public static final String ACTION_RESEND = "BlitzMailReSend";
 	private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 42;
+	private static final int MAX_SUBJECT_LENGTH = 128;
+	private static final int MAX_FILENAME_LENGTH = 32;
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
@@ -136,7 +138,7 @@ public class SendActivity extends AppCompatActivity {
 			// Check for empty content
 			if(subject == null || subject.isEmpty()) {
 				// cut all characters from subject after the 128th
-				subject = text.substring(0, (text.length() < 128) ? text.length() : 128);
+				subject = text.substring(0, Math.min(text.length(), MAX_SUBJECT_LENGTH));
 				// remove line breaks from subject
 				subject = subject.replace("\n", " ").replace("\r", " ");
 			}
@@ -184,8 +186,30 @@ public class SendActivity extends AppCompatActivity {
 		}
 
 		try {
-			String num = String.valueOf(jMail.getJSONArray("attachments").length());
-			jMail.put("subject", num + " " + getString(R.string.files_shared) + " " + getString(R.string.app_name));
+			JSONArray files = jMail.getJSONArray(MAIL_ATTACHMENTS);
+			if (files.length() == 1) {
+				String name1 = files.getJSONObject(0).getString("filename");
+				if (name1.length() > MAX_FILENAME_LENGTH) {
+					name1 = name1.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
+				}
+				jMail.put("subject", getString(R.string.files_shared_1, name1));
+			} else if (files.length() == 2) {
+				String name1 = files.getJSONObject(0).getString("filename");
+				String name2 = files.getJSONObject(1).getString("filename");
+				if (name1.length() > MAX_FILENAME_LENGTH) {
+					name1 = name1.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
+				}
+				if (name2.length() > MAX_FILENAME_LENGTH) {
+					name2 = name2.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
+				}
+				jMail.put("subject", getString(R.string.files_shared_2, name1, name2));
+			} else {
+				String name1 = files.getJSONObject(0).getString("filename");
+				if (name1.length() > MAX_FILENAME_LENGTH) {
+					name1 = name1.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
+				}
+				jMail.put("subject", getString(R.string.files_shared_3, name1, files.length() - 1));
+			}
 		} catch(JSONException e) {
 			e.printStackTrace();
 		}
