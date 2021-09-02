@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <plurals name="files_shared">
-        <item quantity="one">File: %3$s</item>
-        <item quantity="other">Files: %3$s and %2$d more</item>
-    </plurals>
-
-</resources>

@@ -187,13 +187,12 @@ public class SendActivity extends AppCompatActivity {
 
 		try {
 			JSONArray files = jMail.getJSONArray(MAIL_ATTACHMENTS);
-			int count = files.length();
 			String filename = files.getJSONObject(0).getString("filename");
 			if (filename.length() > MAX_FILENAME_LENGTH) {
 				filename = filename.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
 			}
 			jMail.put("subject", getResources().getQuantityString(
-					R.plurals.files_shared, count, count, count - 1, filename));
+				R.plurals.files_shared, count, filename, files.length() - 1));
 		} catch(JSONException e) {
 			e.printStackTrace();
 		}
