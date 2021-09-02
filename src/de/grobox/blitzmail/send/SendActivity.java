@@ -75,7 +75,7 @@ public class SendActivity extends AppCompatActivity {
 	public static final String ACTION_RESEND = "BlitzMailReSend";
 	private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 42;
 	private static final int MAX_SUBJECT_LENGTH = 128;
-	private static final int MAX_FILENAME_LENGTH = 32;
+	private static final int MAX_FILENAME_LENGTH = 64;
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
@@ -187,29 +187,13 @@ public class SendActivity extends AppCompatActivity {
 
 		try {
 			JSONArray files = jMail.getJSONArray(MAIL_ATTACHMENTS);
-			if (files.length() == 1) {
-				String name1 = files.getJSONObject(0).getString("filename");
-				if (name1.length() > MAX_FILENAME_LENGTH) {
-					name1 = name1.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
-				}
-				jMail.put("subject", getString(R.string.files_shared_1, name1));
-			} else if (files.length() == 2) {
-				String name1 = files.getJSONObject(0).getString("filename");
-				String name2 = files.getJSONObject(1).getString("filename");
-				if (name1.length() > MAX_FILENAME_LENGTH) {
-					name1 = name1.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
-				}
-				if (name2.length() > MAX_FILENAME_LENGTH) {
-					name2 = name2.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
-				}
-				jMail.put("subject", getString(R.string.files_shared_2, name1, name2));
-			} else {
-				String name1 = files.getJSONObject(0).getString("filename");
-				if (name1.length() > MAX_FILENAME_LENGTH) {
-					name1 = name1.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
-				}
-				jMail.put("subject", getString(R.string.files_shared_3, name1, files.length() - 1));
+			int count = files.length();
+			String filename = files.getJSONObject(0).getString("filename");
+			if (filename.length() > MAX_FILENAME_LENGTH) {
+				filename = filename.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
 			}
+			jMail.put("subject", getResources().getQuantityString(
+					R.plurals.files_shared, count, count, count - 1, filename));
 		} catch(JSONException e) {
 			e.printStackTrace();
 		}

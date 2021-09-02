@@ -47,12 +47,8 @@
     <string name="pref_success_notification">Show Notification for Sent Mail</string>
     <string name="pref_summary_success_notification_on">Show notification in status bar after mail has been sent</string>
     <string name="pref_summary_success_notification_off">Don\'t show notification in status bar after mail has been sent</string>
-    <string name="files_shared">File(s) shared with</string>
     <string name="save">Save</string>
     <string name="warning_nothing_to_send">Nothing to send</string>
     <string name="mail_queued">Mail will be send when online</string>
 
-    <string name="files_shared_1">File: %s</string>
-    <string name="files_shared_2">Files: %s and %s</string>
-    <string name="files_shared_3">Files: %s and %d more</string>
 </resources>
