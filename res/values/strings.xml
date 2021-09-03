@@ -51,8 +51,9 @@
     <string name="warning_nothing_to_send">Nothing to send</string>
     <string name="mail_queued">Mail will be send when online</string>
 
-    <plurals name="files_shared">
-        <item quantity="one">File: %s</item>
+    <string name="subject_single_file">File: %s</string>
+    <plurals name="subject_multiple_files">
+        <item quantity="one">Files: %s and 1 more</item>
         <item quantity="other">Files: %s and %d more</item>
     </plurals>
 

@@ -191,8 +191,13 @@ public class SendActivity extends AppCompatActivity {
 			if (filename.length() > MAX_FILENAME_LENGTH) {
 				filename = filename.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
 			}
-			jMail.put("subject", getResources().getQuantityString(
-				R.plurals.files_shared, count, filename, files.length() - 1));
+			if (files.length() == 1) {
+				jMail.put("subject", getString(R.string.subject_single_file, filename));
+			} else {
+				int over_one = files.length() - 1;
+				jMail.put("subject", getResources().getQuantityString(
+					R.plurals.subject_multiple_files, over_one, filename, over_one));
+			}
 		} catch(JSONException e) {
 			e.printStackTrace();
 		}
