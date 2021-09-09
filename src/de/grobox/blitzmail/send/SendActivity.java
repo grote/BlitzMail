@@ -178,25 +178,31 @@ public class SendActivity extends AppCompatActivity {
 	}
 
 	private void sendAttachment(@Nullable JSONObject jMail) {
-		if (jMail == null && requestingPermission) {
-			return;
-		} else if(jMail == null) {
-			showError(getString(R.string.error_attachment));
+		if (jMail == null || !jMail.has(MAIL_ATTACHMENTS)) {
+			if (!requestingPermission) {
+				showError(getString(R.string.error_attachment));
+			}
 			return;
 		}
 
 		try {
 			JSONArray files = jMail.getJSONArray(MAIL_ATTACHMENTS);
+			if (files.length() == 0) {
+				showError(getString(R.string.warning_nothing_to_send));
+				return;
+			}
+
 			String filename = files.getJSONObject(0).getString("filename");
 			if (filename.length() > MAX_FILENAME_LENGTH) {
 				filename = filename.substring(0, MAX_FILENAME_LENGTH - 2) + "…";
 			}
+
 			if (files.length() == 1) {
 				jMail.put(MAIL_SUBJECT, getString(R.string.subject_single_file, filename));
 			} else {
 				int over_one = files.length() - 1;
 				jMail.put(MAIL_SUBJECT, getResources().getQuantityString(
-					R.plurals.subject_multiple_files, over_one, filename, over_one));
+						R.plurals.subject_multiple_files, over_one, filename, over_one));
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
@@ -208,79 +214,82 @@ public class SendActivity extends AppCompatActivity {
 
 	@Nullable
 	private JSONObject getMailWithAttachments(ArrayList<Uri> attachmentUris) {
-		if(attachmentUris != null) {
-			// check if permission is needed for an URI and request if so
-			for(Uri uri : attachmentUris) {
-				if("file".equals(uri.getScheme()) && SDK_INT >= 23) requestPermission();
-				if (requestingPermission) {
-					uris = attachmentUris;
-					return null;
-				}
+		if(attachmentUris == null) {
+			return null;
+		}
+
+		// check if permission is needed for an URI and request if so
+		for(Uri uri : attachmentUris) {
+			if("file".equals(uri.getScheme()) && SDK_INT >= 23) requestPermission();
+			if (requestingPermission) {
+				uris = attachmentUris;
+				return null;
 			}
+		}
 
-			// create JSON object with mail information
+		// create JSON object with mail information
+		JSONArray attachments = new JSONArray();
+
+		for(Uri uri : attachmentUris) {
 			try {
-				JSONObject jMail = new JSONObject();
-				jMail.put("id", mailId);
-				JSONArray attachments = new JSONArray();
-
-				for(Uri uri : attachmentUris) {
-					JSONObject attachment = new JSONObject();
-
-					// get file name
-					String filename;
-					Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-					if(cursor != null) {
-						int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-						cursor.moveToFirst();
-						filename = cursor.getString(nameIndex);
-						cursor.close();
-					}
-					else {
-						filename = uri.getLastPathSegment();
-					}
-					attachment.put("filename", filename);
-
-					// copy file into a temporary file
-					try {
-						File file = File.createTempFile(filename, null);
-						FileOutputStream fos = new FileOutputStream(file);
-
-						FileDescriptor fd = getContentResolver().openFileDescriptor(uri, "r").getFileDescriptor();
-						FileInputStream fis = new FileInputStream(fd);
-
-						copyLarge(fis, fos);
-
-						attachment.put("path", file.getAbsolutePath());
-					}
-					catch(FileNotFoundException e) {
-						showError(getString(R.string.error_file_not_found));
-						return null;
-					}
-					catch(IOException e) {
-						e.printStackTrace();
-					}
-
-					// get mime type
-					String mimeType = getContentResolver().getType(uri);
-					if(mimeType == null) {
-						// guess mime type
-						if(filename.endsWith(".jpg") || filename.endsWith(".jpeg")) {
-							mimeType = " image/jpeg";
-						} else {
-							mimeType = "application/octet-stream";
-						}
-					}
-					attachment.put("mimeType", mimeType);
-
-					attachments.put(attachment);
+				// get file name
+				String filename;
+				Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+				if(cursor != null) {
+					int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+					cursor.moveToFirst();
+					filename = cursor.getString(nameIndex);
+					cursor.close();
+				} else {
+					filename = uri.getLastPathSegment();
 				}
-				jMail.put(MAIL_ATTACHMENTS, attachments);
 
-				return jMail;
-			} catch (JSONException e) {
+				// get mime type
+				String mimeType = getContentResolver().getType(uri);
+				if(mimeType == null) {
+					// guess mime type
+					if(filename.endsWith(".jpg") || filename.endsWith(".jpeg")) {
+						mimeType = " image/jpeg";
+					} else {
+						mimeType = "application/octet-stream";
+					}
+				}
+
+				// copy file into a temporary file
+				File file = File.createTempFile(filename, null);
+				FileOutputStream fos = new FileOutputStream(file);
+				FileDescriptor fd = getContentResolver().openFileDescriptor(uri, "r").getFileDescriptor();
+				FileInputStream fis = new FileInputStream(fd);
+
+				copyLarge(fis, fos);
+
+				// add file to mail attachments
+				JSONObject attachment = new JSONObject();
+				attachment.put("filename", filename);
+				attachment.put("mimeType", mimeType);
+				attachment.put("path", file.getAbsolutePath());
+				attachments.put(attachment);
+			}
+			catch(FileNotFoundException e) {
+				showError(getString(R.string.error_file_not_found));
+			}
+			catch(IOException e) {
 				e.printStackTrace();
 			}
+			catch(JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
+		try {
+			JSONObject jMail = new JSONObject();
+			jMail.put(MAIL_ID, mailId);
+			// jMail.put(MAIL_CC, cc);
+			jMail.put(MAIL_DATE, new Date().getTime());
+			jMail.put(MAIL_ATTACHMENTS, attachments);
+			return jMail;
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
